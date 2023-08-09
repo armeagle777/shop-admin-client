@@ -1,42 +1,66 @@
-import { UploadOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import { MdSpaceDashboard } from "react-icons/md";
-import { MdSettingsInputComponent } from "react-icons/md";
+import { UploadOutlined } from '@ant-design/icons';
+import { AiFillInteraction } from 'react-icons/ai';
+import { BsBarChartFill } from 'react-icons/bs';
+import { FaTools } from 'react-icons/fa';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 export const menuItems = [
-  {
-    label: <Link to="/">Գլխավոր</Link>,
-    key: "1",
-    icon: <MdSpaceDashboard />,
-  },
-  {
-    label: "Օժանդակ",
-    key: "sub1",
-    icon: <MdSettingsInputComponent />,
-    children: [
-      { label: <Link to="/shops">Խանութներ</Link>, key: "5" },
-      getItem("Option 6", "6"),
-      getItem("Option 7", "7"),
-      getItem("Option 8", "8"),
-    ],
-  },
-  getItem("Navigation Two", "sub2", <UploadOutlined />, [
-    getItem("Option 9", "9"),
-    getItem("Option 10", "10"),
-    getItem("Submenu", "sub3", null, [
-      getItem("Option 11", "11"),
-      getItem("Option 12", "12"),
-    ]),
-  ]),
+    {
+        label: <Link to='/'>Գլխավոր</Link>,
+        key: '1',
+        icon: <BsBarChartFill />,
+    },
+    {
+        label: 'Հիմնական',
+        key: 'sub1',
+        icon: <AiFillInteraction />,
+        children: [
+            { label: <Link to='/orders'>Պատվերներ</Link>, key: '2' },
+            { label: <Link to='/customers'>Հաճախորդներ</Link>, key: '3' },
+            { label: <Link to='/expenses'>Ծախսեր</Link>, key: '4' },
+        ],
+    },
+    {
+        label: 'Օժանդակ',
+        key: 'sub2',
+        icon: <FaTools />,
+        children: [
+            { label: <Link to='/shops'>Խանութներ</Link>, key: '5' },
+            { label: <Link to='/categories'>Կատեգորիաներ</Link>, key: '6' },
+            {
+                label: <Link to='/expense-directions'>Ծխս. նպատակ</Link>,
+                key: '7',
+                // icon: null,
+                // children: [
+                //     {
+                //         label: (
+                //             <Link to='/expense-directions'>Ծխս. նպատակ</Link>
+                //         ),
+                //         key: '8',
+                //     },
+                // ],
+            },
+        ],
+    },
 ];
 
-function getItem(label, key, icon, children, type) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  };
-}
+export const loaderText = 'Բեռնում․․․․';
+export const messages = {
+    customers: {
+        deleteError: 'Ինչ որ բան այնպես չէ',
+        deleteSuccess: 'Հաջողությամբ հեռացվել է',
+        createError: 'Չհաջողվեց հեռացնել',
+        createSuccess: 'Հաջողությամբ ավելացվել է',
+    },
+    shops: {
+        deleteError: 'Ինչ որ բան այնպես չէ',
+        deleteSuccess: 'Հաջողությամբ հեռացվել է',
+    },
+    orders: {
+        deleteError: 'Ինչ որ բան այնպես չէ',
+        statusChangeSuccess: 'Հաջողությամբ փոփոխվել է',
+        deleteSuccess: 'Հաջողությամբ հեռացվել է',
+        createSuccess: 'Հաջողությամբ ավելացվել է',
+    },
+};

@@ -1,0 +1,18 @@
+.tabs-extra-demo-button {
+    margin-right: 16px;
+}
+  
+.ant-row-rtl .tabs-extra-demo-button {
+    margin-right: 0;
+    margin-left: 16px;
+}
+
+.ant-tabs-tab{
+    width: 30%!important;
+    outline: 1px solid green;
+    padding: 0 20px;
+}
+
+.ant-tabs-nav-list{
+    width: 100%;
+}

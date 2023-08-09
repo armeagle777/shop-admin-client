@@ -1,58 +1,83 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { Avatar, Button, Form, Space } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteShop, getShops } from '../../api/serverApi';
+import { Avatar, Button, Form, Modal, Space, Typography } from 'antd';
 import { messages } from '../../utils/constants';
 import { generateRandomColor } from '../../utils/helpers';
+import { addCustomer, deleteCustomer, getCustomers } from '../../api/serverApi';
 import Alert from '../../components/alert/Alert';
+import AddCustomerForm from '../../components/shared/addCutomerForm/AddCustomerForm';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 import Table from '../../components/table/Table';
 
-const Shops = () => {
+const Customers = () => {
+    const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
     const [showProgress, setShowProgress] = useState(false);
     const [allowPopConfirm, setAllowPopConfirm] = useState(false);
     const { data, isLoading, isError, error } = useQuery(
-        ['shops'],
-        () => getShops(),
+        ['customers'],
+        () => getCustomers(),
         {
             keepPreviousData: false,
         }
     );
     const queryClient = useQueryClient();
-
-    const { data: shops = [], meta } = { ...data };
-    const modifiedData = shops.map(({ id, attributes }) => ({
+    const [addCustomerForm] = Form.useForm();
+    const { data: customers = [], meta } = { ...data };
+    const modifiedData = customers.map(({ id, attributes }) => ({
         key: id,
         ...attributes,
     }));
 
-    const [count, setCount] = useState(2);
     const [form] = Form.useForm();
 
-    const handleAdd = () => {
-        const newData = {
-            key: count,
-            name: `Edward King ${count}`,
-            age: '32',
-            address: `London, Park Lane no. ${count}`,
-        };
-        setDataSource([...dataSource, newData]);
-        setCount(count + 1);
+    const onOpenCustomerModal = () => {
+        setShowAddCustomerModal(true);
     };
 
-    const deleteItemMutation = useMutation((itemId) => deleteShop(itemId), {
+    const onCloseCustomerModal = () => {
+        setShowAddCustomerModal(false);
+    };
+
+    const onSubmit = (values) => {
+        addItemMutation.mutate(values);
+    };
+
+    const addItemMutation = useMutation((item) => addCustomer(item), {
+        onSuccess: (data) => {
+            if (data.data?.error) {
+                return toast.error(data.data?.error || 'Սխալ է տեղի ունեցել', {
+                    progress: undefined,
+                });
+            }
+            queryClient.invalidateQueries('customers');
+            toast.success(messages.customers.createSuccess, {
+                progress: undefined,
+            });
+            setShowAddCustomerModal(false);
+            addCustomerForm.resetFields();
+        },
+        onError: (error, variables, context, mutation) => {
+            console.log('err:::::: ', error);
+
+            toast.error(error.response?.data?.error?.message || error.message, {
+                progress: undefined,
+            });
+        },
+    });
+
+    const deleteItemMutation = useMutation((itemId) => deleteCustomer(itemId), {
         onSuccess: () => {
-            queryClient.invalidateQueries('shops');
-            toast.success(messages.shops.deleteSuccess, {
+            queryClient.invalidateQueries('customers');
+            toast.success(messages.customers.deleteSuccess, {
                 progress: undefined,
             });
             setShowProgress(false);
             setAllowPopConfirm(false);
         },
         onError: () => {
-            toast.error(messages.shops.deleteError, {
+            toast.error(messages.customers.deleteError, {
                 progress: undefined,
             });
             setShowProgress(false);
@@ -67,16 +92,23 @@ const Shops = () => {
 
     const columns = [
         {
-            title: 'Անուն',
-            dataIndex: 'name',
+            title: 'Անուն Ազգանուն',
+            dataIndex: 'full_name',
             width: '25%',
+            render: (_, record) => (
+                <span>
+                    {record.first_name} {record.last_name}
+                </span>
+            ),
         },
         {
             title: 'Նկար',
-            dataIndex: 'logo',
+            dataIndex: 'Avatar',
             width: '10%',
             render: (_, record) => {
-                const src = record.logo.data?.attributes.formats.thumbnail.url;
+                const src =
+                    record.Avatar.data?.attributes?.formats?.thumbnail?.url ||
+                    '';
                 return (
                     <Avatar
                         style={{
@@ -88,22 +120,15 @@ const Shops = () => {
                         gap={2}
                         src={src}
                     >
-                        {record.name || ''}
+                        {record.first_name || ''}
                     </Avatar>
                 );
             },
         },
         {
-            title: 'Հասցե',
-            dataIndex: 'url',
+            title: 'Հեռ․',
+            dataIndex: 'phone_number',
             width: '40%',
-            render: (_, record) => {
-                return (
-                    <a target='_blank' href={record.url}>
-                        {record.url}
-                    </a>
-                );
-            },
         },
 
         {
@@ -142,7 +167,7 @@ const Shops = () => {
     return (
         <>
             <Button
-                onClick={handleAdd}
+                onClick={onOpenCustomerModal}
                 type='primary'
                 style={{
                     marginBottom: 16,
@@ -156,7 +181,23 @@ const Shops = () => {
                 dataSource={modifiedData}
                 form={form}
             />
+
+            <Modal
+                title='Ավելացնել նոր հաճախորդ'
+                centered
+                open={showAddCustomerModal}
+                onCancel={onCloseCustomerModal}
+                width={800}
+                footer={null}
+            >
+                <AddCustomerForm
+                    onCancel={onCloseCustomerModal}
+                    onSubmit={onSubmit}
+                    isLoadingAdd={addItemMutation.isLoading}
+                    form={addCustomerForm}
+                />
+            </Modal>
         </>
     );
 };
-export default Shops;
+export default Customers;
