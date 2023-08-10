@@ -11,6 +11,9 @@ import {
     Cascader,
 } from 'antd';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
+import { getCountries } from '../../../api/serverApi';
+import { formatCountriesData } from '../../../utils/helpers';
 
 const layout = {
     labelCol: {
@@ -65,6 +68,19 @@ const prefixSelector = (
 
 const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
     const [uploadedFileId, setUploadedFileId] = useState(undefined);
+    const {
+        data: countries,
+        isLoading,
+        isFetching,
+        error,
+        isError,
+    } = useQuery(['countries'], getCountries, {
+        keepPreviousData: true,
+    });
+
+    const disabledSubmitButton = isLoading || isFetching;
+
+    const countriesOptions = formatCountriesData(countries);
 
     const fileUploadUrl = `${import.meta.env.VITE_SERVER_URL}/upload`;
     const options = [
@@ -242,7 +258,7 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
                     }}
                 >
                     <Cascader
-                        options={options}
+                        options={countriesOptions}
                         onChange={onChange}
                         placeholder='Երկիր/մարզ/համայնք'
                         showSearch={{
@@ -337,7 +353,12 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
                 <Button onClick={onCancel} style={{ marginRight: 10 }}>
                     Չեղարկել
                 </Button>
-                <Button type='primary' htmlType='submit' loading={isLoadingAdd}>
+                <Button
+                    type='primary'
+                    htmlType='submit'
+                    loading={isLoadingAdd}
+                    disabled={disabledSubmitButton}
+                >
                     Հաստատել
                 </Button>
             </Form.Item>

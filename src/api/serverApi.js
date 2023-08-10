@@ -134,15 +134,12 @@ export const deleteOrder = async (id) => {
     });
 };
 
-// export const addAdvertisement = async (advertisement) => {
-//     return await personsApi.post('/advertisements', advertisement);
-// };
+export const getCountries = async () => {
+    const response = await serverApi.get(
+        `/countries?populate[marzs][populate][communities][populate]=*`
+    );
 
-// export const updateAdvertisement = async (advertisement) => {
-//     return await personsApi.patch(
-//         `/advertisements/${advertisement.id}`,
-//         advertisement
-//     );
-// };
+    return response.data.data;
+};
 
 export default serverApi;

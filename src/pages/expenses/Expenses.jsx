@@ -25,7 +25,7 @@ const Expenses = () => {
             keepPreviousData: false,
         }
     );
-    const isAddButtonDisabled = isFetching || isLoading;
+
     const { data: expenses = [], meta } = { ...data };
     const modifiedData = expenses.map(({ id, attributes }) => ({
         key: id,
@@ -39,8 +39,9 @@ const Expenses = () => {
         _,
         __,
     } = useQuery(['expense-directions'], () => getExpenseDirections(), {
-        keepPreviousData: false,
+        keepPreviousData: true,
     });
+    const isAddButtonDisabled = eDFetching || eDIsLoading;
     const { data: expenseDirections = [], meta: eDMeta } = { ...eDirections };
     const eDOptions = expenseDirections.map(({ id, attributes }) => ({
         value: id,

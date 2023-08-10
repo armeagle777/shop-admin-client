@@ -2,63 +2,7 @@ import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Cascader, Form, Input, Select, Space } from 'antd';
 import React from 'react';
 
-const SecondStepContent = () => {
-    const options = [
-        {
-            value: 1,
-            label: 'ՀՀ',
-            children: [
-                {
-                    value: 8,
-                    label: 'Կոտայք',
-                    children: [
-                        {
-                            value: 'Աբովյան',
-                            label: 'Աբովյան',
-                        },
-                        {
-                            value: 3,
-                            label: 'Գառնի',
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            value: 2,
-            label: 'ԼՂՀ',
-            children: [
-                {
-                    value: 'Ասկերան',
-                    label: 'Ասկերան',
-                    children: [
-                        {
-                            value: 'Պատարա',
-                            label: 'Պատարա',
-                        },
-                        {
-                            value: 'Ասկերան',
-                            label: 'Ասկերան',
-                        },
-                    ],
-                },
-                {
-                    value: 'Մարտակերտ',
-                    label: 'Մարտակերտ',
-                    children: [
-                        {
-                            value: 'Մարտակերտ',
-                            label: 'Մարտակերտ',
-                        },
-                        {
-                            value: 'Դրմբոն',
-                            label: 'Դրմբոն',
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
+const SecondStepContent = ({ countriesOptions, customerOptions }) => {
     const onChange = (value, selectedOptions) => {
         console.log(value, selectedOptions);
     };
@@ -95,7 +39,7 @@ const SecondStepContent = () => {
             </Form.Item>
             <Form.Item name={['address', 'district']} label='Հասցե:երկիր'>
                 <Cascader
-                    options={options}
+                    options={countriesOptions}
                     onChange={onChange}
                     placeholder='Երկիր/մարզ/համայնք'
                     showSearch={{
@@ -141,7 +85,9 @@ const SecondStepContent = () => {
                             placeholder='Search to Select'
                             optionFilterProp='children'
                             filterOption={(input, option) =>
-                                (option?.label ?? '').includes(input)
+                                (option?.label?.toLowerCase() ?? '').includes(
+                                    input.toLowerCase()
+                                )
                             }
                             filterSort={(optionA, optionB) =>
                                 (optionA?.label ?? '')
@@ -150,32 +96,7 @@ const SecondStepContent = () => {
                                         (optionB?.label ?? '').toLowerCase()
                                     )
                             }
-                            options={[
-                                {
-                                    value: 21,
-                                    label: 'Not Identified',
-                                },
-                                {
-                                    value: 22,
-                                    label: 'Closed',
-                                },
-                                {
-                                    value: 23,
-                                    label: 'Communicated',
-                                },
-                                {
-                                    value: 24,
-                                    label: 'Identified',
-                                },
-                                {
-                                    value: 25,
-                                    label: 'Resolved',
-                                },
-                                {
-                                    value: 26,
-                                    label: 'Cancelled',
-                                },
-                            ]}
+                            options={customerOptions}
                         />
                     </Form.Item>
                     <Form.Item>

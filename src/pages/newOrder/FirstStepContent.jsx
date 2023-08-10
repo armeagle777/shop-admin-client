@@ -2,7 +2,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, InputNumber, Select, Space } from 'antd';
 import React from 'react';
 
-const FirstStepContent = ({ setFormValues }) => {
+const FirstStepContent = ({
+    setFormValues,
+    categoriesOptions,
+    shopsOptions,
+}) => {
     return (
         <>
             <Form.Item
@@ -47,24 +51,7 @@ const FirstStepContent = ({ setFormValues }) => {
                         width: 150,
                     }}
                     // onChange={handleChange}
-                    options={[
-                        {
-                            value: 1,
-                            label: 'Jack',
-                        },
-                        {
-                            value: 2,
-                            label: 'Lucy',
-                        },
-                        {
-                            value: 3,
-                            label: 'yiminghe',
-                        },
-                        {
-                            value: 4,
-                            label: 'Disabled',
-                        },
-                    ]}
+                    options={categoriesOptions}
                 />
             </Form.Item>
             <Form.Item
@@ -83,24 +70,7 @@ const FirstStepContent = ({ setFormValues }) => {
                         width: 150,
                     }}
                     // onChange={handleChange}
-                    options={[
-                        {
-                            value: 4,
-                            label: 'Jack',
-                        },
-                        {
-                            value: 5,
-                            label: 'Lucy',
-                        },
-                        {
-                            value: 6,
-                            label: 'yiminghe',
-                        },
-                        {
-                            value: 7,
-                            label: 'Disabled',
-                        },
-                    ]}
+                    options={shopsOptions}
                 />
             </Form.Item>
             <Form.Item

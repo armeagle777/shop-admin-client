@@ -19,7 +19,7 @@ const Customers = () => {
         ['customers'],
         () => getCustomers(),
         {
-            keepPreviousData: false,
+            keepPreviousData: true,
         }
     );
     const queryClient = useQueryClient();

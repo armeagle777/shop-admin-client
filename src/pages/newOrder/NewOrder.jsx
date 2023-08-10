@@ -4,10 +4,17 @@ import { Button, Form, message, Steps, theme } from 'antd';
 import FirstStepContent from './FirstStepContent';
 import SecondStepContent from './SecondStepContent';
 import ThirdStepContent from './ThirdStepContent';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addOrder } from '../../api/serverApi';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+    addOrder,
+    getCategories,
+    getCountries,
+    getCustomers,
+    getShops,
+} from '../../api/serverApi';
 import { messages } from '../../utils/constants';
 import { toast } from 'react-toastify';
+import { formatCountriesData } from '../../utils/helpers';
 
 const NewOrder = () => {
     const { token } = theme.useToken();
@@ -15,6 +22,52 @@ const NewOrder = () => {
     const [form] = Form.useForm();
     const [formValues, setFormValues] = useState({});
     const navigate = useNavigate();
+
+    const {
+        data: countries,
+        isLoading,
+        isFetching,
+    } = useQuery(['countries'], getCountries, {
+        keepPreviousData: true,
+    });
+
+    const { data: customers } = useQuery(['customers'], () => getCustomers(), {
+        keepPreviousData: true,
+    });
+    const customerOptions = customers?.data.map(({ id, attributes }) => {
+        const { first_name, last_name, phone_number } = { ...attributes };
+
+        return {
+            value: id,
+            label: `${first_name} ${last_name} ${phone_number}`,
+        };
+    });
+
+    const { data: categories } = useQuery(
+        ['categories'],
+        () => getCategories(),
+        {
+            keepPreviousData: true,
+        }
+    );
+
+    const categoriesOptions = categories?.data.map(({ id, attributes }) => ({
+        value: id,
+        label: attributes.name,
+    }));
+
+    const { data: shops } = useQuery(['shops'], () => getShops(), {
+        keepPreviousData: true,
+    });
+
+    const shopsOptions = shops?.data.map(({ id, attributes }) => ({
+        value: id,
+        label: attributes.name,
+    }));
+
+    const disabledNextButton = isLoading || isFetching;
+
+    const countriesOptions = formatCountriesData(countries);
 
     const onFinish = (values) => {
         form.submit();
@@ -76,11 +129,22 @@ const NewOrder = () => {
     const steps = [
         {
             title: 'Պարտադիր',
-            content: <FirstStepContent setFormValues={setFormValues} />,
+            content: (
+                <FirstStepContent
+                    setFormValues={setFormValues}
+                    categoriesOptions={categoriesOptions || []}
+                    shopsOptions={shopsOptions || []}
+                />
+            ),
         },
         {
             title: 'Ընտրովի',
-            content: <SecondStepContent />,
+            content: (
+                <SecondStepContent
+                    countriesOptions={countriesOptions}
+                    customerOptions={customerOptions || []}
+                />
+            ),
         },
         {
             title: 'Նկար',
@@ -167,7 +231,11 @@ const NewOrder = () => {
                 }}
             >
                 {current < steps.length - 1 && (
-                    <Button type='primary' onClick={() => next()}>
+                    <Button
+                        type='primary'
+                        onClick={() => next()}
+                        disabled={disabledNextButton}
+                    >
                         Հաջորդը
                     </Button>
                 )}

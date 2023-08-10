@@ -40,7 +40,7 @@ const Orders = () => {
         isError,
         error,
     } = useQuery(['orders', { filter }], () => getOrders(), {
-        keepPreviousData: false,
+        keepPreviousData: true,
     });
 
     const onTabChange = (e) => {

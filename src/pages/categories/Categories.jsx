@@ -21,7 +21,7 @@ const Categories = () => {
         ['categories'],
         () => getCategories(),
         {
-            keepPreviousData: false,
+            keepPreviousData: true,
         }
     );
 
