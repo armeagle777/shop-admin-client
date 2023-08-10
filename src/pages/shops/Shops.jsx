@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { Avatar, Button, Form, Space } from 'antd';
+import { Avatar, Button, Form, Modal, Space } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteShop, getShops } from '../../api/serverApi';
+import { addShop, deleteShop, getShops } from '../../api/serverApi';
 import { messages } from '../../utils/constants';
 import { generateRandomColor } from '../../utils/helpers';
 import Alert from '../../components/alert/Alert';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 import Table from '../../components/table/Table';
+import AddShopForm from '../../components/addShopForm/AddShopForm';
 
 const Shops = () => {
     const [showProgress, setShowProgress] = useState(false);
+    const [showShopModal, setShowShopModal] = useState(false);
     const [allowPopConfirm, setAllowPopConfirm] = useState(false);
     const { data, isLoading, isError, error } = useQuery(
         ['shops'],
@@ -28,18 +30,15 @@ const Shops = () => {
         ...attributes,
     }));
 
-    const [count, setCount] = useState(2);
     const [form] = Form.useForm();
+    const [addShopForm] = Form.useForm();
 
-    const handleAdd = () => {
-        const newData = {
-            key: count,
-            name: `Edward King ${count}`,
-            age: '32',
-            address: `London, Park Lane no. ${count}`,
-        };
-        setDataSource([...dataSource, newData]);
-        setCount(count + 1);
+    const onOpenShopModal = () => {
+        setShowShopModal(true);
+    };
+
+    const onCloseShopModal = () => {
+        setShowShopModal(false);
     };
 
     const deleteItemMutation = useMutation((itemId) => deleteShop(itemId), {
@@ -65,10 +64,51 @@ const Shops = () => {
         deleteItemMutation.mutate(id);
     };
 
+    const addItemMutation = useMutation((item) => addShop(item), {
+        onSuccess: (data) => {
+            if (data.data?.error) {
+                return toast.error(data.data?.error || 'Սխալ է տեղի ունեցել', {
+                    progress: undefined,
+                });
+            }
+            queryClient.invalidateQueries('shops');
+            toast.success(messages.customers.createSuccess, {
+                progress: undefined,
+            });
+            setShowShopModal(false);
+            addShopForm.resetFields();
+        },
+        onError: (error, variables, context, mutation) => {
+            console.log('err:::::: ', error);
+
+            toast.error(error.response?.data?.error?.message || error.message, {
+                progress: undefined,
+            });
+        },
+    });
+
+    const onSubmit = (values) => {
+        console.log('values:::::: ', values);
+
+        const { name, url, logo } = values.shop;
+        const newShop = { name, url };
+        if (logo) {
+            newShop.logo = logo;
+        }
+        console.log('newShop:::::: ', newShop);
+
+        addItemMutation.mutate(newShop);
+    };
+
     const columns = [
         {
             title: 'Անուն',
             dataIndex: 'name',
+            width: '25%',
+        },
+        {
+            title: 'URl',
+            dataIndex: 'url',
             width: '25%',
         },
         {
@@ -142,7 +182,7 @@ const Shops = () => {
     return (
         <>
             <Button
-                onClick={handleAdd}
+                onClick={onOpenShopModal}
                 type='primary'
                 style={{
                     marginBottom: 16,
@@ -156,6 +196,21 @@ const Shops = () => {
                 dataSource={modifiedData}
                 form={form}
             />
+            <Modal
+                title='Ավելացնել նոր Խանութ'
+                centered
+                open={showShopModal}
+                onCancel={onCloseShopModal}
+                width={800}
+                footer={null}
+            >
+                <AddShopForm
+                    onCancel={onCloseShopModal}
+                    onSubmit={onSubmit}
+                    isLoadingAdd={addItemMutation.isLoading}
+                    form={addShopForm}
+                />
+            </Modal>
         </>
     );
 };

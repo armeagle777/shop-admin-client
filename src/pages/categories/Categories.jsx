@@ -1,222 +1,180 @@
-import {
-    Form,
-    InputNumber,
-    Popconfirm,
-    Table,
-    Typography,
-    Input,
-    Button,
-} from 'antd';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { Button, Form, Input, Space } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+    getCategories,
+    addCategory,
+    deleteCategory,
+} from '../../api/serverApi';
+import { messages } from '../../utils/constants';
+import Alert from '../../components/alert/Alert';
+import Table from '../../components/table/Table';
+import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 
-const EditableCell = ({
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-}) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-    return (
-        <td {...restProps}>
-            {editing ? (
-                <Form.Item
-                    name={dataIndex}
-                    style={{
-                        margin: 0,
-                    }}
-                    rules={[
-                        {
-                            required: true,
-                            message: `Please Input ${title}!`,
-                        },
-                    ]}
-                >
-                    {inputNode}
-                </Form.Item>
-            ) : (
-                children
-            )}
-        </td>
-    );
-};
 const Categories = () => {
-    const [dataSource, setDataSource] = useState([
+    const queryClient = useQueryClient();
+    const [showProgress, setShowProgress] = useState(false);
+    const [allowPopConfirm, setAllowPopConfirm] = useState(false);
+    const { data, isLoading, isError, error } = useQuery(
+        ['categories'],
+        () => getCategories(),
         {
-            key: '0',
-            name: 'Edward King 0',
-            age: '32',
-            address: 'London, Park Lane no. 0',
-        },
-        {
-            key: '1',
-            name: 'Edward King 1',
-            age: '32',
-            address: 'London, Park Lane no. 1',
-        },
-    ]);
-    const [count, setCount] = useState(2);
-    const [form] = Form.useForm();
-    const [editingKey, setEditingKey] = useState('');
-    const isEditing = (record) => record.key === editingKey;
-    const edit = (record) => {
-        form.setFieldsValue({
-            name: '',
-            age: '',
-            address: '',
-            ...record,
-        });
-        setEditingKey(record.key);
-    };
-
-    const handleAdd = () => {
-        const newData = {
-            key: count,
-            name: `Edward King ${count}`,
-            age: '32',
-            address: `London, Park Lane no. ${count}`,
-        };
-        setDataSource([...dataSource, newData]);
-        setCount(count + 1);
-    };
-
-    const cancel = () => {
-        setEditingKey('');
-    };
-    const handleDelete = (key) => {
-        const newData = dataSource.filter((item) => item.key !== key);
-        setDataSource(newData);
-    };
-    const save = async (key) => {
-        try {
-            const row = await form.validateFields();
-            const newData = [...dataSource];
-            const index = newData.findIndex((item) => key === item.key);
-            if (index > -1) {
-                const item = newData[index];
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row,
-                });
-                setDataSource(newData);
-                setEditingKey('');
-            } else {
-                newData.push(row);
-                setDataSource(newData);
-                setEditingKey('');
-            }
-        } catch (errInfo) {
-            console.log('Validate Failed:', errInfo);
+            keepPreviousData: false,
         }
+    );
+
+    const validateMessages = {
+        required: '${label} պարտադիր է!',
+        types: {
+            email: '${label}֊ի ֆորմատը սխալ է',
+            number: '${label} is not a valid number!',
+        },
     };
+
+    const { data: categories = [], meta } = { ...data };
+    const modifiedData = categories.map(({ id, attributes }) => ({
+        key: id,
+        ...attributes,
+    }));
+
+    const [form] = Form.useForm();
+    const [newCategoryForm] = Form.useForm();
+
+    const deleteItemMutation = useMutation((itemId) => deleteCategory(itemId), {
+        onSuccess: () => {
+            queryClient.invalidateQueries('categories');
+            toast.success(messages.shops.deleteSuccess, {
+                progress: undefined,
+            });
+            setShowProgress(false);
+            setAllowPopConfirm(false);
+        },
+        onError: () => {
+            toast.error(messages.shops.deleteError, {
+                progress: undefined,
+            });
+            setShowProgress(false);
+            setAllowPopConfirm(false);
+        },
+    });
+
+    const handleDelete = (id) => {
+        setShowProgress(true);
+        deleteItemMutation.mutate(id);
+    };
+
+    const onFinish = (values) => {
+        addItemMutation.mutate(values);
+    };
+
+    const addItemMutation = useMutation((item) => addCategory(item), {
+        onSuccess: (data) => {
+            queryClient.invalidateQueries('categories');
+            toast.success(messages.customers.createSuccess, {
+                progress: undefined,
+            });
+            newCategoryForm.resetFields();
+        },
+        onError: (error, variables, context, mutation) => {
+            console.log('err:::::: ', error);
+
+            toast.error(error.response?.data?.error?.message || error.message, {
+                progress: undefined,
+            });
+        },
+    });
+
     const columns = [
         {
-            title: 'name',
+            title: 'Կատեգորիա',
             dataIndex: 'name',
             width: '25%',
-            editable: true,
         },
         {
-            title: 'age',
-            dataIndex: 'age',
-            width: '15%',
-            editable: true,
-        },
-        {
-            title: 'address',
-            dataIndex: 'address',
-            width: '40%',
-            editable: true,
-        },
-        {
-            title: 'operation',
+            title: 'Գործողություններ',
             dataIndex: 'operation',
             render: (_, record) => {
-                //       dataSource.length >= 1 ? (
-                //   <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-                //     <a>Delete</a>
-                //   </Popconfirm>
-                // ) : null,
-                const editable = isEditing(record);
-                return editable ? (
-                    <span>
-                        <Typography.Link
-                            onClick={() => save(record.key)}
-                            style={{
-                                marginRight: 8,
-                            }}
-                        >
-                            Save
-                        </Typography.Link>
-                        <Popconfirm title='Sure to cancel?' onConfirm={cancel}>
-                            <a>Cancel</a>
-                        </Popconfirm>
-                    </span>
-                ) : (
-                    <>
-                        <Typography.Link
-                            disabled={editingKey !== ''}
-                            onClick={() => edit(record)}
-                        >
-                            Edit
-                        </Typography.Link>
-                        <Popconfirm
-                            title='Sure to delete?'
-                            onConfirm={() => handleDelete(record.key)}
-                        >
-                            <a>Delete</a>
-                        </Popconfirm>
-                    </>
+                const itemId = record.key;
+                return (
+                    <Space>
+                        <Button
+                            icon={<EditOutlined />}
+                            size='small'
+                            title='Խմբագրել'
+                            type='default'
+                        />
+                        <PopConfirm
+                            loading={isLoading}
+                            itemId={itemId}
+                            onConfirm={handleDelete}
+                            showProgress={showProgress}
+                            allowPopConfirm={allowPopConfirm}
+                            setAllowPopConfirm={setAllowPopConfirm}
+                            icon={<DeleteOutlined />}
+                            buttonTitle='Հեռացնել'
+                        />
+                    </Space>
                 );
             },
         },
     ];
-    const mergedColumns = columns.map((col) => {
-        if (!col.editable) {
-            return col;
-        }
-        return {
-            ...col,
-            onCell: (record) => ({
-                record,
-                inputType: col.dataIndex === 'age' ? 'number' : 'text',
-                dataIndex: col.dataIndex,
-                title: col.title,
-                editing: isEditing(record),
-            }),
-        };
-    });
+
+    if (isError) {
+        return <Alert type='error' message={error.message} />;
+    }
+
     return (
         <>
-            <Button
-                onClick={handleAdd}
-                type='primary'
+            <Form
+                name='add-category'
+                validateMessages={validateMessages}
+                onFinish={onFinish}
+                labelCol={{
+                    span: 8,
+                }}
+                form={newCategoryForm}
+                wrapperCol={{
+                    span: 20,
+                }}
                 style={{
-                    marginBottom: 16,
+                    maxWidth: 600,
                 }}
             >
-                Add a row
-            </Button>
-            <Form form={form} component={false}>
-                <Table
-                    components={{
-                        body: {
-                            cell: EditableCell,
+                <Form.Item
+                    name='name'
+                    rules={[
+                        {
+                            required: true,
                         },
+                    ]}
+                    style={{
+                        display: 'inline-block',
+                        width: 'calc(50% - 8px)',
+                        marginRight: 8,
                     }}
-                    bordered
-                    dataSource={dataSource}
-                    columns={mergedColumns}
-                    rowClassName='editable-row'
-                    pagination={{
-                        onChange: cancel,
-                    }}
-                />
+                >
+                    <Input placeholder='Նոր կատեգորիա' />
+                </Form.Item>
+                <Button
+                    type='primary'
+                    htmlType='submit'
+                    loading={addItemMutation.isLoading}
+                    style={{ marginBottom: 16 }}
+                >
+                    Ավելացնել
+                </Button>
             </Form>
+            <Table
+                loading={!!isLoading}
+                columns={columns}
+                dataSource={modifiedData}
+                form={form}
+                size='medium'
+            />
         </>
     );
 };
+
 export default Categories;

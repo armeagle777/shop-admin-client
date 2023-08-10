@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ConfigProvider, theme, Button, Card } from 'antd';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useTheme } from './store/ThemeContext';
 
 import AdminLayout from './components/adminLayout/AdminLayout';
 import Home from './pages/home/Home';
@@ -14,12 +15,9 @@ import Orders from './pages/orders/Orders';
 import NotFound from './pages/notFound/NotFound';
 
 function App() {
-    const [isDarkMode, setIsDarkMode] = useState(false);
     const { defaultAlgorithm, darkAlgorithm } = theme;
 
-    const handleThemeChange = () => {
-        setIsDarkMode((previousValue) => !previousValue);
-    };
+    const { isDarkMode, toggleDarkMode } = useTheme();
 
     const router = createBrowserRouter([
         {
@@ -27,7 +25,7 @@ function App() {
             element: (
                 <AdminLayout
                     isDarkMode={isDarkMode}
-                    handleThemeChange={handleThemeChange}
+                    handleThemeChange={toggleDarkMode}
                 />
             ),
             children: [

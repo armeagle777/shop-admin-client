@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Avatar, Button, Form, Modal, Space, Typography } from 'antd';
+import { Avatar, Button, Form, Modal, Space } from 'antd';
 import { messages } from '../../utils/constants';
 import { generateRandomColor } from '../../utils/helpers';
 import { addCustomer, deleteCustomer, getCustomers } from '../../api/serverApi';

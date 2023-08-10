@@ -30,6 +30,12 @@ export const getShops = async () => {
     return response.data;
 };
 
+export const addShop = async (shop) => {
+    return await serverApi.post('/shops', {
+        data: shop,
+    });
+};
+
 export const deleteShop = async (id) => {
     return await serverApi.put(`/shops/${id}`, {
         data: { isActive: false },
@@ -51,6 +57,25 @@ export const getExpenseDirections = async () => {
 
 export const deleteExpenseDirections = async (id) => {
     return await serverApi.put(`/expense-directions/${id}`, {
+        data: { isActive: false },
+    });
+};
+
+export const getCategories = async () => {
+    const response = await serverApi.get(
+        '/categories?filters[isActive][$eq]=true'
+    );
+    return response.data;
+};
+
+export const addCategory = async (newCategory) => {
+    return await serverApi.post('/categories', {
+        data: newCategory,
+    });
+};
+
+export const deleteCategory = async (id) => {
+    return await serverApi.put(`/categories/${id}`, {
         data: { isActive: false },
     });
 };
