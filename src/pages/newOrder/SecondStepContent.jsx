@@ -1,8 +1,49 @@
 import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Cascader, Form, Input, Select, Space } from 'antd';
-import React from 'react';
+import { Button, Cascader, Form, Input, Modal, Select, Space } from 'antd';
+import React, { useState } from 'react';
+import AddCustomerForm from '../../components/shared/addCutomerForm/AddCustomerForm';
+import { addCustomer } from '../../api/serverApi';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { messages } from '../../utils/constants';
 
 const SecondStepContent = ({ countriesOptions, customerOptions }) => {
+    const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
+
+    const [addCustomerForm] = Form.useForm();
+    const onOpenCustomerModal = () => {
+        setShowAddCustomerModal(true);
+    };
+    const onCloseCustomerModal = () => {
+        setShowAddCustomerModal(false);
+    };
+    const queryClient = useQueryClient();
+    const addItemMutation = useMutation((item) => addCustomer(item), {
+        onSuccess: (data) => {
+            if (data.data?.error) {
+                return toast.error(data.data?.error || 'Սխալ է տեղի ունեցել', {
+                    progress: undefined,
+                });
+            }
+            queryClient.invalidateQueries('customers');
+            toast.success(messages.customers.createSuccess, {
+                progress: undefined,
+            });
+            setShowAddCustomerModal(false);
+            addCustomerForm.resetFields();
+        },
+        onError: (error, variables, context, mutation) => {
+            console.log('err:::::: ', error);
+
+            toast.error(error.response?.data?.error?.message || error.message, {
+                progress: undefined,
+            });
+        },
+    });
+    const onSubmit = (values) => {
+        addItemMutation.mutate(values);
+    };
+
     const onChange = (value, selectedOptions) => {
         console.log(value, selectedOptions);
     };
@@ -104,10 +145,26 @@ const SecondStepContent = ({ countriesOptions, customerOptions }) => {
                             type='primary'
                             icon={<PlusOutlined />}
                             size='medium'
+                            onClick={onOpenCustomerModal}
                         />
                     </Form.Item>
                 </Space.Compact>
             </Form.Item>
+            <Modal
+                title='Ավելացնել նոր հաճախորդ'
+                centered
+                open={showAddCustomerModal}
+                onCancel={onCloseCustomerModal}
+                width={800}
+                footer={null}
+            >
+                <AddCustomerForm
+                    onCancel={onCloseCustomerModal}
+                    onSubmit={onSubmit}
+                    isLoadingAdd={addItemMutation.isLoading}
+                    form={addCustomerForm}
+                />
+            </Modal>
         </>
     );
 };
