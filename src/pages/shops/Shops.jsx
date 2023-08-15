@@ -1,12 +1,11 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Avatar, Button, Form, Modal, Space } from 'antd';
+import { Form, Modal } from 'antd';
 import { useState } from 'react';
+import { BrowserView, MobileView } from 'react-device-detect';
 import { toast } from 'react-toastify';
 import { addShop, deleteShop, getShops } from '../../api/serverApi';
 import AddShopForm from '../../components/addShopForm/AddShopForm';
 import Alert from '../../components/alert/Alert';
-import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 import { messages } from '../../utils/constants';
 import ShopsBrowserView from './ShopsBrowserView';
 import ShopsMobileView from './ShopsMobileView';
@@ -103,25 +102,29 @@ const Shops = () => {
 
     return (
         <>
-            <ShopsBrowserView
-                form={form}
-                modifiedData={modifiedData}
-                isLoading={isLoading}
-                onOpenShopModal={onOpenShopModal}
-                allowPopConfirm={allowPopConfirm}
-                setAllowPopConfirm={setAllowPopConfirm}
-                handleDelete={handleDelete}
-                showProgress={showProgress}
-            />
-            <ShopsMobileView
-                modifiedData={modifiedData}
-                isLoading={isFetching || isLoading}
-                onOpenShopModal={onOpenShopModal}
-                handleDelete={handleDelete}
-                showProgress={showProgress}
-                allowPopConfirm={allowPopConfirm}
-                setAllowPopConfirm={setAllowPopConfirm}
-            />
+            <BrowserView>
+                <ShopsBrowserView
+                    form={form}
+                    modifiedData={modifiedData}
+                    isLoading={isLoading}
+                    onOpenShopModal={onOpenShopModal}
+                    allowPopConfirm={allowPopConfirm}
+                    setAllowPopConfirm={setAllowPopConfirm}
+                    handleDelete={handleDelete}
+                    showProgress={showProgress}
+                />
+            </BrowserView>
+            <MobileView>
+                <ShopsMobileView
+                    modifiedData={modifiedData}
+                    isLoading={isFetching || isLoading}
+                    onOpenShopModal={onOpenShopModal}
+                    handleDelete={handleDelete}
+                    showProgress={showProgress}
+                    allowPopConfirm={allowPopConfirm}
+                    setAllowPopConfirm={setAllowPopConfirm}
+                />
+            </MobileView>
             <Modal
                 title='Ավելացնել նոր Խանութ'
                 centered

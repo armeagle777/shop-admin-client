@@ -63,7 +63,7 @@ export const deleteExpenseDirections = async (id) => {
 
 export const getCategories = async () => {
     const response = await serverApi.get(
-        '/categories?filters[isActive][$eq]=true'
+        '/categories?filters[isActive][$eq]=true&populate=*'
     );
     return response.data;
 };

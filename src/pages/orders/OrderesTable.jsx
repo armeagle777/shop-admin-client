@@ -74,10 +74,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Tracking ID',
-                dataIndex: 'tracking_id',
-            },
-            {
                 title: 'Կատեգորիա',
                 render: (_, record) => {
                     const category = record.category;
@@ -106,7 +102,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                     return (
                         <Tooltip title={customer?.phone_number} placement='top'>
                             {customer?.first_name
-                                ? customer?.first_name + customer?.last_name
+                                ? customer?.first_name +
+                                  ' ' +
+                                  customer?.last_name
                                 : ''}
                         </Tooltip>
                     );
@@ -211,10 +209,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Tracking ID',
-                dataIndex: 'tracking_id',
-            },
-            {
                 title: 'Կատեգորիա',
                 render: (_, record) => {
                     const category = record.category;
@@ -244,7 +238,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                     return (
                         <Tooltip title={customer?.phone_number} placement='top'>
                             {customer?.first_name
-                                ? customer?.first_name + customer?.last_name
+                                ? customer?.first_name +
+                                  ' ' +
+                                  customer?.last_name
                                 : ''}
                         </Tooltip>
                     );
@@ -360,10 +356,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Tracking ID',
-                dataIndex: 'tracking_id',
-            },
-            {
                 title: 'Կատեգորիա',
                 render: (_, record) => {
                     const category = record.category;
@@ -393,7 +385,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                     return (
                         <Tooltip title={customer?.phone_number} placement='top'>
                             {customer?.first_name
-                                ? customer?.first_name + customer?.last_name
+                                ? customer?.first_name +
+                                  ' ' +
+                                  customer?.last_name
                                 : ''}
                         </Tooltip>
                     );
@@ -486,10 +480,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Tracking ID',
-                dataIndex: 'tracking_id',
-            },
-            {
                 title: 'Կատեգորիա',
                 render: (_, record) => {
                     const category = record.category;
@@ -512,7 +502,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                     return (
                         <Tooltip title={customer?.phone_number} placement='top'>
                             {customer?.first_name
-                                ? customer?.first_name + customer?.last_name
+                                ? customer?.first_name +
+                                  ' ' +
+                                  customer?.last_name
                                 : ''}
                         </Tooltip>
                     );
@@ -578,10 +570,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Tracking ID',
-                dataIndex: 'tracking_id',
-            },
-            {
                 title: 'Կատեգորիա',
                 render: (_, record) => {
                     const category = record.category;
@@ -604,7 +592,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                     return (
                         <Tooltip title={customer?.phone_number} placement='top'>
                             {customer?.first_name
-                                ? customer?.first_name + customer?.last_name
+                                ? customer?.first_name +
+                                  ' ' +
+                                  customer?.last_name
                                 : ''}
                         </Tooltip>
                     );

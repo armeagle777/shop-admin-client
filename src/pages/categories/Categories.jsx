@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { Button, Form, Input, Space } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Form } from 'antd';
+import { useState } from 'react';
+import { BrowserView, MobileView } from 'react-device-detect';
+import { toast } from 'react-toastify';
 import {
-    getCategories,
     addCategory,
     deleteCategory,
+    getCategories,
 } from '../../api/serverApi';
-import { messages } from '../../utils/constants';
 import Alert from '../../components/alert/Alert';
-import Table from '../../components/table/Table';
-import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
+import { messages } from '../../utils/constants';
+import CategoriesBrowserView from './CategoriesBrowserView';
+import CategoriesMobileView from './CategoriesMobileView';
 
 const Categories = () => {
     const queryClient = useQueryClient();
     const [showProgress, setShowProgress] = useState(false);
     const [allowPopConfirm, setAllowPopConfirm] = useState(false);
-    const { data, isLoading, isError, error } = useQuery(
+    const { data, isLoading, isFetching, isError, error } = useQuery(
         ['categories'],
         () => getCategories(),
         {
@@ -26,7 +26,7 @@ const Categories = () => {
     );
 
     const validateMessages = {
-        required: '${label} պարտադիր է!',
+        required: 'Անունը պարտադիր է!',
         types: {
             email: '${label}֊ի ֆորմատը սխալ է',
             number: '${label} is not a valid number!',
@@ -39,7 +39,6 @@ const Categories = () => {
         ...attributes,
     }));
 
-    const [form] = Form.useForm();
     const [newCategoryForm] = Form.useForm();
 
     const deleteItemMutation = useMutation((itemId) => deleteCategory(itemId), {
@@ -86,93 +85,40 @@ const Categories = () => {
         },
     });
 
-    const columns = [
-        {
-            title: 'Կատեգորիա',
-            dataIndex: 'name',
-            width: '25%',
-        },
-        {
-            title: 'Գործողություններ',
-            dataIndex: 'operation',
-            render: (_, record) => {
-                const itemId = record.key;
-                return (
-                    <Space>
-                        <Button
-                            icon={<EditOutlined />}
-                            size='small'
-                            title='Խմբագրել'
-                            type='default'
-                        />
-                        <PopConfirm
-                            loading={isLoading}
-                            itemId={itemId}
-                            onConfirm={handleDelete}
-                            showProgress={showProgress}
-                            allowPopConfirm={allowPopConfirm}
-                            setAllowPopConfirm={setAllowPopConfirm}
-                            icon={<DeleteOutlined />}
-                            buttonTitle='Հեռացնել'
-                        />
-                    </Space>
-                );
-            },
-        },
-    ];
-
     if (isError) {
         return <Alert type='error' message={error.message} />;
     }
 
     return (
         <>
-            <Form
-                name='add-category'
-                validateMessages={validateMessages}
-                onFinish={onFinish}
-                labelCol={{
-                    span: 8,
-                }}
-                form={newCategoryForm}
-                wrapperCol={{
-                    span: 20,
-                }}
-                style={{
-                    maxWidth: 600,
-                }}
-            >
-                <Form.Item
-                    name='name'
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
-                    style={{
-                        display: 'inline-block',
-                        width: 'calc(50% - 8px)',
-                        marginRight: 8,
-                    }}
-                >
-                    <Input placeholder='Նոր կատեգորիա' />
-                </Form.Item>
-                <Button
-                    type='primary'
-                    htmlType='submit'
-                    loading={addItemMutation.isLoading}
-                    style={{ marginBottom: 16 }}
-                >
-                    Ավելացնել
-                </Button>
-            </Form>
-            <Table
-                loading={!!isLoading}
-                columns={columns}
-                dataSource={modifiedData}
-                form={form}
-                size='medium'
-            />
+            <BrowserView>
+                <CategoriesBrowserView
+                    validateMessages={validateMessages}
+                    onFinish={onFinish}
+                    newCategoryForm={newCategoryForm}
+                    addItemMutation={addItemMutation}
+                    isLoading={isLoading}
+                    modifiedData={modifiedData}
+                    handleDelete={handleDelete}
+                    showProgress={showProgress}
+                    allowPopConfirm={allowPopConfirm}
+                    setAllowPopConfirm={setAllowPopConfirm}
+                />
+            </BrowserView>
+            <MobileView>
+                <CategoriesMobileView
+                    validateMessages={validateMessages}
+                    onFinish={onFinish}
+                    newCategoryForm={newCategoryForm}
+                    addItemMutation={addItemMutation}
+                    isLoading={isLoading || isFetching}
+                    modifiedData={modifiedData}
+                    handleDelete={handleDelete}
+                    showProgress={showProgress}
+                    allowPopConfirm={allowPopConfirm}
+                    setAllowPopConfirm={setAllowPopConfirm}
+                />
+            </MobileView>
         </>
     );
 };

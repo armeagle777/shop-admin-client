@@ -1,11 +1,11 @@
 import React from 'react';
-import { Avatar, Button, FloatButton, List, Skeleton, Space } from 'antd';
 import {
     DeleteOutlined,
     EditOutlined,
     PlusOutlined,
     StarOutlined,
 } from '@ant-design/icons';
+import { Button, Form, Input, List, Skeleton, Space } from 'antd';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 
 const IconText = ({ icon, text }) => (
@@ -15,17 +15,49 @@ const IconText = ({ icon, text }) => (
     </Space>
 );
 
-const ShopsMobileView = ({
-    modifiedData,
+const CategoriesMobileView = ({
+    validateMessages,
+    onFinish,
+    newCategoryForm,
+    addItemMutation,
     isLoading,
-    onOpenShopModal,
+    modifiedData,
     handleDelete,
     showProgress,
     allowPopConfirm,
     setAllowPopConfirm,
 }) => {
     return (
-        <>
+        <Space direction='vertical' style={{ width: '100%' }}>
+            <Form
+                name='add-category'
+                validateMessages={validateMessages}
+                onFinish={onFinish}
+                form={newCategoryForm}
+            >
+                <Space.Compact block style={{ justifyContent: 'center' }}>
+                    <Form.Item
+                        name='name'
+                        rules={[
+                            {
+                                required: true,
+                            },
+                        ]}
+                        style={{
+                            width: '80%',
+                        }}
+                    >
+                        <Input placeholder='Նոր կատեգորիա' />
+                    </Form.Item>
+                    <Button
+                        style={{ outline: 'none' }}
+                        type='primary'
+                        htmlType='submit'
+                        icon={<PlusOutlined />}
+                        loading={addItemMutation.isLoading}
+                    />
+                </Space.Compact>
+            </Form>
             <List
                 pagination={{
                     position: 'bottom',
@@ -35,8 +67,7 @@ const ShopsMobileView = ({
                 dataSource={modifiedData}
                 itemLayout='vertical'
                 renderItem={(item, index) => {
-                    const { key, logo, name, url, orders } = { ...item };
-                    const avatarUrl = logo?.data?.attributes?.url;
+                    const { key, name, orders } = { ...item };
                     return (
                         <List.Item
                             key={key}
@@ -66,41 +97,21 @@ const ShopsMobileView = ({
                                               text={`${
                                                   orders?.data?.length || 0
                                               } Պատվեր`}
-                                              key='list-vertical-total-orders'
+                                              key='list-vertical-total-categories'
                                           />,
                                       ]
                                     : undefined
                             }
                         >
-                            <Skeleton loading={isLoading} active avatar>
-                                <List.Item.Meta
-                                    avatar={<Avatar src={avatarUrl} />}
-                                    title={
-                                        <a target='_blank' href={url}>
-                                            {name}
-                                        </a>
-                                    }
-                                    // description={item.description}
-                                />
-                                {/* {item.content} */}
+                            <Skeleton loading={isLoading} active>
+                                <List.Item.Meta title={name} />
                             </Skeleton>
                         </List.Item>
                     );
                 }}
             />
-            <FloatButton
-                shape='circle'
-                type='primary'
-                style={{
-                    right: 20,
-                    bottom: 20,
-                    outline: 'none',
-                }}
-                onClick={onOpenShopModal}
-                icon={<PlusOutlined />}
-            />
-        </>
+        </Space>
     );
 };
 
-export default ShopsMobileView;
+export default CategoriesMobileView;

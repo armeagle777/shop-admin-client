@@ -71,7 +71,7 @@ const AdminLayout = ({ handleThemeChange, isDarkMode }) => {
                 <Content
                     style={{
                         margin: '8px',
-                        padding: '36px 24px',
+                        padding: isMobile ? '36px 0' : '36px 24px',
                         minHeight: 280,
                         background: colorBgContainer,
                     }}
