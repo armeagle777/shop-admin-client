@@ -2,6 +2,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Upload } from 'antd';
 import axios from 'axios';
 import React, { useState } from 'react';
+import { isMobile } from 'react-device-detect';
 
 const layout = {
     labelCol: {
@@ -112,7 +113,7 @@ const AddShopForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
             <Form.Item
                 wrapperCol={{
                     ...layout.wrapperCol,
-                    offset: 12,
+                    offset: isMobile ? 2 : 12,
                 }}
             >
                 <Button onClick={onCancel} style={{ marginRight: 10 }}>

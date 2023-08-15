@@ -65,6 +65,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                                         size='large'
                                         gap={2}
                                         src={src}
+                                        shape='square'
                                     />
                                 );
                             })}
@@ -201,6 +202,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                                         size='large'
                                         gap={2}
                                         src={src}
+                                        shape='square'
                                     />
                                 );
                             })}
@@ -349,6 +351,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                                         size='large'
                                         gap={2}
                                         src={src}
+                                        shape='square'
                                     />
                                 );
                             })}
@@ -474,6 +477,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                                         size='large'
                                         gap={2}
                                         src={src}
+                                        shape='square'
                                     />
                                 );
                             })}
@@ -565,6 +569,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                                         size='large'
                                         gap={2}
                                         src={src}
+                                        shape='square'
                                     />
                                 );
                             })}

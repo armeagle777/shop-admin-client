@@ -1,9 +1,10 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { Button, Layout, theme } from 'antd';
+import { Button, Layout, Menu, theme } from 'antd';
 import { useState } from 'react';
 import { BsMoonFill, BsSunFill } from 'react-icons/bs';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { isMobile } from 'react-device-detect';
 
 const { Header, Content } = Layout;
 
@@ -27,24 +28,26 @@ const AdminLayout = ({ handleThemeChange, isDarkMode }) => {
                         background: colorBgContainer,
                     }}
                 >
-                    <Button
-                        type='text'
-                        icon={
-                            collapsed ? (
-                                <MenuUnfoldOutlined />
-                            ) : (
-                                <MenuFoldOutlined />
-                            )
-                        }
-                        onClick={() => setCollapsed(!collapsed)}
-                        style={{
-                            fontSize: '8px',
-                            width: 64,
-                            height: 64,
-                            outline: 'none',
-                            border: 'none',
-                        }}
-                    />
+                    {!isMobile && (
+                        <Button
+                            type='text'
+                            icon={
+                                collapsed ? (
+                                    <MenuUnfoldOutlined />
+                                ) : (
+                                    <MenuFoldOutlined />
+                                )
+                            }
+                            onClick={() => setCollapsed(!collapsed)}
+                            style={{
+                                fontSize: '8px',
+                                width: 64,
+                                height: 64,
+                                outline: 'none',
+                                border: 'none',
+                            }}
+                        />
+                    )}
                     <Button
                         ghost
                         type='primary'
@@ -68,7 +71,7 @@ const AdminLayout = ({ handleThemeChange, isDarkMode }) => {
                 <Content
                     style={{
                         margin: '8px',
-                        padding: 24,
+                        padding: '36px 24px',
                         minHeight: 280,
                         background: colorBgContainer,
                     }}

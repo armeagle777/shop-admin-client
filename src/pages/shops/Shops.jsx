@@ -1,21 +1,21 @@
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { Avatar, Button, Form, Modal, Space } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Avatar, Button, Form, Modal, Space } from 'antd';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { addShop, deleteShop, getShops } from '../../api/serverApi';
-import { messages } from '../../utils/constants';
-import { generateRandomColor } from '../../utils/helpers';
+import AddShopForm from '../../components/addShopForm/AddShopForm';
 import Alert from '../../components/alert/Alert';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
-import Table from '../../components/table/Table';
-import AddShopForm from '../../components/addShopForm/AddShopForm';
+import { messages } from '../../utils/constants';
+import ShopsBrowserView from './ShopsBrowserView';
+import ShopsMobileView from './ShopsMobileView';
 
 const Shops = () => {
     const [showProgress, setShowProgress] = useState(false);
     const [showShopModal, setShowShopModal] = useState(false);
     const [allowPopConfirm, setAllowPopConfirm] = useState(false);
-    const { data, isLoading, isError, error } = useQuery(
+    const { data, isLoading, isFetching, isError, error } = useQuery(
         ['shops'],
         () => getShops(),
         {
@@ -88,92 +88,14 @@ const Shops = () => {
     });
 
     const onSubmit = (values) => {
-        console.log('values:::::: ', values);
-
         const { name, url, logo } = values.shop;
         const newShop = { name, url };
         if (logo) {
             newShop.logo = logo;
         }
-        console.log('newShop:::::: ', newShop);
 
         addItemMutation.mutate(newShop);
     };
-
-    const columns = [
-        {
-            title: 'Անուն',
-            dataIndex: 'name',
-            width: '25%',
-        },
-        {
-            title: 'URl',
-            dataIndex: 'url',
-            width: '25%',
-        },
-        {
-            title: 'Նկար',
-            dataIndex: 'logo',
-            width: '10%',
-            render: (_, record) => {
-                const src = record.logo.data?.attributes.formats.thumbnail.url;
-                return (
-                    <Avatar
-                        style={{
-                            backgroundColor: generateRandomColor(),
-                            verticalAlign: 'middle',
-                            border: 'none',
-                        }}
-                        size='large'
-                        gap={2}
-                        src={src}
-                    >
-                        {record.name || ''}
-                    </Avatar>
-                );
-            },
-        },
-        {
-            title: 'Հասցե',
-            dataIndex: 'url',
-            width: '40%',
-            render: (_, record) => {
-                return (
-                    <a target='_blank' href={record.url}>
-                        {record.url}
-                    </a>
-                );
-            },
-        },
-
-        {
-            title: 'Գործողություններ',
-            dataIndex: 'operation',
-            render: (_, record) => {
-                const itemId = record.key;
-                return (
-                    <Space>
-                        <Button
-                            icon={<EditOutlined />}
-                            size='small'
-                            title='Խմբագրել'
-                            type='default'
-                        />
-                        <PopConfirm
-                            loading={isLoading}
-                            itemId={itemId}
-                            onConfirm={handleDelete}
-                            showProgress={showProgress}
-                            allowPopConfirm={allowPopConfirm}
-                            setAllowPopConfirm={setAllowPopConfirm}
-                            icon={<DeleteOutlined />}
-                            buttonTitle='Հեռացնել'
-                        />
-                    </Space>
-                );
-            },
-        },
-    ];
 
     if (isError) {
         return <Alert type='error' message={error.message} />;
@@ -181,20 +103,24 @@ const Shops = () => {
 
     return (
         <>
-            <Button
-                onClick={onOpenShopModal}
-                type='primary'
-                style={{
-                    marginBottom: 16,
-                }}
-            >
-                Ավելացնել
-            </Button>
-            <Table
-                loading={!!isLoading}
-                columns={columns}
-                dataSource={modifiedData}
+            <ShopsBrowserView
                 form={form}
+                modifiedData={modifiedData}
+                isLoading={isLoading}
+                onOpenShopModal={onOpenShopModal}
+                allowPopConfirm={allowPopConfirm}
+                setAllowPopConfirm={setAllowPopConfirm}
+                handleDelete={handleDelete}
+                showProgress={showProgress}
+            />
+            <ShopsMobileView
+                modifiedData={modifiedData}
+                isLoading={isFetching || isLoading}
+                onOpenShopModal={onOpenShopModal}
+                handleDelete={handleDelete}
+                showProgress={showProgress}
+                allowPopConfirm={allowPopConfirm}
+                setAllowPopConfirm={setAllowPopConfirm}
             />
             <Modal
                 title='Ավելացնել նոր Խանութ'

@@ -36,3 +36,27 @@ export const items = [
         key: 5,
     },
 ];
+
+export const setgmentOptions = [
+    'Պատվիրված',
+    'Առկա',
+    'Առաքված',
+    'Դադարեցված',
+    'Վերադարձված',
+];
+
+export const segmentFilterValues = {
+    Պատվիրված: 'ORDERED',
+    Առկա: 'AVAILABLE',
+    Առաքված: 'DELIVERED',
+    Դադարեցված: 'CANCELLED',
+    Վերադարձված: 'RETURNED',
+};
+
+export const filterSegmentValues = {
+    ORDERED: 'Պատվիրված',
+    AVAILABLE: 'Առկա',
+    DELIVERED: 'Առաքված',
+    CANCELLED: 'Դադարեցված',
+    RETURNED: 'Վերադարձված',
+};

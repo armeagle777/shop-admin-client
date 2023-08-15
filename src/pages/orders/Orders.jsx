@@ -1,11 +1,31 @@
-import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Form, Tabs } from 'antd';
+import {
+    Avatar,
+    FloatButton,
+    Form,
+    List,
+    Segmented,
+    Space,
+    Typography,
+} from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getOrders } from '../../api/serverApi';
-import { filterTabsValue, items, tabFilterValues } from './Orders.constants';
 import OrderesTable from './OrderesTable';
+import {
+    filterSegmentValues,
+    segmentFilterValues,
+    setgmentOptions,
+    tabFilterValues,
+} from './Orders.constants';
 
+import {
+    LikeOutlined,
+    MessageOutlined,
+    PlusOutlined,
+    StarOutlined,
+} from '@ant-design/icons';
+import { BrowserView, MobileView, isMobile } from 'react-device-detect';
 import './orders.styles.css';
 
 const Orders = () => {
@@ -47,35 +67,41 @@ const Orders = () => {
         setFilter(tabFilterValues[e]);
     };
 
+    const onSegmentChange = (e) => {
+        setFilter(segmentFilterValues[e]);
+    };
+
     const filteredData = data.filter((o) => o?.attributes?.status === filter);
 
     return (
         <>
-            <Tabs
-                tabBarExtraContent={{
-                    left: (
-                        <Button
-                            type='primary'
-                            htmlType='submit'
-                            onClick={handleNavigate}
-                            className='tabs-extra-demo-button'
-                        >
-                            Ավելացնել
-                        </Button>
-                    ),
+            <BrowserView>
+                <Segmented
+                    onChange={onSegmentChange}
+                    block
+                    options={setgmentOptions}
+                    defaultValue={filterSegmentValues[filter]}
+                    style={{ marginBottom: 10 }}
+                />
+                <OrderesTable
+                    data={filteredData}
+                    isLoading={isLoading}
+                    error={error}
+                    isError={isError}
+                    form={form}
+                    filter={filter}
+                />
+            </BrowserView>
+            <MobileView></MobileView>
+            <FloatButton
+                shape='circle'
+                type='primary'
+                style={{
+                    right: isMobile ? 20 : 94,
                 }}
-                items={items}
-                tabBarGutter={20}
-                onChange={onTabChange}
-                defaultActiveKey={filterTabsValue[filter] || 1}
-            />
-            <OrderesTable
-                data={filteredData}
-                isLoading={isLoading}
-                error={error}
-                isError={isError}
-                form={form}
-                filter={filter}
+                onClick={handleNavigate}
+                icon={<PlusOutlined />}
+                tooltip={<div>Ավելացնել</div>}
             />
         </>
     );
