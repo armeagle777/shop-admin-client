@@ -50,7 +50,7 @@ export const addExpenseDirection = async (newDirection) => {
 
 export const getExpenseDirections = async () => {
     const response = await serverApi.get(
-        '/expense-directions?filters[isActive][$eq]=true'
+        '/expense-directions?filters[isActive][$eq]=true&populate=*'
     );
     return response.data;
 };
