@@ -128,13 +128,18 @@ const Customers = () => {
         {
             title: 'Հեռ․',
             dataIndex: 'phone_number',
-            width: '40%',
+        },
+        {
+            title: 'Հասցե',
+            dataIndex: 'address',
         },
 
         {
             title: 'Գործողություններ',
             dataIndex: 'operation',
             render: (_, record) => {
+                console.log('record:::::: ', record);
+
                 const itemId = record.key;
                 return (
                     <Space>

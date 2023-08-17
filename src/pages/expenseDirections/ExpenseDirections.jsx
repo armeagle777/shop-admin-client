@@ -20,13 +20,15 @@ const ExpenseDirections = () => {
     const queryClient = useQueryClient();
     const [showProgress, setShowProgress] = useState(false);
     const [allowPopConfirm, setAllowPopConfirm] = useState(false);
-    const { data, isLoading, isFetching, isError, error } = useQuery(
-        ['expense-directions'],
-        () => getExpenseDirections(),
-        {
-            keepPreviousData: false,
-        }
-    );
+    const {
+        data = { data: [] },
+        isLoading,
+        isFetching,
+        isError,
+        error,
+    } = useQuery(['expense-directions'], () => getExpenseDirections(), {
+        keepPreviousData: false,
+    });
 
     const validateMessages = {
         required: '${label} պարտադիր է!',
@@ -36,12 +38,11 @@ const ExpenseDirections = () => {
         },
     };
 
-    const { data: expenseDirections = [], meta } = { ...data };
+    const { data: expenseDirections, meta } = { ...data };
     const modifiedData = expenseDirections.map(({ id, attributes }) => ({
         key: id,
         ...attributes,
     }));
-    console.log('modifiedData:::::: ', modifiedData);
 
     const [newDirectionForm] = Form.useForm();
 

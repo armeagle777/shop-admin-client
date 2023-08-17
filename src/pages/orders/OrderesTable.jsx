@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Avatar, Button, Space, Tooltip } from 'antd';
+import { Avatar, Button, Image, Space, Tooltip } from 'antd';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import {
@@ -40,36 +40,15 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Նկարագրություն',
+                title: 'Չափս',
                 dataIndex: 'description',
             },
             {
                 title: 'Նկարներ',
                 render: (_, record) => {
-                    const images = record.images.data;
+                    const images = record.images?.data;
                     return (
-                        <Avatar.Group
-                            maxCount={2}
-                            maxStyle={{
-                                color: '#f56a00',
-                                backgroundColor: generateRandomColor(),
-                                border: 'none',
-                            }}
-                        >
-                            {images?.map((i) => {
-                                const src =
-                                    i.attributes?.formats?.thumbnail?.url;
-                                return (
-                                    <Avatar
-                                        key={i.id}
-                                        size='large'
-                                        gap={2}
-                                        src={src}
-                                        shape='square'
-                                    />
-                                );
-                            })}
-                        </Avatar.Group>
+                        <Image width={50} src={images[0]?.attributes?.url} />
                     );
                 },
             },
@@ -91,7 +70,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
             {
                 title: 'Պատվերի ա/թ',
                 render: (_, record) => {
-                    const created_date = record.createdAt;
+                    const created_date = record.order_date || record.createdAt;
                     return format(new Date(created_date), 'dd-MM-yyy');
                 },
             },
@@ -175,37 +154,14 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Նկարագրություն',
+                title: 'Չափս',
                 dataIndex: 'description',
             },
             {
                 title: 'Նկարներ',
                 render: (_, record) => {
                     const images = record.images.data;
-                    return (
-                        <Avatar.Group
-                            maxCount={2}
-                            maxStyle={{
-                                color: '#f56a00',
-                                backgroundColor: generateRandomColor(),
-                                border: 'none',
-                            }}
-                        >
-                            {images?.map((i) => {
-                                const src =
-                                    i.attributes?.formats?.thumbnail?.url;
-                                return (
-                                    <Avatar
-                                        key={i.id}
-                                        size='large'
-                                        gap={2}
-                                        src={src}
-                                        shape='square'
-                                    />
-                                );
-                            })}
-                        </Avatar.Group>
-                    );
+                    return <Image width={50} src={images[0].attributes.url} />;
                 },
             },
             {
@@ -322,37 +278,14 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Նկարագրություն',
+                title: 'Չափս',
                 dataIndex: 'description',
             },
             {
                 title: 'Նկարներ',
                 render: (_, record) => {
                     const images = record.images.data;
-                    return (
-                        <Avatar.Group
-                            maxCount={2}
-                            maxStyle={{
-                                color: '#f56a00',
-                                backgroundColor: generateRandomColor(),
-                                border: 'none',
-                            }}
-                        >
-                            {images?.map((i) => {
-                                const src =
-                                    i.attributes?.formats?.thumbnail?.url;
-                                return (
-                                    <Avatar
-                                        key={i.id}
-                                        size='large'
-                                        gap={2}
-                                        src={src}
-                                        shape='square'
-                                    />
-                                );
-                            })}
-                        </Avatar.Group>
-                    );
+                    return <Image width={50} src={images[0].attributes.url} />;
                 },
             },
             {
@@ -446,37 +379,14 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Նկարագրություն',
+                title: 'Չափս',
                 dataIndex: 'description',
             },
             {
                 title: 'Նկարներ',
                 render: (_, record) => {
                     const images = record.images.data;
-                    return (
-                        <Avatar.Group
-                            maxCount={2}
-                            maxStyle={{
-                                color: '#f56a00',
-                                backgroundColor: generateRandomColor(),
-                                border: 'none',
-                            }}
-                        >
-                            {images?.map((i) => {
-                                const src =
-                                    i.attributes?.formats?.thumbnail?.url;
-                                return (
-                                    <Avatar
-                                        key={i.id}
-                                        size='large'
-                                        gap={2}
-                                        src={src}
-                                        shape='square'
-                                    />
-                                );
-                            })}
-                        </Avatar.Group>
-                    );
+                    return <Image width={50} src={images[0].attributes.url} />;
                 },
             },
             {
@@ -536,37 +446,14 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Նկարագրություն',
+                title: 'Չափս',
                 dataIndex: 'description',
             },
             {
                 title: 'Նկարներ',
                 render: (_, record) => {
                     const images = record.images.data;
-                    return (
-                        <Avatar.Group
-                            maxCount={2}
-                            maxStyle={{
-                                color: '#f56a00',
-                                backgroundColor: generateRandomColor(),
-                                border: 'none',
-                            }}
-                        >
-                            {images?.map((i) => {
-                                const src =
-                                    i.attributes?.formats?.thumbnail?.url;
-                                return (
-                                    <Avatar
-                                        key={i.id}
-                                        size='large'
-                                        gap={2}
-                                        src={src}
-                                        shape='square'
-                                    />
-                                );
-                            })}
-                        </Avatar.Group>
-                    );
+                    return <Image width={50} src={images[0].attributes.url} />;
                 },
             },
             {

@@ -26,6 +26,7 @@ import {
     StarOutlined,
 } from '@ant-design/icons';
 import { BrowserView, MobileView, isMobile } from 'react-device-detect';
+import OrdersMobileView from './OrdersMobileView';
 import './orders.styles.css';
 
 const Orders = () => {
@@ -63,10 +64,6 @@ const Orders = () => {
         keepPreviousData: true,
     });
 
-    const onTabChange = (e) => {
-        setFilter(tabFilterValues[e]);
-    };
-
     const onSegmentChange = (e) => {
         setFilter(segmentFilterValues[e]);
     };
@@ -92,12 +89,14 @@ const Orders = () => {
                     filter={filter}
                 />
             </BrowserView>
-            <MobileView></MobileView>
+            <MobileView>
+                <OrdersMobileView filteredData={filteredData} />
+            </MobileView>
             <FloatButton
                 shape='circle'
                 type='primary'
                 style={{
-                    right: isMobile ? 20 : 94,
+                    right: isMobile ? 20 : 150,
                 }}
                 onClick={handleNavigate}
                 icon={<PlusOutlined />}

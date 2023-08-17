@@ -15,6 +15,8 @@ import {
 import { messages } from '../../utils/constants';
 import { toast } from 'react-toastify';
 import { formatCountriesData } from '../../utils/helpers';
+import dayjs from 'dayjs';
+import { format } from 'date-fns';
 
 const NewOrder = () => {
     const { token } = theme.useToken();
@@ -97,7 +99,7 @@ const NewOrder = () => {
 
     const onSubmit = () => {
         const orderAddress = {};
-        const { address, ...restData } = { ...formValues };
+        const { address, order_date, ...restData } = { ...formValues };
 
         const { district, street, index } = { ...address };
         if (district) {
@@ -123,6 +125,10 @@ const NewOrder = () => {
         }
 
         const newData = { ...restData, address: orderAddress };
+        if (order_date) {
+            newData.order_date = new Date(order_date.$d).toISOString();
+        }
+
         addItemMutation.mutate(newData);
     };
 
@@ -213,10 +219,6 @@ const NewOrder = () => {
                     form={form}
                     name='new-order'
                     onFinish={onFinish}
-                    // initialValues={{
-                    //     residence: ['zhejiang', 'hangzhou', 'xihu'],
-                    //     prefix: '86',
-                    // }}
                     style={{
                         maxWidth: 600,
                     }}

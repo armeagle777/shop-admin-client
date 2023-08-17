@@ -1,5 +1,14 @@
 import { DownloadOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Cascader, Form, Input, Modal, Select, Space } from 'antd';
+import {
+    Button,
+    Cascader,
+    DatePicker,
+    Form,
+    Input,
+    Modal,
+    Select,
+    Space,
+} from 'antd';
 import React, { useState } from 'react';
 import AddCustomerForm from '../../components/shared/addCutomerForm/AddCustomerForm';
 import { addCustomer } from '../../api/serverApi';
@@ -17,6 +26,7 @@ const SecondStepContent = ({ countriesOptions, customerOptions }) => {
     const onCloseCustomerModal = () => {
         setShowAddCustomerModal(false);
     };
+    const dateFormat = 'DD/MM/YYYY';
     const queryClient = useQueryClient();
     const addItemMutation = useMutation((item) => addCustomer(item), {
         onSuccess: (data) => {
@@ -56,27 +66,12 @@ const SecondStepContent = ({ countriesOptions, customerOptions }) => {
         );
     return (
         <>
-            <Form.Item
-                name='reference_url'
-                label='Ապրանքի link-ը'
-                rules={[
-                    {
-                        whitespace: true,
-                    },
-                ]}
-            >
-                <Input />
-            </Form.Item>
-            <Form.Item
-                name='tracking_id'
-                label='Բեռնակրման համար'
-                rules={[
-                    {
-                        whitespace: true,
-                    },
-                ]}
-            >
-                <Input />
+            <Form.Item name='order_date' label='Պատվերի ա/թ'>
+                <DatePicker
+                    format={dateFormat}
+                    placeholder='Ընտրեք ամսաթիվը'
+                    style={{ width: '100%' }}
+                />
             </Form.Item>
             <Form.Item name={['address', 'district']} label='Հասցե:երկիր'>
                 <Cascader
