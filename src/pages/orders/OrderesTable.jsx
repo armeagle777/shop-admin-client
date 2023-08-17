@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import delve from 'dlv';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Avatar, Button, Image, Space, Tooltip } from 'antd';
 import { format } from 'date-fns';
@@ -53,13 +54,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Կատեգորիա',
-                render: (_, record) => {
-                    const category = record.category;
-                    return category?.data?.attributes.name;
-                },
-            },
-            {
                 title: 'Ինքնարժեք',
                 dataIndex: 'net_cost',
             },
@@ -90,16 +84,46 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Խանութ',
+                title: 'Նկար',
+                dataIndex: 'Avatar',
                 render: (_, record) => {
-                    const shop = record?.shop?.data?.attributes;
+                    const src =
+                        record.customer?.data?.attributes?.Avatar.data
+                            ?.attributes?.formats?.thumbnail?.url || '';
                     return (
-                        <a target='_blank' href={shop?.url}>
-                            {shop?.name}
-                        </a>
+                        <Avatar
+                            style={{
+                                backgroundColor: generateRandomColor(),
+                                verticalAlign: 'middle',
+                                border: 'none',
+                            }}
+                            size='large'
+                            gap={2}
+                            src={src}
+                        >
+                            {record.first_name || ''}
+                        </Avatar>
                     );
                 },
             },
+            // {
+            //     title: 'Խանութ',
+            //     render: (_, record) => {
+            //         const shop = record?.shop?.data?.attributes;
+            //         return (
+            //             <a target='_blank' href={shop?.url}>
+            //                 {shop?.name}
+            //             </a>
+            //         );
+            //     },
+            // },
+            // {
+            //     title: 'Կատեգորիա',
+            //     render: (_, record) => {
+            //         const category = record.category;
+            //         return category?.data?.attributes.name;
+            //     },
+            // },
             {
                 title: <DashOutlined />,
                 dataIndex: 'operation',
@@ -165,13 +189,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Կատեգորիա',
-                render: (_, record) => {
-                    const category = record.category;
-                    return category?.data?.attributes.name;
-                },
-            },
-            {
                 title: 'Ինքնարժեք',
                 dataIndex: 'net_cost',
             },
@@ -203,13 +220,25 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Խանութ',
+                title: 'Նկար',
+                dataIndex: 'Avatar',
                 render: (_, record) => {
-                    const shop = record?.shop?.data?.attributes;
+                    const src =
+                        record.customer?.data?.attributes?.Avatar.data
+                            ?.attributes?.formats?.thumbnail?.url || '';
                     return (
-                        <a target='_blank' href={shop?.url}>
-                            {shop?.name}
-                        </a>
+                        <Avatar
+                            style={{
+                                backgroundColor: generateRandomColor(),
+                                verticalAlign: 'middle',
+                                border: 'none',
+                            }}
+                            size='large'
+                            gap={2}
+                            src={src}
+                        >
+                            {record.first_name || ''}
+                        </Avatar>
                     );
                 },
             },
@@ -289,13 +318,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Կատեգորիա',
-                render: (_, record) => {
-                    const category = record.category;
-                    return category?.data?.attributes.name;
-                },
-            },
-            {
                 title: 'Ինքնարժեք',
                 dataIndex: 'net_cost',
             },
@@ -327,13 +349,25 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Խանութ',
+                title: 'Նկար',
+                dataIndex: 'Avatar',
                 render: (_, record) => {
-                    const shop = record?.shop?.data?.attributes;
+                    const src =
+                        record.customer?.data?.attributes?.Avatar.data
+                            ?.attributes?.formats?.thumbnail?.url || '';
                     return (
-                        <a target='_blank' href={shop?.url}>
-                            {shop?.name}
-                        </a>
+                        <Avatar
+                            style={{
+                                backgroundColor: generateRandomColor(),
+                                verticalAlign: 'middle',
+                                border: 'none',
+                            }}
+                            size='large'
+                            gap={2}
+                            src={src}
+                        >
+                            {record.first_name || ''}
+                        </Avatar>
                     );
                 },
             },
@@ -390,13 +424,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Կատեգորիա',
-                render: (_, record) => {
-                    const category = record.category;
-                    return category?.data?.attributes.name;
-                },
-            },
-            {
                 title: 'Ինքնարժեք',
                 dataIndex: 'net_cost',
             },
@@ -421,13 +448,25 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Խանութ',
+                title: 'Նկար',
+                dataIndex: 'Avatar',
                 render: (_, record) => {
-                    const shop = record?.shop?.data?.attributes;
+                    const src =
+                        record.customer?.data?.attributes?.Avatar.data
+                            ?.attributes?.formats?.thumbnail?.url || '';
                     return (
-                        <a target='_blank' href={shop?.url}>
-                            {shop?.name}
-                        </a>
+                        <Avatar
+                            style={{
+                                backgroundColor: generateRandomColor(),
+                                verticalAlign: 'middle',
+                                border: 'none',
+                            }}
+                            size='large'
+                            gap={2}
+                            src={src}
+                        >
+                            {record.first_name || ''}
+                        </Avatar>
                     );
                 },
             },
@@ -457,13 +496,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Կատեգորիա',
-                render: (_, record) => {
-                    const category = record.category;
-                    return category?.data?.attributes.name;
-                },
-            },
-            {
                 title: 'Ինքնարժեք',
                 dataIndex: 'net_cost',
             },
@@ -488,13 +520,25 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 },
             },
             {
-                title: 'Խանութ',
+                title: 'Նկար',
+                dataIndex: 'Avatar',
                 render: (_, record) => {
-                    const shop = record?.shop?.data?.attributes;
+                    const src =
+                        record.customer?.data?.attributes?.Avatar.data
+                            ?.attributes?.formats?.thumbnail?.url || '';
                     return (
-                        <a target='_blank' href={shop?.url}>
-                            {shop?.name}
-                        </a>
+                        <Avatar
+                            style={{
+                                backgroundColor: generateRandomColor(),
+                                verticalAlign: 'middle',
+                                border: 'none',
+                            }}
+                            size='large'
+                            gap={2}
+                            src={src}
+                        >
+                            {record.first_name || ''}
+                        </Avatar>
                     );
                 },
             },

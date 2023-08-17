@@ -138,8 +138,6 @@ const Customers = () => {
             title: 'Գործողություններ',
             dataIndex: 'operation',
             render: (_, record) => {
-                console.log('record:::::: ', record);
-
                 const itemId = record.key;
                 return (
                     <Space>

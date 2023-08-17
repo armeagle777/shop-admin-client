@@ -24,11 +24,11 @@ const FirstStepContent = ({
             </Form.Item>
             <Form.Item
                 name='description'
-                label='Նկարագրություն'
+                label='Չափս'
                 rules={[
                     {
                         required: true,
-                        message: 'Նկարագրությունը պարտադիր դաշտ է',
+                        message: 'Չափսը պարտադիր դաշտ է',
                         whitespace: true,
                     },
                 ]}
