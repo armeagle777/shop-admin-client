@@ -5,12 +5,14 @@ import { Avatar, Button, Image, Space, Tooltip } from 'antd';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import {
+    AntDesignOutlined,
     CloseOutlined,
     DashOutlined,
     DeleteOutlined,
     EditOutlined,
     RedoOutlined,
     StepForwardOutlined,
+    UserOutlined,
 } from '@ant-design/icons';
 import { deleteOrder, editOrder, removeOrder } from '../../api/serverApi';
 import { messages } from '../../utils/constants';
@@ -48,8 +50,25 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 title: 'Նկարներ',
                 render: (_, record) => {
                     const images = record.images?.data;
+
                     return (
-                        <Image width={50} src={images[0]?.attributes?.url} />
+                        <Avatar.Group shape='square'>
+                            {images?.map((image, index) => {
+                                const src = delve(image, 'attributes.url');
+                                return (
+                                    <Avatar
+                                        key={image?.id}
+                                        src={src}
+                                        style={{
+                                            backgroundColor: '#fde3cf',
+                                        }}
+                                        shape='square'
+                                    >
+                                        A
+                                    </Avatar>
+                                );
+                            })}
+                        </Avatar.Group>
                     );
                 },
             },
@@ -106,24 +125,16 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                     );
                 },
             },
-            // {
-            //     title: 'Խանութ',
-            //     render: (_, record) => {
-            //         const shop = record?.shop?.data?.attributes;
-            //         return (
-            //             <a target='_blank' href={shop?.url}>
-            //                 {shop?.name}
-            //             </a>
-            //         );
-            //     },
-            // },
-            // {
-            //     title: 'Կատեգորիա',
-            //     render: (_, record) => {
-            //         const category = record.category;
-            //         return category?.data?.attributes.name;
-            //     },
-            // },
+            {
+                title: 'Հասցե',
+                render: (_, record) => {
+                    const address =
+                        record?.customer?.data?.attributes?.addresses.data[0];
+                    const index = delve(address, 'attributes.index');
+                    const street = delve(address, 'attributes.street');
+                    return `${street || ''} ${index || ''}`;
+                },
+            },
             {
                 title: <DashOutlined />,
                 dataIndex: 'operation',

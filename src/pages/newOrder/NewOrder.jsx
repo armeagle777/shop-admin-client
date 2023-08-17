@@ -73,7 +73,6 @@ const NewOrder = () => {
 
     const onFinish = (values) => {
         form.submit();
-        console.log('Received values of form: ');
     };
 
     const queryClient = useQueryClient();
@@ -125,9 +124,10 @@ const NewOrder = () => {
         }
 
         const newData = { ...restData, address: orderAddress };
-        if (order_date) {
-            newData.order_date = new Date(order_date.$d).toISOString();
-        }
+
+        newData.order_date = order_date
+            ? new Date(order_date.$d).toISOString()
+            : new Date().toISOString();
 
         addItemMutation.mutate(newData);
     };

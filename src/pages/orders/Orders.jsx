@@ -93,10 +93,13 @@ const Orders = () => {
                 <OrdersMobileView filteredData={filteredData} />
             </MobileView>
             <FloatButton
-                shape='circle'
+                shape='square'
                 type='primary'
                 style={{
-                    right: isMobile ? 20 : 150,
+                    // right: isMobile ? 20 : 150,
+                    position: 'fixed',
+                    right: 0,
+                    bottom: 200,
                 }}
                 onClick={handleNavigate}
                 icon={<PlusOutlined />}
