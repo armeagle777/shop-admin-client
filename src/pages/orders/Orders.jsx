@@ -1,13 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-    Avatar,
-    FloatButton,
-    Form,
-    List,
-    Segmented,
-    Space,
-    Typography,
-} from 'antd';
+import { FloatButton, Form, Segmented } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getOrders } from '../../api/serverApi';
@@ -16,16 +8,10 @@ import {
     filterSegmentValues,
     segmentFilterValues,
     setgmentOptions,
-    tabFilterValues,
 } from './Orders.constants';
 
-import {
-    LikeOutlined,
-    MessageOutlined,
-    PlusOutlined,
-    StarOutlined,
-} from '@ant-design/icons';
-import { BrowserView, MobileView, isMobile } from 'react-device-detect';
+import { PlusOutlined } from '@ant-design/icons';
+import { BrowserView, MobileView } from 'react-device-detect';
 import OrdersMobileView from './OrdersMobileView';
 import './orders.styles.css';
 
@@ -60,15 +46,13 @@ const Orders = () => {
         isLoading,
         isError,
         error,
-    } = useQuery(['orders', { filter }], () => getOrders(), {
-        keepPreviousData: true,
+    } = useQuery(['orders', { filter }], () => getOrders(filter), {
+        keepPreviousData: false,
     });
 
     const onSegmentChange = (e) => {
         setFilter(segmentFilterValues[e]);
     };
-
-    const filteredData = data.filter((o) => o?.attributes?.status === filter);
 
     return (
         <>
@@ -81,7 +65,7 @@ const Orders = () => {
                     style={{ marginBottom: 10 }}
                 />
                 <OrderesTable
-                    data={filteredData}
+                    data={data}
                     isLoading={isLoading}
                     error={error}
                     isError={isError}
@@ -90,7 +74,7 @@ const Orders = () => {
                 />
             </BrowserView>
             <MobileView>
-                <OrdersMobileView filteredData={filteredData} />
+                <OrdersMobileView filteredData={data} />
             </MobileView>
             <FloatButton
                 shape='square'

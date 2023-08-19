@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import delve from 'dlv';
 import { toast } from 'react-toastify';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -131,9 +132,14 @@ const Customers = () => {
         },
         {
             title: 'Հասցե',
-            dataIndex: 'address',
+            render: (_, record) => {
+                const address = record?.addresses.data[0];
+                console.log('address:::::: ', address);
+                const index = delve(address, 'attributes.index');
+                const street = delve(address, 'attributes.street');
+                return `${street || ''} ${index || ''}`;
+            },
         },
-
         {
             title: 'Գործողություններ',
             dataIndex: 'operation',
