@@ -10,6 +10,7 @@ import {
     DashOutlined,
     DeleteOutlined,
     EditOutlined,
+    InfoCircleFilled,
     RedoOutlined,
     StepForwardOutlined,
     UserOutlined,
@@ -90,15 +91,36 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
             {
                 title: 'Հաճախորդ',
                 render: (_, record) => {
-                    const customer = record?.customer?.data?.attributes;
+                    const customer = delve(record, 'customer.data.attributes');
+                    const contacts = delve(
+                        record,
+                        'customer.data.attributes.contacts.data'
+                    );
+
+                    const extraContacts =
+                        contacts.length === 0
+                            ? ''
+                            : '/' +
+                              contacts
+                                  .map((c) => c.attributes.phone_number)
+                                  .join(',');
+                    const phone_number = customer?.phone_number;
+                    const customerExtraInfo = `${phone_number}  ${extraContacts}`;
                     return (
-                        <Tooltip title={customer?.phone_number} placement='top'>
-                            {customer?.first_name
-                                ? customer?.first_name +
-                                  ' ' +
-                                  customer?.last_name
-                                : ''}
-                        </Tooltip>
+                        <>
+                            {customer?.first_name || ''}{' '}
+                            {customer?.last_name || ''}
+                            {(phone_number || contacts?.length > 0) && (
+                                <Tooltip
+                                    title={customerExtraInfo}
+                                    placement='top'
+                                >
+                                    <InfoCircleFilled
+                                        style={{ marginLeft: 2 }}
+                                    />
+                                </Tooltip>
+                            )}
+                        </>
                     );
                 },
             },
@@ -130,6 +152,8 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 render: (_, record) => {
                     const address =
                         record?.customer?.data?.attributes?.addresses.data[0];
+                    console.log('address:::::: ', address);
+
                     const index = delve(address, 'attributes.index');
                     const street = delve(address, 'attributes.street');
                     return `${street || ''} ${index || ''}`;
@@ -195,8 +219,10 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
             {
                 title: 'Նկարներ',
                 render: (_, record) => {
-                    const images = record.images.data;
-                    return <Image width={50} src={images[0].attributes.url} />;
+                    const images = record.images?.data;
+                    return (
+                        <Image width={50} src={images[0]?.attributes?.url} />
+                    );
                 },
             },
             {
@@ -218,15 +244,36 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
             {
                 title: 'Հաճախորդ',
                 render: (_, record) => {
-                    const customer = record?.customer?.data?.attributes;
+                    const customer = delve(record, 'customer.data.attributes');
+                    const contacts = delve(
+                        record,
+                        'customer.data.attributes.contacts.data'
+                    );
+
+                    const extraContacts =
+                        contacts.length === 0
+                            ? ''
+                            : '/' +
+                              contacts
+                                  .map((c) => c.attributes.phone_number)
+                                  .join(',');
+                    const phone_number = customer?.phone_number;
+                    const customerExtraInfo = `${phone_number}  ${extraContacts}`;
                     return (
-                        <Tooltip title={customer?.phone_number} placement='top'>
-                            {customer?.first_name
-                                ? customer?.first_name +
-                                  ' ' +
-                                  customer?.last_name
-                                : ''}
-                        </Tooltip>
+                        <>
+                            {customer?.first_name || ''}{' '}
+                            {customer?.last_name || ''}
+                            {(phone_number || contacts?.length > 0) && (
+                                <Tooltip
+                                    title={customerExtraInfo}
+                                    placement='top'
+                                >
+                                    <InfoCircleFilled
+                                        style={{ marginLeft: 2 }}
+                                    />
+                                </Tooltip>
+                            )}
+                        </>
                     );
                 },
             },
@@ -347,15 +394,36 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
             {
                 title: 'Հաճախորդ',
                 render: (_, record) => {
-                    const customer = record?.customer?.data?.attributes;
+                    const customer = delve(record, 'customer.data.attributes');
+                    const contacts = delve(
+                        record,
+                        'customer.data.attributes.contacts.data'
+                    );
+
+                    const extraContacts =
+                        contacts.length === 0
+                            ? ''
+                            : '/' +
+                              contacts
+                                  .map((c) => c.attributes.phone_number)
+                                  .join(',');
+                    const phone_number = customer?.phone_number;
+                    const customerExtraInfo = `${phone_number}  ${extraContacts}`;
                     return (
-                        <Tooltip title={customer?.phone_number} placement='top'>
-                            {customer?.first_name
-                                ? customer?.first_name +
-                                  ' ' +
-                                  customer?.last_name
-                                : ''}
-                        </Tooltip>
+                        <>
+                            {customer?.first_name || ''}{' '}
+                            {customer?.last_name || ''}
+                            {(phone_number || contacts?.length > 0) && (
+                                <Tooltip
+                                    title={customerExtraInfo}
+                                    placement='top'
+                                >
+                                    <InfoCircleFilled
+                                        style={{ marginLeft: 2 }}
+                                    />
+                                </Tooltip>
+                            )}
+                        </>
                     );
                 },
             },

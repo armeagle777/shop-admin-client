@@ -3,7 +3,7 @@ import delve from 'dlv';
 import { toast } from 'react-toastify';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Avatar, Button, Form, Modal, Space } from 'antd';
+import { Avatar, Button, Form, Image, Modal, Space } from 'antd';
 import { messages } from '../../utils/constants';
 import { generateRandomColor } from '../../utils/helpers';
 import { addCustomer, deleteCustomer, getCustomers } from '../../api/serverApi';
@@ -107,11 +107,12 @@ const Customers = () => {
             dataIndex: 'Avatar',
             width: '10%',
             render: (_, record) => {
-                const src =
-                    record.Avatar.data?.attributes?.formats?.thumbnail?.url ||
-                    '';
-                return (
+                const src = delve(record, 'Avatar.data.attributes.url');
+                return src ? (
+                    <Image width={50} src={src} />
+                ) : (
                     <Avatar
+                        shape='square'
                         style={{
                             backgroundColor: generateRandomColor(),
                             verticalAlign: 'middle',
@@ -119,7 +120,6 @@ const Customers = () => {
                         }}
                         size='large'
                         gap={2}
-                        src={src}
                     >
                         {record.first_name || ''}
                     </Avatar>
@@ -129,6 +129,19 @@ const Customers = () => {
         {
             title: 'Հեռ․',
             dataIndex: 'phone_number',
+            render: (_, record) => {
+                const contacts = delve(record, 'contacts.data');
+
+                const extraContacts =
+                    contacts.length === 0
+                        ? ''
+                        : '/' +
+                          contacts
+                              .map((c) => c.attributes.phone_number)
+                              .join(',');
+                const phone_number = record.phone_number;
+                return `${phone_number}  ${extraContacts}`;
+            },
         },
         {
             title: 'Հասցե',

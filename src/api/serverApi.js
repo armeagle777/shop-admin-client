@@ -114,7 +114,7 @@ export const removeOrder = async ({ record, newStatus }) => {
 
 export const getOrders = async (filter) => {
     const response = await serverApi.get(
-        `/orders?filters[isActive][$eq]=true&filters[status][$eq]=${filter}&pagination[pageSize]=1000&populate[customer][populate][0]=addresses&populate[customer][populate][1]=Avatar&populate[shop][populate][0]=logo&populate[images][populate]=url&populate[category][populate]=image&sort[0]=order_date:desc`
+        `/orders?filters[isActive][$eq]=true&filters[status][$eq]=${filter}&pagination[pageSize]=1000&populate[customer][populate][0]=addresses&populate[customer][populate][1]=Avatar&populate[customer][populate][2]=contacts&populate[shop][populate][0]=logo&populate[images][populate]=url&populate[category][populate]=image&sort[0]=order_date:desc`
     );
 
     return response.data.data;
