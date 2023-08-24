@@ -11,6 +11,7 @@ import Alert from '../../components/alert/Alert';
 import AddCustomerForm from '../../components/shared/addCutomerForm/AddCustomerForm';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 import Table from '../../components/table/Table';
+import { useNavigate } from 'react-router-dom';
 
 const Customers = () => {
     const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
@@ -23,6 +24,8 @@ const Customers = () => {
             keepPreviousData: true,
         }
     );
+
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [addCustomerForm] = Form.useForm();
     const { data: customers = [], meta } = { ...data };
@@ -91,6 +94,10 @@ const Customers = () => {
         deleteItemMutation.mutate(id);
     };
 
+    const onEditClick = (id) => {
+        navigate(`${id}`);
+    };
+
     const columns = [
         {
             title: 'Անուն Ազգանուն',
@@ -147,7 +154,6 @@ const Customers = () => {
             title: 'Հասցե',
             render: (_, record) => {
                 const address = record?.addresses.data[0];
-                console.log('address:::::: ', address);
                 const index = delve(address, 'attributes.index');
                 const street = delve(address, 'attributes.street');
                 return `${street || ''} ${index || ''}`;
@@ -165,6 +171,7 @@ const Customers = () => {
                             size='small'
                             title='Խմբագրել'
                             type='default'
+                            onClick={() => onEditClick(itemId)}
                         />
                         <PopConfirm
                             loading={isLoading}

@@ -13,6 +13,7 @@ import ExpenseDirections from './pages/expenseDirections/ExpenseDirections';
 import Expenses from './pages/expenses/Expenses';
 import Orders from './pages/orders/Orders';
 import NotFound from './pages/notFound/NotFound';
+import Customer from './pages/customers/Customer';
 
 function App() {
     const { defaultAlgorithm, darkAlgorithm } = theme;
@@ -39,7 +40,16 @@ function App() {
                 },
                 {
                     path: '/customers',
-                    element: <Customers />,
+                    children: [
+                        {
+                            index: true,
+                            element: <Customers />,
+                        },
+                        {
+                            path: ':customerId',
+                            element: <Customer />,
+                        },
+                    ],
                 },
                 {
                     path: '/categories',
@@ -68,7 +78,9 @@ function App() {
                 },
                 {
                     path: '*',
-                    element: <NotFound />,
+                    element: (
+                        <NotFound message='Կներեք, նման էջ գոյություն չունի' />
+                    ),
                 },
             ],
         },

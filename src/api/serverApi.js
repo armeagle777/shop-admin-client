@@ -11,6 +11,13 @@ export const getCustomers = async () => {
     return response.data;
 };
 
+export const getCustomerById = async (id) => {
+    const response = await serverApi.get(
+        `/customers/${id}?populate[addresses][populate]=*&populate[Avatar][populate]=*&populate[contacts]populate=*&populate[orders][populate]=*&populate[segments][populate]=*`
+    );
+    return response.data;
+};
+
 export const addCustomer = async (customer) => {
     return await serverApi.post('/customers/create-with-relation', {
         data: customer,
@@ -25,7 +32,7 @@ export const deleteCustomer = async (id) => {
 
 export const getShops = async () => {
     const response = await serverApi.get(
-        '/shops?filters[isActive][$eq]=true&populate=*'
+        '/shops?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*'
     );
     return response.data;
 };
@@ -50,7 +57,7 @@ export const addExpenseDirection = async (newDirection) => {
 
 export const getExpenseDirections = async () => {
     const response = await serverApi.get(
-        '/expense-directions?filters[isActive][$eq]=true&populate=*'
+        '/expense-directions?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*'
     );
     return response.data;
 };
@@ -63,7 +70,7 @@ export const deleteExpenseDirections = async (id) => {
 
 export const getCategories = async () => {
     const response = await serverApi.get(
-        '/categories?filters[isActive][$eq]=true&populate=*'
+        '/categories?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*'
     );
     return response.data;
 };
@@ -88,7 +95,7 @@ export const addExpense = async (newExpense) => {
 
 export const getExpenses = async () => {
     const response = await serverApi.get(
-        '/expenses?filters[isActive][$eq]=true&populate=*&sort[0]=id:desc'
+        '/expenses?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*&sort[0]=id:desc'
     );
     return response.data;
 };
@@ -136,7 +143,7 @@ export const deleteOrder = async (id) => {
 
 export const getCountries = async () => {
     const response = await serverApi.get(
-        `/countries?populate[marzs][populate][communities][populate]=*`
+        `/countries?pagination[pageSize]=1000&populate[marzs][populate][communities][populate]=*`
     );
 
     return response.data.data;

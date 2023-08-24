@@ -152,7 +152,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 render: (_, record) => {
                     const address =
                         record?.customer?.data?.attributes?.addresses.data[0];
-                    console.log('address:::::: ', address);
 
                     const index = delve(address, 'attributes.index');
                     const street = delve(address, 'attributes.street');

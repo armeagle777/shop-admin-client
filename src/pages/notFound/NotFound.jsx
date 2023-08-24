@@ -1,16 +1,12 @@
 import { Button, Result } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 
-const NotFound = () => {
-    const navigate = useNavigate();
-    const onClick = () => {
-        navigate('/');
-    };
+const NotFound = ({ message }) => {
     return (
         <Result
             status='404'
             title='404'
-            subTitle='Կներեք, նման էջ գոյություն չունի'
+            subTitle={message}
             extra={
                 <Link to='/'>
                     <Button type='primary'>Հինական էջ</Button>

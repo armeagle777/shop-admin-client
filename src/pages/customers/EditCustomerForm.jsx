@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Cascader, Form, Input, Select, Upload } from 'antd';
 import axios from 'axios';
-import {
-    Button,
-    Form,
-    Input,
-    InputNumber,
-    Upload,
-    Space,
-    Select,
-    Cascader,
-} from 'antd';
-import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import React from 'react';
+import { formatCountriesData } from '../../utils/helpers';
 import { useQuery } from '@tanstack/react-query';
-import { getCountries } from '../../../api/serverApi';
-import { formatCountriesData } from '../../../utils/helpers';
+import { getCountries } from '../../api/serverApi';
+import Alert from '../../components/alert/Alert';
+import delve from 'dlv';
 
 const layout = {
     labelCol: {
@@ -67,19 +60,54 @@ const prefixSelector = (
     </Form.Item>
 );
 
-const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
-    const [uploadedFileId, setUploadedFileId] = useState(undefined);
+const EditCustomerForm = ({
+    customerData,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+}) => {
     const {
         data: countries,
-        isLoading,
-        isFetching,
-        error,
-        isError,
+        isLoadin: isCountriesLoadin,
+        isFetching: isCountriesFetching,
     } = useQuery(['countries'], getCountries, {
         keepPreviousData: true,
     });
+    const [form] = Form.useForm();
 
-    const disabledSubmitButton = isLoading || isFetching;
+    const info = delve(customerData, 'data.attributes');
+
+    const {
+        first_name,
+        last_name,
+        phone_number,
+        Avatar,
+        addresses,
+        contacts,
+        orders,
+        segments,
+        orders_count,
+        latest_purchase,
+        isActive,
+        has_ordered,
+        createdAt,
+    } = {
+        ...info,
+    };
+    const phone_code = phone_number?.substring(0, 3);
+    const phone_digits = phone_number?.substring(3, 9);
+    const contactsInfo = contacts?.data;
+    const address_info = addresses?.data[0]?.attributes;
+    const { community, country, index, marz, settlement, street } = {
+        ...address_info,
+    };
+    const countryId = delve(country, 'data.id');
+    const marzId = delve(marz, 'data.id');
+    const communityId = delve(community, 'data.id');
+    const settlementId = delve(settlement, 'data.id');
+
+    const disabledSubmitButton = isCountriesLoadin || isCountriesFetching;
 
     const countriesOptions = formatCountriesData(countries);
 
@@ -108,16 +136,31 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
         return e?.files;
     };
 
+    if (isLoading || isFetching) return 'Loading...';
+
+    if (isError) {
+        return <Alert type='error' message={error.message} />;
+    }
+
     return (
         <Form
             {...layout}
-            name='create-customer'
+            name='edit-customer'
             onFinish={onFinish}
             style={{
-                maxWidth: 600,
+                maxWidth: 900,
             }}
             validateMessages={validateMessages}
-            initialValues={{ phone_code: '093' }}
+            initialValues={{
+                phone_code,
+                first_name,
+                last_name,
+                phone_number: phone_digits,
+                street,
+                index,
+                district: [countryId, marzId, communityId, settlementId],
+                contacts: contactsInfo?.map((el) => el.attributes.phone_number),
+            }}
             form={form}
         >
             <Form.Item
@@ -159,7 +202,7 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
                 </Upload>
             </Form.Item>
             <Form.Item
-                name={['customer', 'first_name']}
+                name='first_name'
                 label='Անուն'
                 rules={[
                     {
@@ -170,7 +213,7 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
                 <Input />
             </Form.Item>
             <Form.Item
-                name={['customer', 'last_name']}
+                name='last_name'
                 label='Ազգանուն'
                 rules={[
                     {
@@ -181,7 +224,7 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
                 <Input />
             </Form.Item>
             <Form.Item
-                name={['customer', 'phone', 'number']}
+                name='phone_number'
                 label='Հեռ․'
                 rules={[
                     {
@@ -197,10 +240,10 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
             </Form.Item>
             <Form.Item label='Հասցե'>
                 <Form.Item
-                    name={['customer', 'address', 'district']}
+                    name='district'
                     style={{
                         display: 'inline-block',
-                        width: 'calc(50% - 8px)',
+                        width: 'calc(40% - 8px)',
                     }}
                 >
                     <Cascader
@@ -214,26 +257,26 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
                     />
                 </Form.Item>
                 <Form.Item
-                    name={['customer', 'address', 'street']}
+                    name='street'
                     style={{
                         display: 'inline-block',
-                        width: 'calc(30% - 8px)',
+                        width: 'calc(50% - 8px)',
                         margin: '0 8px',
                     }}
                 >
                     <Input placeholder='Մուտքագրել հասցեն' />
                 </Form.Item>
                 <Form.Item
-                    name={['customer', 'address', 'index']}
+                    name='index'
                     style={{
                         display: 'inline-block',
-                        width: 'calc(20% - 8px)',
+                        width: 'calc(10% - 8px)',
                     }}
                 >
                     <Input placeholder='index' />
                 </Form.Item>
             </Form.Item>
-            <Form.List name={['customer', 'contacts']}>
+            <Form.List name='contacts'>
                 {(fields, { add, remove }) => (
                     <div
                         style={{
@@ -263,7 +306,7 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Missing first name',
+                                            message: 'Missing phone_number',
                                         },
                                     ]}
                                 >
@@ -296,7 +339,7 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
                     offset: 12,
                 }}
             >
-                <Button onClick={onCancel} style={{ marginRight: 10 }}>
+                {/* <Button onClick={onCancel} style={{ marginRight: 10 }}>
                     Չեղարկել
                 </Button>
                 <Button
@@ -306,10 +349,10 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
                     disabled={disabledSubmitButton}
                 >
                     Հաստատել
-                </Button>
+                </Button> */}
             </Form.Item>
         </Form>
     );
 };
 
-export default AddCustomerForm;
+export default EditCustomerForm;
