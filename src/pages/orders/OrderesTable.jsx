@@ -53,23 +53,32 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                     const images = record.images?.data;
 
                     return (
-                        <Avatar.Group shape='square'>
+                        <Image.PreviewGroup
+                            preview={{
+                                onChange: (current, prev) =>
+                                    console.log(
+                                        `current index: ${current}, prev index: ${prev}`
+                                    ),
+                            }}
+                        >
                             {images?.map((image, index) => {
                                 const src = delve(image, 'attributes.url');
                                 return (
-                                    <Avatar
-                                        key={image?.id}
+                                    <Image
+                                        key={index}
+                                        width={50}
                                         src={src}
-                                        style={{
-                                            backgroundColor: '#fde3cf',
-                                        }}
-                                        shape='square'
-                                    >
-                                        A
-                                    </Avatar>
+                                        placeholder={
+                                            <Image
+                                                preview={false}
+                                                src='/image_placeholder.jpg'
+                                                width={50}
+                                            />
+                                        }
+                                    />
                                 );
                             })}
-                        </Avatar.Group>
+                        </Image.PreviewGroup>
                     );
                 },
             },

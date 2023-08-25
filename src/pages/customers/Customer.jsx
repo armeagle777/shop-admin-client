@@ -29,7 +29,7 @@ const Customer = () => {
         <>
             <BrowserView>
                 <div style={{ width: '100%', display: 'flex' }}>
-                    <div style={{ width: '80%', outline: '1px solid red' }}>
+                    <div style={{ width: '70%' }}>
                         <EditCustomerForm
                             customerData={data}
                             isLoading={isLoading}
@@ -40,7 +40,7 @@ const Customer = () => {
                     </div>
 
                     <div
-                        style={{ width: '20%', outline: '1px solid yellow' }}
+                        style={{ width: '30%', outline: '1px solid yellow' }}
                     ></div>
                 </div>
             </BrowserView>

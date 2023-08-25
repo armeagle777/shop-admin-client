@@ -210,7 +210,7 @@ const EditCustomerForm = ({
                     },
                 ]}
             >
-                <Input />
+                <Input size='large' />
             </Form.Item>
             <Form.Item
                 name='last_name'
@@ -221,7 +221,7 @@ const EditCustomerForm = ({
                     },
                 ]}
             >
-                <Input />
+                <Input size='large' />
             </Form.Item>
             <Form.Item
                 name='phone_number'
@@ -236,17 +236,22 @@ const EditCustomerForm = ({
                 ]}
                 extra={<span>ճիշտ ֆորմատն է 887755</span>}
             >
-                <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
+                <Input
+                    addonBefore={prefixSelector}
+                    style={{ width: '100%' }}
+                    size='large'
+                />
             </Form.Item>
             <Form.Item label='Հասցե'>
                 <Form.Item
                     name='district'
                     style={{
                         display: 'inline-block',
-                        width: 'calc(40% - 8px)',
+                        width: 'calc(35% - 8px)',
                     }}
                 >
                     <Cascader
+                        size='large'
                         options={countriesOptions}
                         onChange={onChange}
                         placeholder='Երկիր/մարզ/համայնք'
@@ -264,16 +269,16 @@ const EditCustomerForm = ({
                         margin: '0 8px',
                     }}
                 >
-                    <Input placeholder='Մուտքագրել հասցեն' />
+                    <Input size='large' placeholder='Մուտքագրել հասցեն' />
                 </Form.Item>
                 <Form.Item
                     name='index'
                     style={{
                         display: 'inline-block',
-                        width: 'calc(10% - 8px)',
+                        width: 'calc(15% - 8px)',
                     }}
                 >
-                    <Input placeholder='index' />
+                    <Input size='large' placeholder='index' />
                 </Form.Item>
             </Form.Item>
             <Form.List name='contacts'>
