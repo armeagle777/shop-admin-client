@@ -116,7 +116,19 @@ const Customers = () => {
             render: (_, record) => {
                 const src = delve(record, 'Avatar.data.attributes.url');
                 return src ? (
-                    <Image width={50} src={src} />
+                    <Image
+                        width={60}
+                        height={70}
+                        src={src}
+                        placeholder={
+                            <Image
+                                preview={false}
+                                src='/image_placeholder.jpg'
+                                width={60}
+                                height={70}
+                            />
+                        }
+                    />
                 ) : (
                     <Avatar
                         shape='square'
