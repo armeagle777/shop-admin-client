@@ -32,6 +32,7 @@ const Customer = () => {
                     <div style={{ width: '70%' }}>
                         <EditCustomerForm
                             customerData={data}
+                            customerId={customerId}
                             isLoading={isLoading}
                             isFetching={isFetching}
                             isError={isError}

@@ -1,12 +1,28 @@
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Cascader, Form, Input, Select, Upload } from 'antd';
+import {
+    EditOutlined,
+    MinusCircleOutlined,
+    PlusOutlined,
+} from '@ant-design/icons';
+import {
+    Button,
+    Cascader,
+    Form,
+    Image,
+    Input,
+    Select,
+    Space,
+    Upload,
+} from 'antd';
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import { formatCountriesData } from '../../utils/helpers';
-import { useQuery } from '@tanstack/react-query';
-import { getCountries } from '../../api/serverApi';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { editCustomer, getCountries } from '../../api/serverApi';
 import Alert from '../../components/alert/Alert';
 import delve from 'dlv';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { messages } from '../../utils/constants';
 
 const layout = {
     labelCol: {
@@ -62,6 +78,7 @@ const prefixSelector = (
 
 const EditCustomerForm = ({
     customerData,
+    customerId,
     isLoading,
     isFetching,
     isError,
@@ -75,6 +92,39 @@ const EditCustomerForm = ({
         keepPreviousData: true,
     });
     const [form] = Form.useForm();
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const [uploadedFileId, setUploadedFileId] = useState(undefined);
+    const editItemMutation = useMutation(
+        ({ item, customerId }) => editCustomer({ item, customerId }),
+        {
+            onSuccess: (data) => {
+                if (data.data?.error) {
+                    return toast.error(
+                        data.data?.error || 'Սխալ է տեղի ունեցել',
+                        {
+                            progress: undefined,
+                        }
+                    );
+                }
+                queryClient.invalidateQueries('customers');
+                toast.success(messages.customers.createSuccess, {
+                    progress: undefined,
+                });
+                // form.resetFields();
+            },
+            onError: (error, variables, context, mutation) => {
+                console.log('err:::::: ', error);
+
+                toast.error(
+                    error.response?.data?.error?.message || error.message,
+                    {
+                        progress: undefined,
+                    }
+                );
+            },
+        }
+    );
 
     const info = delve(customerData, 'data.attributes');
 
@@ -107,7 +157,12 @@ const EditCustomerForm = ({
     const communityId = delve(community, 'data.id');
     const settlementId = delve(settlement, 'data.id');
 
+    const avatarSrc = delve(Avatar, 'data.attributes.url');
+    const currentImageId = delve(Avatar, 'data.id');
     const disabledSubmitButton = isCountriesLoadin || isCountriesFetching;
+    const contactsList = contactsInfo?.map((el) => ({
+        phone_number: el.attributes.phone_number,
+    }));
 
     const countriesOptions = formatCountriesData(countries);
 
@@ -115,6 +170,9 @@ const EditCustomerForm = ({
 
     const onChange = (value, selectedOptions) => {
         console.log(value, selectedOptions);
+    };
+    const onCancel = () => {
+        navigate('/customers');
     };
     const filter = (inputValue, path) =>
         path.some(
@@ -124,7 +182,9 @@ const EditCustomerForm = ({
         );
 
     const onFinish = (values) => {
-        onSubmit(values);
+        console.log('values:::::: ', values);
+
+        editItemMutation.mutate({ item: values, customerId });
     };
 
     const normFile = (e) => {
@@ -159,47 +219,66 @@ const EditCustomerForm = ({
                 street,
                 index,
                 district: [countryId, marzId, communityId, settlementId],
-                contacts: contactsInfo?.map((el) => el.attributes.phone_number),
+                contacts: contactsList,
             }}
             form={form}
         >
             <Form.Item
-                name={['customer', 'image']}
+                name='image'
                 label='Նկար'
-                valuePropName={['customer', 'image']}
+                valuePropName='image'
                 getValueFromEvent={normFile}
             >
-                <Upload
-                    accept='.png,.jpeg,.jpg'
-                    name='files'
-                    action={fileUploadUrl}
-                    listType='picture-card'
-                    multiple={false}
-                    maxCount={1}
-                    onChange={async (res) => {
-                        if (!res.file?.response) return;
-                        const fileId = res.file?.response[0].id;
-                        setUploadedFileId(fileId);
-                        form.setFieldValue(['customer', 'image'], fileId);
-                    }}
-                    onRemove={async (file) => {
-                        if (!uploadedFileId) return;
-                        const res = await axios.delete(
-                            `${fileUploadUrl}/files/${uploadedFileId}`
-                        );
-                    }}
-                >
-                    <div>
-                        <PlusOutlined />
-                        <div
-                            style={{
-                                marginTop: 8,
-                            }}
-                        >
-                            Բեռնել
+                <Space align='start'>
+                    {avatarSrc && !uploadedFileId && (
+                        <Image height={100} width={90} src={avatarSrc} />
+                    )}
+                    <Upload
+                        accept='.png,.jpeg,.jpg'
+                        name='files'
+                        action={fileUploadUrl}
+                        listType='picture-card'
+                        multiple={false}
+                        maxCount={1}
+                        onChange={async (res) => {
+                            if (!res.file?.response) return;
+                            if (currentImageId && !uploadedFileId) {
+                                await axios.delete(
+                                    `${fileUploadUrl}/files/${currentImageId}`
+                                );
+                            }
+
+                            if (uploadedFileId) {
+                                await axios.delete(
+                                    `${fileUploadUrl}/files/${uploadedFileId}`
+                                );
+                            }
+
+                            const fileId = res.file?.response[0].id;
+                            console.log('fileId:::::: ', fileId);
+
+                            setUploadedFileId(fileId);
+                            form.setFieldValue('image', fileId);
+                        }}
+                        onRemove={async (file) => {
+                            if (!uploadedFileId) return;
+                            const res = await axios.delete(
+                                `${fileUploadUrl}/files/${uploadedFileId}`
+                            );
+                        }}
+                    >
+                        <div>
+                            <EditOutlined />
+                            <div
+                                style={{
+                                    marginTop: 8,
+                                }}
+                            >
+                                Խմբագրել
+                            </div>
                         </div>
-                    </div>
-                </Upload>
+                    </Upload>
+                </Space>
             </Form.Item>
             <Form.Item
                 name='first_name'
@@ -301,7 +380,7 @@ const EditCustomerForm = ({
                                     flexDirection: 'row',
                                     justifyContent: 'space-between',
                                     width: '35%',
-                                    height: 35,
+                                    height: 45,
                                 }}
                             >
                                 <Form.Item
@@ -317,7 +396,7 @@ const EditCustomerForm = ({
                                 >
                                     <Input
                                         placeholder='Կոնտակտ'
-                                        style={{ minWidth: '180px' }}
+                                        style={{ minWidth: '280px' }}
                                     />
                                 </Form.Item>
                                 <MinusCircleOutlined
@@ -344,17 +423,17 @@ const EditCustomerForm = ({
                     offset: 12,
                 }}
             >
-                {/* <Button onClick={onCancel} style={{ marginRight: 10 }}>
+                <Button onClick={onCancel} style={{ marginRight: 10 }}>
                     Չեղարկել
                 </Button>
                 <Button
                     type='primary'
                     htmlType='submit'
-                    loading={isLoadingAdd}
+                    loading={editItemMutation.isLoading}
                     disabled={disabledSubmitButton}
                 >
-                    Հաստատել
-                </Button> */}
+                    Պահպանել
+                </Button>
             </Form.Item>
         </Form>
     );
