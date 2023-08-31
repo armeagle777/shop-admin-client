@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Form, InputNumber, Select, Space } from 'antd';
+import { Button, DatePicker, Form, InputNumber, Select, Space } from 'antd';
 import {
     addExpense,
     deleteExpense,
@@ -25,7 +25,6 @@ const Expenses = () => {
             keepPreviousData: false,
         }
     );
-
     const { data: expenses = [], meta } = { ...data };
     const modifiedData = expenses.map(({ id, attributes }) => ({
         key: id,
@@ -53,6 +52,7 @@ const Expenses = () => {
     const [form] = Form.useForm();
     const [newExpenseForm] = Form.useForm();
 
+    const dateFormat = 'DD/MM/YYYY';
     const validateMessages = {
         required: '${label} պարտադիր է!',
         types: {
@@ -105,6 +105,9 @@ const Expenses = () => {
     };
 
     const onFinish = (values) => {
+        // newData.order_date = order_date
+        //     ? new Date(order_date.$d).toISOString()
+        //     : new Date().toISOString();
         addItemMutation.mutate(values);
     };
 
@@ -175,7 +178,7 @@ const Expenses = () => {
                     span: 20,
                 }}
                 style={{
-                    maxWidth: 600,
+                    maxWidth: 900,
                 }}
             >
                 <Form.Item
@@ -224,6 +227,20 @@ const Expenses = () => {
                                 )
                         }
                         options={eDOptions}
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    name='expense_date'
+                    style={{
+                        display: 'inline-block',
+                        width: '320px',
+                    }}
+                >
+                    <DatePicker
+                        format={dateFormat}
+                        placeholder='Ընտրեք ամսաթիվը'
+                        style={{ width: '100%' }}
                     />
                 </Form.Item>
                 <Button

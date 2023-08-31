@@ -145,10 +145,13 @@ const EditCustomerForm = ({
     } = {
         ...info,
     };
+    console.log('addresses:::::: ', addresses);
+
     const phone_code = phone_number?.substring(0, 3);
     const phone_digits = phone_number?.substring(3, 9);
     const contactsInfo = contacts?.data;
     const address_info = addresses?.data[0]?.attributes;
+    const address_id = addresses?.data[0]?.id;
     const { community, country, index, marz, settlement, street } = {
         ...address_info,
     };
@@ -182,7 +185,7 @@ const EditCustomerForm = ({
         );
 
     const onFinish = (values) => {
-        console.log('values:::::: ', values);
+        values.address_id = address_id;
 
         editItemMutation.mutate({ item: values, customerId });
     };
