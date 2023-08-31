@@ -105,9 +105,11 @@ const Expenses = () => {
     };
 
     const onFinish = (values) => {
-        // newData.order_date = order_date
-        //     ? new Date(order_date.$d).toISOString()
-        //     : new Date().toISOString();
+        const expenseDate = values.expense_date;
+        values.expense_date = expenseDate
+            ? new Date(expenseDate.$d).toISOString()
+            : new Date().toISOString();
+
         addItemMutation.mutate(values);
     };
 
