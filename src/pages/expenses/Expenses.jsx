@@ -107,8 +107,8 @@ const Expenses = () => {
     const onFinish = (values) => {
         const expenseDate = values.expense_date;
         values.expense_date = expenseDate
-            ? new Date(expenseDate.$d).toISOString()
-            : new Date().toISOString();
+            ? new Date(expenseDate.$d)
+            : new Date();
 
         addItemMutation.mutate(values);
     };
@@ -129,7 +129,7 @@ const Expenses = () => {
             title: 'Ա/թ',
             dataIndex: 'createdAt',
             render: (_, record) => {
-                const create_date = record.createdAt;
+                const create_date = record.expense_date;
                 return format(new Date(create_date), 'dd-MM-yyy');
             },
         },

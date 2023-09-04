@@ -125,9 +125,7 @@ const NewOrder = () => {
 
         const newData = { ...restData, address: orderAddress };
 
-        newData.order_date = order_date
-            ? new Date(order_date.$d).toISOString()
-            : new Date().toISOString();
+        newData.order_date = order_date ? new Date(order_date.$d) : new Date();
 
         addItemMutation.mutate(newData);
     };

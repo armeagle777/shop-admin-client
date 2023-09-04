@@ -677,10 +677,10 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         mutationFn: ({ record, newStatus }) => {
             const editObj = { id: record.key, status: newStatus };
             if (newStatus === 'AVAILABLE') {
-                editObj.received_date = new Date().toISOString();
+                editObj.received_date = new Date();
             }
             if (newStatus === 'DELIVERED') {
-                editObj.deliver_date = new Date().toISOString();
+                editObj.deliver_date = new Date();
             }
             return editOrder(editObj);
         },

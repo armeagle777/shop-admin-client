@@ -26,10 +26,10 @@ import { messages } from '../../utils/constants';
 
 const layout = {
     labelCol: {
-        span: 8,
+        span: 4,
     },
     wrapperCol: {
-        span: 16,
+        span: 24,
     },
 };
 
@@ -61,6 +61,7 @@ const prefixSelector = (
             <Select.Option value='012'>012</Select.Option>
             <Select.Option value='033'>033</Select.Option>
             <Select.Option value='041'>041</Select.Option>
+            <Select.Option value='043'>043</Select.Option>
             <Select.Option value='044'>044</Select.Option>
             <Select.Option value='055'>055</Select.Option>
             <Select.Option value='077'>077</Select.Option>
@@ -77,12 +78,17 @@ const prefixSelector = (
 );
 
 const EditCustomerForm = ({
-    customerData,
     customerId,
     isLoading,
     isFetching,
     isError,
     error,
+    first_name,
+    last_name,
+    phone_number,
+    Avatar,
+    addresses,
+    contacts,
 }) => {
     const {
         data: countries,
@@ -125,27 +131,6 @@ const EditCustomerForm = ({
             },
         }
     );
-
-    const info = delve(customerData, 'data.attributes');
-
-    const {
-        first_name,
-        last_name,
-        phone_number,
-        Avatar,
-        addresses,
-        contacts,
-        orders,
-        segments,
-        orders_count,
-        latest_purchase,
-        isActive,
-        has_ordered,
-        createdAt,
-    } = {
-        ...info,
-    };
-    console.log('addresses:::::: ', addresses);
 
     const phone_code = phone_number?.substring(0, 3);
     const phone_digits = phone_number?.substring(3, 9);
@@ -240,6 +225,11 @@ const EditCustomerForm = ({
                         accept='.png,.jpeg,.jpg'
                         name='files'
                         action={fileUploadUrl}
+                        data={{
+                            ref: 'api::customer.customer',
+                            refId: customerId,
+                            field: 'Avatar',
+                        }}
                         listType='picture-card'
                         multiple={false}
                         maxCount={1}
@@ -258,10 +248,8 @@ const EditCustomerForm = ({
                             }
 
                             const fileId = res.file?.response[0].id;
-                            console.log('fileId:::::: ', fileId);
 
                             setUploadedFileId(fileId);
-                            form.setFieldValue('image', fileId);
                         }}
                         onRemove={async (file) => {
                             if (!uploadedFileId) return;
@@ -367,10 +355,11 @@ const EditCustomerForm = ({
                 {(fields, { add, remove }) => (
                     <div
                         style={{
-                            width: '100%',
+                            width: '80%',
+                            paddingLeft: '15%',
                             display: 'flex',
                             flexDirection: 'column',
-                            alignItems: 'center',
+                            alignItems: 'flex-start',
                             justifyContent: 'flex-start',
                             gap: 5,
                         }}
@@ -381,9 +370,10 @@ const EditCustomerForm = ({
                                 style={{
                                     display: 'flex',
                                     flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    width: '35%',
+                                    justifyContent: 'flex-start',
+                                    width: '55%',
                                     height: 45,
+                                    gap: 8,
                                 }}
                             >
                                 <Form.Item
@@ -399,7 +389,9 @@ const EditCustomerForm = ({
                                 >
                                     <Input
                                         placeholder='Կոնտակտ'
-                                        style={{ minWidth: '280px' }}
+                                        style={{
+                                            minWidth: '220px',
+                                        }}
                                     />
                                 </Form.Item>
                                 <MinusCircleOutlined
@@ -423,7 +415,7 @@ const EditCustomerForm = ({
             <Form.Item
                 wrapperCol={{
                     ...layout.wrapperCol,
-                    offset: 12,
+                    offset: 6,
                 }}
             >
                 <Button onClick={onCancel} style={{ marginRight: 10 }}>

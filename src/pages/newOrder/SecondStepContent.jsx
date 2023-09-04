@@ -118,7 +118,7 @@ const SecondStepContent = ({ countriesOptions, customerOptions }) => {
                             style={{
                                 width: 200,
                             }}
-                            placeholder='Search to Select'
+                            placeholder='Որոնել'
                             optionFilterProp='children'
                             filterOption={(input, option) =>
                                 (option?.label?.toLowerCase() ?? '').includes(
