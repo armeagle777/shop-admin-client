@@ -8,7 +8,11 @@ import { getCustomerById } from '../../api/serverApi';
 import Alert from '../../components/alert/Alert';
 import NotFound from '../notFound/NotFound';
 import EditCustomerForm from './EditCustomerForm';
-import { DollarOutlined, FieldTimeOutlined, SkinOutlined } from '@ant-design/icons';
+import {
+    DollarOutlined,
+    FieldTimeOutlined,
+    SkinOutlined,
+} from '@ant-design/icons';
 import { format } from 'date-fns';
 import { SmileOutlined } from '@ant-design/icons';
 import { Timeline } from 'antd';
@@ -16,28 +20,28 @@ import { FaTshirt } from 'react-icons/fa';
 import { BiDollar } from 'react-icons/bi';
 
 const colorsMap = {
-    'ORDERED':'gray',
-    'AVAILABLE':'blue',
-    'DELIVERED':'green',
-    'CANCELED':'red',
-    'RETURNED':'red'
-}
+    ORDERED: 'gray',
+    AVAILABLE: 'blue',
+    DELIVERED: 'green',
+    CANCELED: 'red',
+    RETURNED: 'red',
+};
 
 const datesMap = {
-    'ORDERED':'order_date',
-    'AVAILABLE':'received_date',
-    'DELIVERED':'deliver_date',
-    'CANCELED':'cancel_date',
-    'RETURNED':'return_date'
-}
+    ORDERED: 'order_date',
+    AVAILABLE: 'received_date',
+    DELIVERED: 'deliver_date',
+    CANCELED: 'cancel_date',
+    RETURNED: 'return_date',
+};
 
 const statusesMap = {
-    'ORDERED':'պատվիրված',
-    'AVAILABLE':'առկա',
-    'DELIVERED':'առաքված',
-    'CANCELED':'չեղարկված',
-    'RETURNED':'վերադարձված'
-}
+    ORDERED: 'պատվիրված',
+    AVAILABLE: 'առկա',
+    DELIVERED: 'առաքված',
+    CANCELED: 'չեղարկված',
+    RETURNED: 'վերադարձված',
+};
 
 const Customer = () => {
     const { customerId } = useParams();
@@ -74,83 +78,106 @@ const Customer = () => {
     } = {
         ...info,
     };
-    const ordersInfo = delve(orders,'data')
-    const ordersCount = ordersInfo?.length || 0
-    const ordersSum = ordersInfo ? ordersInfo.reduce((acc,el)=>{
-        const sum = delve(el,'attributes.selling_price') || 0
-        acc += sum
-        return acc
-    },0) : 0
-    const timeLineItems = ordersInfo ? ordersInfo.map(el => {
-        const info = delve(el,'attributes')
-        const status=info.status
- 
-        return {
-            color:colorsMap[status],
-            children:(
-            <>
-                <p>{new Date(info[datesMap[status]]).toLocaleString()}</p>
-                <p>Պատվեր N {el.id}</p>
-                <p>${info.net_cost} - ${info.selling_price} - {statusesMap[status]}</p>
-            </>
-        )}
-    }) : [] 
-    // [
-    //     {
-    //         color: 'green',
-    //         children: 'Create a services site 2015-09-01',
-    //     },
-    //     {
-    //         color: 'red',
-    //         children: (
-    //         <>
-    //             <p>Saturday, Mar 11, 2023, 5:34 AM</p>
-    //             <p>Order #T9D3AP</p>
-    //             <p>6 items - $477.58 - delivered</p>
-    //         </>
-    //         ),
-    //     },
-    //     {
-    //         children: (
-    //         <>
-    //             <p>Technical testing 1</p>
-    //             <p>Technical testing 2</p>
-    //             <p>Technical testing 3 2015-09-01</p>
-    //         </>
-    //         ),
-    //     },
-    //     {
-    //         color: 'gray',
-    //         children: (
-    //         <>
-    //             <p>Technical testing 1</p>
-    //             <p>Technical testing 2</p>
-    //             <p>Technical testing 3 2015-09-01</p>
-    //         </>
-    //         ),
-    //     },
-    //     ]
+    const ordersInfo = delve(orders, 'data');
+    const ordersCount = ordersInfo?.length || 0;
+    const ordersSums = ordersInfo
+        ? ordersInfo.reduce(
+              (acc, el) => {
+                  const net_cost = delve(el, 'attributes.net_cost') || 0;
+                  const selling_price =
+                      delve(el, 'attributes.selling_price') || 0;
+                  const profit = selling_price - net_cost;
 
-    console.log('ordersInfo:::::: ',ordersInfo)
-    
+                  acc.net_cost += net_cost;
+                  acc.profit += profit;
+
+                  return acc;
+              },
+              { net_cost: 0, profit: 0 }
+          )
+        : { net_cost: 0, profit: 0 };
+    const timeLineItems = ordersInfo
+        ? ordersInfo.map((el) => {
+              const info = delve(el, 'attributes');
+              const status = info.status;
+
+              return {
+                  color: colorsMap[status],
+                  children: (
+                      <>
+                          <p>
+                              {new Date(
+                                  info[datesMap[status]]
+                              ).toLocaleString()}
+                          </p>
+                          <p>Պատվեր N {el.id}</p>
+                          <p>
+                              ${info.net_cost} - ${info.selling_price} -{' '}
+                              {statusesMap[status]}
+                          </p>
+                      </>
+                  ),
+              };
+          })
+        : [];
+
+    console.log('ordersInfo:::::: ', ordersInfo);
+
     return (
         <>
             <BrowserView>
                 <div style={{ width: '100%', display: 'flex' }}>
                     <div style={{ width: '70%' }}>
-                        <EditCustomerForm
-                            customerId={customerId}
-                            isLoading={isLoading}
-                            isFetching={isFetching}
-                            isError={isError}
-                            error={error}
-                            first_name={first_name}
-                            last_name={last_name}
-                            phone_number={phone_number}
-                            Avatar={Avatar}
-                            addresses={addresses}
-                            contacts={contacts}
-                        />
+                        {isLoading || isFetching ? (
+                            <Space
+                                direction='vertical'
+                                style={{
+                                    width: '80%',
+                                    paddingLeft: 130,
+                                }}
+                            >
+                                <Space>
+                                    <Skeleton.Image active />
+                                    <Skeleton.Node active />
+                                </Space>
+                                <Skeleton.Input active size='large' block />
+                                <Skeleton.Input active size='large' block />
+                                <Skeleton.Input active size='large' block />
+                                <Skeleton.Input active size='large' block />
+                                <Skeleton.Input active size='large' block />
+                                <Skeleton.Input active size='large' block />
+                                <Skeleton.Input active size='large' block />
+                                <Skeleton paragraph={{ rows: 2 }} />
+                                <Space style={{ paddingLeft: 100 }}>
+                                    <Skeleton.Button
+                                        active
+                                        size='large'
+                                        shape='square'
+                                        block
+                                    />
+                                    <Skeleton.Button
+                                        active
+                                        size='large'
+                                        shape='square'
+                                        block
+                                    />
+                                </Space>
+                            </Space>
+                        ) : (
+                            <EditCustomerForm
+                                customerId={customerId}
+                                isLoading={isLoading}
+                                isFetching={isFetching}
+                                isError={isError}
+                                error={error}
+                                first_name={first_name}
+                                last_name={last_name}
+                                phone_number={phone_number}
+                                Avatar={Avatar}
+                                addresses={addresses}
+                                contacts={contacts}
+                            />
+                        )}
                     </div>
 
                     <div
@@ -160,11 +187,11 @@ const Customer = () => {
                         }}
                     >
                         <Card
-                        loading={isLoading || isFetching}
+                            loading={isLoading || isFetching}
                             title='Պատմություն'
                             style={{
                                 width: '100%',
-                                marginBottom:'20px'
+                                marginBottom: '20px',
                             }}
                         >
                             <div
@@ -196,7 +223,11 @@ const Customer = () => {
                                             type='secondary'
                                             style={{ fontSize: 16 }}
                                         >
-                                            {createdAt && format(new Date(createdAt), 'dd-MM-yyy')}
+                                            {createdAt &&
+                                                format(
+                                                    new Date(createdAt),
+                                                    'dd-MM-yyy'
+                                                )}
                                         </Text>
                                     </div>
                                     <div
@@ -206,16 +237,16 @@ const Customer = () => {
                                         }}
                                     >
                                         <Text style={{ fontSize: 16 }}>
-                                            <FieldTimeOutlined
+                                            <SkinOutlined
                                                 style={{ marginRight: 8 }}
                                             />
-                                            Last seen
+                                            Քանակը
                                         </Text>
                                         <Text
                                             type='secondary'
                                             style={{ fontSize: 16 }}
                                         >
-                                            9/3/2023
+                                            {ordersCount} - Պատվեր
                                         </Text>
                                     </div>
                                 </div>
@@ -226,24 +257,56 @@ const Customer = () => {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <div>
-                                        <Text><SkinOutlined style={{ marginRight: 8 }}/> {ordersCount} - Պատվեր</Text>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                        }}
+                                    >
+                                        <Text style={{ fontSize: 16 }}>
+                                            <DollarOutlined
+                                                style={{ marginRight: 8 }}
+                                            />
+                                            Գումարը
+                                        </Text>
+                                        <Text
+                                            type='secondary'
+                                            style={{ fontSize: 16 }}
+                                        >
+                                            {ordersSums.net_cost}դ. Պատվեր
+                                        </Text>
                                     </div>
-                                    <div style={{marginTop:30, }}>
-                                        <Text><DollarOutlined />{ordersSum}դ. Պատվեր</Text>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                        }}
+                                    >
+                                        <Text style={{ fontSize: 16 }}>
+                                            <DollarOutlined
+                                                style={{ marginRight: 8 }}
+                                            />
+                                            Եկամուտ
+                                        </Text>
+                                        <Text
+                                            type='secondary'
+                                            style={{ fontSize: 16 }}
+                                        >
+                                            {ordersSums.profit}դ. Եկամուտ
+                                        </Text>
                                     </div>
                                 </div>
                             </div>
                         </Card>
-                        {isLoading || isFetching ? <Skeleton
-   
-    paragraph={{
-      rows: 6,
-    }}
-  /> : <Timeline
-  items={timeLineItems}
-/>}
-                        
+                        {isLoading || isFetching ? (
+                            <Skeleton
+                                paragraph={{
+                                    rows: 6,
+                                }}
+                            />
+                        ) : (
+                            <Timeline items={timeLineItems} />
+                        )}
                     </div>
                 </div>
             </BrowserView>
