@@ -101,13 +101,15 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 title: 'Հաճախորդ',
                 render: (_, record) => {
                     const customer = delve(record, 'customer.data.attributes');
+                    console.log('customer:::::: ',customer);
                     const contacts = delve(
                         record,
                         'customer.data.attributes.contacts.data'
                     );
 
                     const extraContacts =
-                        contacts.length === 0
+                    !contacts || 
+                        contacts?.length === 0
                             ? ''
                             : '/' +
                               contacts
@@ -252,14 +254,16 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
             {
                 title: 'Հաճախորդ',
                 render: (_, record) => {
-                    const customer = delve(record, 'customer.data.attributes');
+                    const customer = delve(record, 'customer.data.attributes')
+                    console.log('customer:::::: ',customer);
                     const contacts = delve(
                         record,
                         'customer.data.attributes.contacts.data'
                     );
 
                     const extraContacts =
-                        contacts.length === 0
+                    !contacts || 
+                        contacts?.length === 0
                             ? ''
                             : '/' +
                               contacts
@@ -403,13 +407,16 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 title: 'Հաճախորդ',
                 render: (_, record) => {
                     const customer = delve(record, 'customer.data.attributes');
+                    console.log('customer:::::: ',customer);
+                    
                     const contacts = delve(
                         record,
                         'customer.data.attributes.contacts.data'
                     );
 
                     const extraContacts =
-                        contacts.length === 0
+                    !contacts || 
+                        contacts?.length === 0
                             ? ''
                             : '/' +
                               contacts

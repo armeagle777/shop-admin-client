@@ -152,7 +152,8 @@ const Customers = () => {
                 const contacts = delve(record, 'contacts.data');
 
                 const extraContacts =
-                    contacts.length === 0
+                !contacts || 
+                    contacts?.length === 0
                         ? ''
                         : '/' +
                           contacts
