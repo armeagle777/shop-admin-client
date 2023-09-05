@@ -83,12 +83,13 @@ const Customer = () => {
     const ordersSums = ordersInfo
         ? ordersInfo.reduce(
               (acc, el) => {
+                  const status = delve(el, 'attributes.status');
                   const net_cost = delve(el, 'attributes.net_cost') || 0;
                   const selling_price =
                       delve(el, 'attributes.selling_price') || 0;
                   const profit = selling_price - net_cost;
-
-                  acc.net_cost += net_cost;
+                  if (status !== 'CANCELED' && status !== 'RETURNED')
+                      acc.net_cost += net_cost;
                   acc.profit += profit;
 
                   return acc;
@@ -120,8 +121,6 @@ const Customer = () => {
               };
           })
         : [];
-
-    console.log('ordersInfo:::::: ', ordersInfo);
 
     return (
         <>
