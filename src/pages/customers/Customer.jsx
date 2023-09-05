@@ -11,6 +11,7 @@ import EditCustomerForm from './EditCustomerForm';
 import {
     DollarOutlined,
     FieldTimeOutlined,
+    GiftOutlined,
     SkinOutlined,
 } from '@ant-design/icons';
 import { format } from 'date-fns';
@@ -113,7 +114,7 @@ const Customer = () => {
                           </p>
                           <p>Պատվեր N {el.id}</p>
                           <p>
-                              ${info.net_cost} - ${info.selling_price} -{' '}
+                              {info.net_cost.toLocaleString()}֏ - {info.selling_price.toLocaleString()}֏ -{' '}
                               {statusesMap[status]}
                           </p>
                       </>
@@ -263,7 +264,7 @@ const Customer = () => {
                                         }}
                                     >
                                         <Text style={{ fontSize: 16 }}>
-                                            <DollarOutlined
+                                            <GiftOutlined
                                                 style={{ marginRight: 8 }}
                                             />
                                             Գումարը
@@ -272,7 +273,7 @@ const Customer = () => {
                                             type='secondary'
                                             style={{ fontSize: 16 }}
                                         >
-                                            {ordersSums.net_cost}դ. Պատվեր
+                                            {ordersSums.net_cost.toLocaleString()}դ. Պատվեր
                                         </Text>
                                     </div>
                                     <div
@@ -282,7 +283,7 @@ const Customer = () => {
                                         }}
                                     >
                                         <Text style={{ fontSize: 16 }}>
-                                            <DollarOutlined
+                                            <SmileOutlined
                                                 style={{ marginRight: 8 }}
                                             />
                                             Եկամուտ
@@ -291,7 +292,7 @@ const Customer = () => {
                                             type='secondary'
                                             style={{ fontSize: 16 }}
                                         >
-                                            {ordersSums.profit}դ. Եկամուտ
+                                            {ordersSums.profit.toLocaleString()}դ. Եկամուտ
                                         </Text>
                                     </div>
                                 </div>
