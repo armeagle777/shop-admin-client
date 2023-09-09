@@ -130,7 +130,7 @@ const Home = () => {
         },
         {
             name: 'Հուլիս',
-            Ծախս: 3490,
+            Ծախս: 0,
             Եկամուտ: julyData?.ekamut || 0,
             Վաճառք: julyData?.vajarq || 0,
         },
@@ -404,7 +404,7 @@ const Home = () => {
                             >
                                 <Statistic
                                     title='Նոր հաճախորդ'
-                                    value={customersCount? Math.floor(customersCount * 15 / 100) : 0}
+                                    value={customersCount? Math.ceil(customersCount * 15 / 100) : 0}
                                     formatter={formatter}
                                 />
                             </div>
