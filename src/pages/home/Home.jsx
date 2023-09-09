@@ -8,6 +8,8 @@ import {
     Typography,
     Statistic,
 } from 'antd';
+import delve from 'dlv';
+import { isAfter, isBefore, isEqual } from 'date-fns';
 
 import { BrowserView } from 'react-device-detect';
 import { GiftOutlined, UsergroupAddOutlined } from '@ant-design/icons';
@@ -24,53 +26,147 @@ import {
     Pie,
     Cell,
 } from 'recharts';
+import { useQuery } from '@tanstack/react-query';
+import { getCustomers, getOrders } from '../../api/serverApi';
 
-const data = [
-    {
-        name: 'Page A',
-        uv: 4000,
-        pv: 2400,
-        amt: 2400,
-    },
-    {
-        name: 'Page B',
-        uv: 3000,
-        pv: 1398,
-        amt: 2210,
-    },
-    {
-        name: 'Page C',
-        uv: 2000,
-        pv: 9800,
-        amt: 2290,
-    },
-    {
-        name: 'Page D',
-        uv: 2780,
-        pv: 3908,
-        amt: 2000,
-    },
-    {
-        name: 'Page E',
-        uv: 1890,
-        pv: 4800,
-        amt: 2181,
-    },
-    {
-        name: 'Page F',
-        uv: 2390,
-        pv: 3800,
-        amt: 2500,
-    },
-    {
-        name: 'Page G',
-        uv: 3490,
-        pv: 4300,
-        amt: 2100,
-    },
-];
+
+
 
 const Home = () => {
+    const { data:customers } = useQuery(
+        ['customers'],
+        () => getCustomers(),
+        {
+            keepPreviousData: true,
+        }
+    );
+    const customersCount = delve(customers,'meta.pagination.total')
+
+    const {
+        data :orders
+    } = useQuery(['orders'], () => getOrders(), {
+        keepPreviousData: false,
+    });
+ 
+    
+    
+    const ordersCount = orders?.length
+    const julyStartDate = new Date('2023-07-01');
+    const julyEndDate = new Date('2023-07-31');
+
+    const augustStartDate = new Date('2023-08-01');
+    const augustEndDate = new Date('2023-08-31');
+
+    const julyOrders = orders?.filter((item) => {
+        const itemDate = new Date(item?.attributes?.order_date);
+        return isAfter(itemDate, julyStartDate) && isBefore(itemDate, julyEndDate);
+    });
+    const julyData = julyOrders?.reduce((acc,el)=>{
+        const selling_price = delve(el,'attributes.selling_price')
+        const net_cost = delve(el,'attributes.net_cost')
+
+        acc.vajarq += net_cost
+        acc.ekamut += (selling_price - net_cost)
+
+        return acc
+
+    },{vajarq:0,ekamut:0})
+
+    console.log('julyData:::::: ',julyData);
+    
+
+    const augustOrders = orders?.filter((item) => {
+        const itemDate = new Date(item?.attributes?.order_date);
+        return isAfter(itemDate, augustStartDate) && isBefore(itemDate, augustEndDate);
+    });
+
+    const augustData = augustOrders?.reduce((acc,el)=>{
+        const selling_price = delve(el,'attributes.selling_price')
+        const net_cost = delve(el,'attributes.net_cost')
+
+        acc.vajarq += net_cost
+        acc.ekamut += (selling_price - net_cost)
+
+        return acc
+
+    },{vajarq:0,ekamut:0})
+
+    const data = [
+        {
+            name: 'Հունվար',
+            Ծախս: 0,
+            Եկամուտ: 0,
+            Վաճառք: 0,
+        },
+        {
+            name: 'Փետրվար',
+            Ծախս: 0,
+            Եկամուտ: 0,
+            Վաճառք: 0,
+        },
+        {
+            name: 'Մարտ',
+            Ծախս: 0,
+            Եկամուտ: 0,
+            Վաճառք: 0,
+        },
+        {
+            name: 'Ապրիլ',
+            Ծախս: 0,
+            Եկամուտ: 0,
+            Վաճառք: 0,
+        },
+        {
+            name: 'Մայիս',
+            Ծախս: 0,
+            Եկամուտ: 0,
+            Վաճառք: 0,
+        },
+        {
+            name: 'Հունիս',
+            Ծախս: 0,
+            Եկամուտ: 0,
+            Վաճառք: 0,
+        },
+        {
+            name: 'Հուլիս',
+            Ծախս: 3490,
+            Եկամուտ: julyData?.ekamut || 0,
+            Վաճառք: julyData?.vajarq || 0,
+        },
+        {
+            name: 'Օգոստոս',
+            Ծախս: 3490,
+            Եկամուտ: augustData?.ekamut || 0,
+            Վաճառք: augustData?.vajarq || 0,
+        },
+        {
+            name: 'Սեպտեմբեր',
+            Ծախս: 1000,
+            Եկամուտ: 2100,
+            Վաճառք: 1600,
+        },
+        {
+            name: 'Հոկտեմբեր',
+            Ծախս: 0,
+            Եկամուտ: 0,
+            Վաճառք: 0,
+        },
+        {
+            name: 'Նոյեմբեր',
+            Ծախս: 0,
+            Եկամուտ: 0,
+            Վաճառք: 0,
+        },
+        {
+            name: 'Դեկտեմբեր',
+            Ծախս: 0,
+            Եկամուտ: 0,
+            Վաճառք: 0,
+        },
+    ];
+  
+    
     const { Text } = Typography;
     const formatter = (value) => <CountUp end={value} separator=',' />;
     return (
@@ -168,7 +264,7 @@ const Home = () => {
                             >
                                 <Statistic
                                     title='Պատվեր'
-                                    value={112893}
+                                    value={ordersCount || 0}
                                     formatter={formatter}
                                 />
                             </div>
@@ -193,21 +289,21 @@ const Home = () => {
                                 <Tooltip />
                                 <Area
                                     type='monotone'
-                                    dataKey='uv'
+                                    dataKey='Ծախս'
                                     stackId='1'
                                     stroke='#8884d8'
                                     fill='#8884d8'
                                 />
                                 <Area
                                     type='monotone'
-                                    dataKey='pv'
+                                    dataKey='Եկամուտ'
                                     stackId='1'
                                     stroke='#82ca9d'
                                     fill='#82ca9d'
                                 />
                                 <Area
                                     type='monotone'
-                                    dataKey='amt'
+                                    dataKey='Վաճառք'
                                     stackId='1'
                                     stroke='#ffc658'
                                     fill='#ffc658'
@@ -260,7 +356,7 @@ const Home = () => {
                             >
                                 <Statistic
                                     title='Հաճախորդ'
-                                    value={2400}
+                                    value={customersCount || 0}
                                     formatter={formatter}
                                 />
                             </div>
@@ -308,7 +404,7 @@ const Home = () => {
                             >
                                 <Statistic
                                     title='Նոր հաճախորդ'
-                                    value={112893}
+                                    value={customersCount? Math.floor(customersCount * 15 / 100) : 0}
                                     formatter={formatter}
                                 />
                             </div>
