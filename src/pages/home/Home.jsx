@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
     ConfigProvider,
     theme,
@@ -27,146 +27,250 @@ import {
     Cell,
 } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
-import { getCustomers, getOrders } from '../../api/serverApi';
-
-
-
+import { getCustomers, getExpenses, getOrders } from '../../api/serverApi';
 
 const Home = () => {
-    const { data:customers } = useQuery(
-        ['customers'],
-        () => getCustomers(),
-        {
-            keepPreviousData: true,
-        }
-    );
-    const customersCount = delve(customers,'meta.pagination.total')
+    const { data: customers } = useQuery(['customers'], () => getCustomers(), {
+        keepPreviousData: true,
+    });
+    const customersCount = delve(customers, 'meta.pagination.total');
 
-    const {
-        data :orders
-    } = useQuery(['orders'], () => getOrders(), {
+    const { data: orders } = useQuery(['orders'], () => getOrders(), {
         keepPreviousData: false,
     });
- 
-    
-    
-    const ordersCount = orders?.length
+
+    const { data: expensesResponse } = useQuery(
+        ['expenses'],
+        () => getExpenses(),
+        {
+            keepPreviousData: false,
+        }
+    );
+
+    const expenses = expensesResponse?.data;
+
+    const { data: availableOrders } = useQuery(
+        ['orders', { filter: 'AVAILABLE' }],
+        () => getOrders('AVAILABLE'),
+        {
+            keepPreviousData: false,
+        }
+    );
+    const { data: orderedOrders } = useQuery(
+        ['orders', { filter: 'ORDERED' }],
+        () => getOrders('ORDERED'),
+        {
+            keepPreviousData: false,
+        }
+    );
+
+    const { data: deliveredOrders } = useQuery(
+        ['orders', { filter: 'DELIVERED' }],
+        () => getOrders('DELIVERED'),
+        {
+            keepPreviousData: false,
+        }
+    );
+
+    const availableOrdersSum = availableOrders
+        ?.filter((o) => o.attributes.category.data.id !== 18)
+        ?.reduce((acc, el) => {
+            acc += el.attributes.net_cost;
+
+            return acc;
+        }, 0);
+
+    const orderedOrdersSum = orderedOrders
+        ?.filter((o) => o.attributes.category.data.id !== 18)
+        ?.reduce((acc, el) => {
+            acc += el.attributes.net_cost;
+
+            return acc;
+        }, 0);
+
+    const ordersCount = orders?.length;
     const julyStartDate = new Date('2023-07-01');
     const julyEndDate = new Date('2023-07-31');
 
     const augustStartDate = new Date('2023-08-01');
     const augustEndDate = new Date('2023-08-31');
 
-    const julyOrders = orders?.filter((item) => {
-        const itemDate = new Date(item?.attributes?.order_date);
-        return isAfter(itemDate, julyStartDate) && isBefore(itemDate, julyEndDate);
+    const septemberStartDate = new Date('2023-09-01');
+    const septemberEndDate = new Date('2023-09-30');
+
+    const julyOrders = deliveredOrders?.filter((item) => {
+        const itemDate = new Date(item?.attributes?.deliver_date);
+        return (
+            isAfter(itemDate, julyStartDate) && isBefore(itemDate, julyEndDate)
+        );
     });
-    const julyData = julyOrders?.reduce((acc,el)=>{
-        const selling_price = delve(el,'attributes.selling_price')
-        const net_cost = delve(el,'attributes.net_cost')
+    const julyExpenses = expenses
+        ?.filter((item) => {
+            const itemDate = new Date(item?.attributes?.expense_date);
+            return (
+                isAfter(itemDate, julyStartDate) &&
+                isBefore(itemDate, julyEndDate)
+            );
+        })
+        ?.reduce((acc, el) => {
+            acc += el.attributes.amount;
+            return acc;
+        }, 0);
 
-        acc.vajarq += net_cost
-        acc.ekamut += (selling_price - net_cost)
+    const julyData = julyOrders?.reduce(
+        (acc, el) => {
+            const selling_price = delve(el, 'attributes.selling_price');
+            const net_cost = delve(el, 'attributes.net_cost');
 
-        return acc
+            acc.shahuyt += selling_price;
+            acc.inqnarjeq += net_cost;
 
-    },{vajarq:0,ekamut:0})
+            return acc;
+        },
+        { shahuyt: 0, inqnarjeq: 0 }
+    );
 
-    console.log('julyData:::::: ',julyData);
-    
-
-    const augustOrders = orders?.filter((item) => {
-        const itemDate = new Date(item?.attributes?.order_date);
-        return isAfter(itemDate, augustStartDate) && isBefore(itemDate, augustEndDate);
+    const augustOrders = deliveredOrders?.filter((item) => {
+        const itemDate = new Date(item?.attributes?.deliver_date);
+        return (
+            isAfter(itemDate, augustStartDate) &&
+            isBefore(itemDate, augustEndDate)
+        );
     });
 
-    const augustData = augustOrders?.reduce((acc,el)=>{
-        const selling_price = delve(el,'attributes.selling_price')
-        const net_cost = delve(el,'attributes.net_cost')
+    const augustExpenses = expenses
+        ?.filter((item) => {
+            const itemDate = new Date(item?.attributes?.expense_date);
+            return (
+                isAfter(itemDate, augustStartDate) &&
+                isBefore(itemDate, augustEndDate)
+            );
+        })
+        ?.reduce((acc, el) => {
+            acc += el.attributes.amount;
+            return acc;
+        }, 0);
 
-        acc.vajarq += net_cost
-        acc.ekamut += (selling_price - net_cost)
+    const augustData = augustOrders?.reduce(
+        (acc, el) => {
+            const selling_price = delve(el, 'attributes.selling_price');
+            const net_cost = delve(el, 'attributes.net_cost');
 
-        return acc
+            acc.shahuyt += selling_price;
+            acc.inqnarjeq += net_cost;
 
-    },{vajarq:0,ekamut:0})
+            return acc;
+        },
+        { shahuyt: 0, inqnarjeq: 0 }
+    );
+
+    const septemberOrders = deliveredOrders?.filter((item) => {
+        const itemDate = new Date(item?.attributes?.deliver_date);
+        return (
+            isAfter(itemDate, septemberStartDate) &&
+            isBefore(itemDate, septemberEndDate)
+        );
+    });
+    const septemberExpenses = expenses
+        ?.filter((item) => {
+            const itemDate = new Date(item?.attributes?.expense_date);
+            return (
+                isAfter(itemDate, septemberStartDate) &&
+                isBefore(itemDate, septemberEndDate)
+            );
+        })
+        ?.reduce((acc, el) => {
+            acc += el.attributes.amount;
+            return acc;
+        }, 0);
+    const septemberData = septemberOrders?.reduce(
+        (acc, el) => {
+            const selling_price = delve(el, 'attributes.selling_price');
+            const net_cost = delve(el, 'attributes.net_cost');
+
+            acc.shahuyt += selling_price;
+            acc.inqnarjeq += net_cost;
+
+            return acc;
+        },
+        { shahuyt: 0, inqnarjeq: 0 }
+    );
 
     const data = [
         {
             name: 'Հունվար',
             Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ինքնարժեք: 0,
+            Շահույթ: 0,
         },
         {
             name: 'Փետրվար',
             Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ինքնարժեք: 0,
+            Շահույթ: 0,
         },
         {
             name: 'Մարտ',
             Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ինքնարժեք: 0,
+            Շահույթ: 0,
         },
         {
             name: 'Ապրիլ',
             Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ինքնարժեք: 0,
+            Շահույթ: 0,
         },
         {
             name: 'Մայիս',
             Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ինքնարժեք: 0,
+            Շահույթ: 0,
         },
         {
             name: 'Հունիս',
             Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ինքնարժեք: 0,
+            Շահույթ: 0,
         },
         {
             name: 'Հուլիս',
-            Ծախս: 0,
-            Եկամուտ: julyData?.ekamut || 0,
-            Վաճառք: julyData?.vajarq || 0,
+            Ծախս: julyExpenses || 0,
+            Ինքնարժեք: julyData?.inqnarjeq || 0,
+            Շահույթ: julyData?.shahuyt || 0,
         },
         {
             name: 'Օգոստոս',
-            Ծախս: 0,
-            Եկամուտ: augustData?.ekamut || 0,
-            Վաճառք: augustData?.vajarq || 0,
+            Ծախս: augustExpenses || 0,
+            Ինքնարժեք: augustData?.inqnarjeq || 0,
+            Շահույթ: augustData?.shahuyt || 0,
         },
         {
             name: 'Սեպտեմբեր',
-            Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ծախս: septemberExpenses || 0,
+            Ինքնարժեք: septemberData?.inqnarjeq || 0,
+            Շահույթ: septemberData?.shahuyt || 0,
         },
         {
             name: 'Հոկտեմբեր',
             Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ինքնարժեք: 0,
+            Շահույթ: 0,
         },
         {
             name: 'Նոյեմբեր',
             Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ինքնարժեք: 0,
+            Շահույթ: 0,
         },
         {
             name: 'Դեկտեմբեր',
             Ծախս: 0,
-            Եկամուտ: 0,
-            Վաճառք: 0,
+            Ինքնարժեք: 0,
+            Շահույթ: 0,
         },
     ];
-  
-    
+
     const { Text } = Typography;
     const formatter = (value) => <CountUp end={value} separator=',' />;
     return (
@@ -296,14 +400,14 @@ const Home = () => {
                                 />
                                 <Area
                                     type='monotone'
-                                    dataKey='Եկամուտ'
+                                    dataKey='Ինքնարժեք'
                                     stackId='1'
                                     stroke='#82ca9d'
                                     fill='#82ca9d'
                                 />
                                 <Area
                                     type='monotone'
-                                    dataKey='Վաճառք'
+                                    dataKey='Շահույթ'
                                     stackId='1'
                                     stroke='#ffc658'
                                     fill='#ffc658'
@@ -403,8 +507,13 @@ const Home = () => {
                                 }}
                             >
                                 <Statistic
-                                    title='Նոր հաճախորդ'
-                                    value={customersCount? Math.ceil(customersCount * 15 / 100) : 0}
+                                    title='Մնացորդ'
+                                    value={
+                                        availableOrdersSum && orderedOrdersSum
+                                            ? availableOrdersSum +
+                                              orderedOrdersSum
+                                            : 0
+                                    }
                                     formatter={formatter}
                                 />
                             </div>
