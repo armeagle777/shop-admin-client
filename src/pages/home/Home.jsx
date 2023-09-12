@@ -320,7 +320,13 @@ const Home = () => {
                             >
                                 <Statistic
                                     title='Ամսական Եկամուտ'
-                                    value={2400}
+                                    value={
+                                        septemberExpenses && septemberData
+                                            ? septemberData?.shahuyt -
+                                              septemberData?.inqnarjeq -
+                                              septemberExpenses
+                                            : 0
+                                    }
                                     formatter={formatter}
                                 />
                             </div>
