@@ -25,9 +25,12 @@ import {
     PieChart,
     Pie,
     Cell,
+    Line,
+    ComposedChart,
 } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import { getCustomers, getExpenses, getOrders } from '../../api/serverApi';
+import { getCurrentYearAndPast11Months } from './Home.helpers';
 
 const Home = () => {
     const { data: customers } = useQuery(['customers'], () => getCustomers(), {
@@ -90,237 +93,85 @@ const Home = () => {
 
     const ordersCount = orders?.length;
 
-    function getFirstDayOfMonth(year, month) {
-        return new Date(year, month, 1);
-    }
-
-    function getLastDayOfMonth(year, month) {
-        return new Date(year, month + 1, 0);
-    }
-
-    function getCurrentYearAndPast11Months() {
-        const months = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
-        ];
-
-        const currentDate = new Date();
-        let currentYear = currentDate.getFullYear();
-        let currentMonth = currentDate.getMonth();
-        const currentMonthName = months[currentMonth];
-
-        const monthsData = [];
-
-        for (let i = 0; i < 12; i++) {
-            const monthName = months[currentMonth];
-            monthsData.push({
-                month: monthName,
-                startDate: getFirstDayOfMonth(currentYear, currentMonth),
-                endDate: getLastDayOfMonth(currentYear, currentMonth),
-            });
-
-            if (currentMonth === 0) {
-                currentYear--; // Decrement the year if the current month is January
-                currentMonth = 11; // Set the current month to December
-            } else {
-                currentMonth--; // Move to the previous month
-            }
-        }
-
-        return monthsData.reverse(); // Reverse the order to get past months first
-    }
-
-    const julyStartDate = new Date('2023-07-01');
-    const julyEndDate = new Date('2023-07-31');
-
-    const augustStartDate = new Date('2023-08-01');
-    const augustEndDate = new Date('2023-08-31');
-
-    const septemberStartDate = new Date('2023-09-01');
-    const septemberEndDate = new Date('2023-09-30');
-
-    const julyOrders = deliveredOrders?.filter((item) => {
-        const itemDate = new Date(item?.attributes?.deliver_date);
-        return (
-            isAfter(itemDate, julyStartDate) && isBefore(itemDate, julyEndDate)
-        );
-    });
-    const julyExpenses = expenses
-        ?.filter((item) => {
-            const itemDate = new Date(item?.attributes?.expense_date);
-            return (
-                isAfter(itemDate, julyStartDate) &&
-                isBefore(itemDate, julyEndDate)
-            );
-        })
-        ?.reduce((acc, el) => {
-            acc += el.attributes.amount;
-            return acc;
-        }, 0);
-
-    const julyData = julyOrders?.reduce(
-        (acc, el) => {
-            const selling_price = delve(el, 'attributes.selling_price');
-            const net_cost = delve(el, 'attributes.net_cost');
-
-            acc.shahuyt += selling_price;
-            acc.inqnarjeq += net_cost;
-
-            return acc;
-        },
-        { shahuyt: 0, inqnarjeq: 0 }
+    const chartData = useMemo(
+        () => getCurrentYearAndPast11Months(expenses, deliveredOrders),
+        [expenses, deliveredOrders]
     );
 
-    const augustOrders = deliveredOrders?.filter((item) => {
-        const itemDate = new Date(item?.attributes?.deliver_date);
-        return (
-            isAfter(itemDate, augustStartDate) &&
-            isBefore(itemDate, augustEndDate)
-        );
-    });
-
-    const augustExpenses = expenses
-        ?.filter((item) => {
-            const itemDate = new Date(item?.attributes?.expense_date);
-            return (
-                isAfter(itemDate, augustStartDate) &&
-                isBefore(itemDate, augustEndDate)
-            );
-        })
-        ?.reduce((acc, el) => {
-            acc += el.attributes.amount;
-            return acc;
-        }, 0);
-
-    const augustData = augustOrders?.reduce(
-        (acc, el) => {
-            const selling_price = delve(el, 'attributes.selling_price');
-            const net_cost = delve(el, 'attributes.net_cost');
-
-            acc.shahuyt += selling_price;
-            acc.inqnarjeq += net_cost;
-
-            return acc;
-        },
-        { shahuyt: 0, inqnarjeq: 0 }
-    );
-
-    const septemberOrders = deliveredOrders?.filter((item) => {
-        const itemDate = new Date(item?.attributes?.deliver_date);
-        return (
-            isAfter(itemDate, septemberStartDate) &&
-            isBefore(itemDate, septemberEndDate)
-        );
-    });
-    const septemberExpenses = expenses
-        ?.filter((item) => {
-            const itemDate = new Date(item?.attributes?.expense_date);
-            return (
-                isAfter(itemDate, septemberStartDate) &&
-                isBefore(itemDate, septemberEndDate)
-            );
-        })
-        ?.reduce((acc, el) => {
-            acc += el.attributes.amount;
-            return acc;
-        }, 0);
-    const septemberData = septemberOrders?.reduce(
-        (acc, el) => {
-            const selling_price = delve(el, 'attributes.selling_price');
-            const net_cost = delve(el, 'attributes.net_cost');
-
-            acc.shahuyt += selling_price;
-            acc.inqnarjeq += net_cost;
-
-            return acc;
-        },
-        { shahuyt: 0, inqnarjeq: 0 }
-    );
-
-    const data = [
-        {
-            name: 'Հունվար',
-            Ծախս: 0,
-            Ինքնարժեք: 0,
-            Շահույթ: 0,
-        },
-        {
-            name: 'Փետրվար',
-            Ծախս: 0,
-            Ինքնարժեք: 0,
-            Շահույթ: 0,
-        },
-        {
-            name: 'Մարտ',
-            Ծախս: 0,
-            Ինքնարժեք: 0,
-            Շահույթ: 0,
-        },
-        {
-            name: 'Ապրիլ',
-            Ծախս: 0,
-            Ինքնարժեք: 0,
-            Շահույթ: 0,
-        },
-        {
-            name: 'Մայիս',
-            Ծախս: 0,
-            Ինքնարժեք: 0,
-            Շահույթ: 0,
-        },
-        {
-            name: 'Հունիս',
-            Ծախս: 0,
-            Ինքնարժեք: 0,
-            Շահույթ: 0,
-        },
-        {
-            name: 'Հուլիս',
-            Ծախս: julyExpenses || 0,
-            Ինքնարժեք: julyData?.inqnarjeq || 0,
-            Շահույթ: julyData?.shahuyt || 0,
-        },
-        {
-            name: 'Օգոստոս',
-            Ծախս: augustExpenses || 0,
-            Ինքնարժեք: augustData?.inqnarjeq || 0,
-            Շահույթ: augustData?.shahuyt || 0,
-        },
-        {
-            name: 'Սեպտեմբեր',
-            Ծախս: septemberExpenses || 0,
-            Ինքնարժեք: septemberData?.inqnarjeq || 0,
-            Շահույթ: septemberData?.shahuyt || 0,
-        },
-        {
-            name: 'Հոկտեմբեր',
-            Ծախս: 0,
-            Ինքնարժեք: 0,
-            Շահույթ: 0,
-        },
-        {
-            name: 'Նոյեմբեր',
-            Ծախս: 0,
-            Ինքնարժեք: 0,
-            Շահույթ: 0,
-        },
-        {
-            name: 'Դեկտեմբեր',
-            Ծախս: 0,
-            Ինքնարժեք: 0,
-            Շահույթ: 0,
-        },
-    ];
+    // const data = [
+    //     {
+    //         name: 'Հունվար',
+    //         Ծախս: 0,
+    //         Ինքնարժեք: 0,
+    //         Շահույթ: 0,
+    //     },
+    //     {
+    //         name: 'Փետրվար',
+    //         Ծախս: 0,
+    //         Ինքնարժեք: 0,
+    //         Շահույթ: 0,
+    //     },
+    //     {
+    //         name: 'Մարտ',
+    //         Ծախս: 0,
+    //         Ինքնարժեք: 0,
+    //         Շահույթ: 0,
+    //     },
+    //     {
+    //         name: 'Ապրիլ',
+    //         Ծախս: 0,
+    //         Ինքնարժեք: 0,
+    //         Շահույթ: 0,
+    //     },
+    //     {
+    //         name: 'Մայիս',
+    //         Ծախս: 0,
+    //         Ինքնարժեք: 0,
+    //         Շահույթ: 0,
+    //     },
+    //     {
+    //         name: 'Հունիս',
+    //         Ծախս: 0,
+    //         Ինքնարժեք: 0,
+    //         Շահույթ: 0,
+    //     },
+    //     {
+    //         name: 'Հուլիս',
+    //         Ծախս: julyExpenses || 0,
+    //         Ինքնարժեք: julyData?.inqnarjeq || 0,
+    //         Շահույթ: julyData?.shahuyt || 0,
+    //     },
+    //     {
+    //         name: 'Օգոստոս',
+    //         Ծախս: augustExpenses || 0,
+    //         Ինքնարժեք: augustData?.inqnarjeq || 0,
+    //         Շահույթ: augustData?.shahuyt || 0,
+    //     },
+    //     {
+    //         name: 'Սեպտեմբեր',
+    //         Ծախս: septemberExpenses || 0,
+    //         Ինքնարժեք: septemberData?.inqnarjeq || 0,
+    //         Շահույթ: septemberData?.shahuyt || 0,
+    //     },
+    //     {
+    //         name: 'Հոկտեմբեր',
+    //         Ծախս: 0,
+    //         Ինքնարժեք: 0,
+    //         Շահույթ: 0,
+    //     },
+    //     {
+    //         name: 'Նոյեմբեր',
+    //         Ծախս: 0,
+    //         Ինքնարժեք: 0,
+    //         Շահույթ: 0,
+    //     },
+    //     {
+    //         name: 'Դեկտեմբեր',
+    //         Ծախս: 0,
+    //         Ինքնարժեք: 0,
+    //         Շահույթ: 0,
+    //     },
+    // ];
 
     const { Text } = Typography;
     const formatter = (value) => <CountUp end={value} separator=',' />;
@@ -372,11 +223,12 @@ const Home = () => {
                                 <Statistic
                                     title='Ամսական Եկամուտ'
                                     value={
-                                        septemberExpenses && septemberData
-                                            ? septemberData?.shahuyt -
-                                              septemberData?.inqnarjeq -
-                                              septemberExpenses
-                                            : 0
+                                        0
+                                        // septemberExpenses && septemberData
+                                        //     ? septemberData?.shahuyt -
+                                        //       septemberData?.inqnarjeq -
+                                        //       septemberExpenses
+                                        //     : 0
                                     }
                                     formatter={formatter}
                                 />
@@ -433,10 +285,10 @@ const Home = () => {
                     </div>
                     <div style={{ width: '100%', height: 400, marginTop: 30 }}>
                         <ResponsiveContainer width='100%' height='100%'>
-                            <AreaChart
+                            <ComposedChart
                                 width={500}
                                 height={400}
-                                data={data}
+                                data={chartData}
                                 margin={{
                                     top: 10,
                                     right: 30,
@@ -450,7 +302,7 @@ const Home = () => {
                                 <Tooltip />
                                 <Area
                                     type='monotone'
-                                    dataKey='Ծախս'
+                                    dataKey='Ծախսեր'
                                     stackId='1'
                                     stroke='#8884d8'
                                     fill='#8884d8'
@@ -469,7 +321,12 @@ const Home = () => {
                                     stroke='#ffc658'
                                     fill='#ffc658'
                                 />
-                            </AreaChart>
+                                <Line
+                                    type='monotone'
+                                    dataKey='Զուտ եկամուտ'
+                                    stroke='rgb(220, 53, 69)'
+                                />
+                            </ComposedChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
