@@ -3,7 +3,14 @@ import OrderCard from './OrderCard';
 
 const OrdersMobileView = ({ filteredData }) => {
     return (
-        <>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                background: 'transparent',
+            }}
+        >
             {filteredData?.map((row) => {
                 const { id, attributes } = { ...row };
                 const {
@@ -30,11 +37,13 @@ const OrdersMobileView = ({ filteredData }) => {
                         description={description}
                         customer={customer}
                         images={images}
+                        net_cost={net_cost}
+                        selling_price={selling_price}
                         key={id}
                     />
                 );
             })}
-        </>
+        </div>
     );
 };
 

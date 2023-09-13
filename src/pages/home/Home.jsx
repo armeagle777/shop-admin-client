@@ -89,6 +89,57 @@ const Home = () => {
         }, 0);
 
     const ordersCount = orders?.length;
+
+    function getFirstDayOfMonth(year, month) {
+        return new Date(year, month, 1);
+    }
+
+    function getLastDayOfMonth(year, month) {
+        return new Date(year, month + 1, 0);
+    }
+
+    function getCurrentYearAndPast11Months() {
+        const months = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+        ];
+
+        const currentDate = new Date();
+        let currentYear = currentDate.getFullYear();
+        let currentMonth = currentDate.getMonth();
+        const currentMonthName = months[currentMonth];
+
+        const monthsData = [];
+
+        for (let i = 0; i < 12; i++) {
+            const monthName = months[currentMonth];
+            monthsData.push({
+                month: monthName,
+                startDate: getFirstDayOfMonth(currentYear, currentMonth),
+                endDate: getLastDayOfMonth(currentYear, currentMonth),
+            });
+
+            if (currentMonth === 0) {
+                currentYear--; // Decrement the year if the current month is January
+                currentMonth = 11; // Set the current month to December
+            } else {
+                currentMonth--; // Move to the previous month
+            }
+        }
+
+        return monthsData.reverse(); // Reverse the order to get past months first
+    }
+
     const julyStartDate = new Date('2023-07-01');
     const julyEndDate = new Date('2023-07-31');
 

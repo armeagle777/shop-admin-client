@@ -8,7 +8,14 @@ import { Avatar, Card, Image } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import React from 'react';
 
-const OrderCard = ({ name, description, customer, images }) => {
+const OrderCard = ({
+    name,
+    description,
+    customer,
+    images,
+    net_cost,
+    selling_price,
+}) => {
     const first_name = delve(customer, 'data.attributes.first_name');
     const last_name = delve(customer, 'data.attributes.last_name');
     const avatarUrl = delve(
@@ -40,8 +47,18 @@ const OrderCard = ({ name, description, customer, images }) => {
         >
             <Meta
                 avatar={<Avatar src={avatarUrl || ''} />}
-                title={`${name} / ${description}`}
-                description={`${first_name} ${last_name}`}
+                title={
+                    <>
+                        {name} <br />
+                        Չափսը՝ {description}
+                    </>
+                }
+                description={
+                    <>
+                        {first_name} {last_name} <br />
+                        {net_cost} ֏ - {selling_price} ֏
+                    </>
+                }
             />
         </Card>
     );
