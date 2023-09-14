@@ -9,7 +9,6 @@ import {
     Statistic,
 } from 'antd';
 import delve from 'dlv';
-import { isAfter, isBefore, isEqual } from 'date-fns';
 
 import { BrowserView } from 'react-device-detect';
 import { GiftOutlined, UsergroupAddOutlined } from '@ant-design/icons';
@@ -27,6 +26,7 @@ import {
     Cell,
     Line,
     ComposedChart,
+    Legend,
 } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import { getCustomers, getExpenses, getOrders } from '../../api/serverApi';
@@ -50,7 +50,12 @@ const Home = () => {
         }
     );
 
-    const expenses = expensesResponse?.data;
+    const expenses = expensesResponse?.data?.filter(
+        (ex) =>
+            ex.attributes.direction.data.id !== 23 &&
+            ex.attributes.direction.data.id !== 30
+    );
+    console.log('expenses:::::: ', expenses);
 
     const { data: availableOrders } = useQuery(
         ['orders', { filter: 'AVAILABLE' }],
@@ -97,81 +102,6 @@ const Home = () => {
         () => getCurrentYearAndPast11Months(expenses, deliveredOrders),
         [expenses, deliveredOrders]
     );
-
-    // const data = [
-    //     {
-    //         name: 'Հունվար',
-    //         Ծախս: 0,
-    //         Ինքնարժեք: 0,
-    //         Շահույթ: 0,
-    //     },
-    //     {
-    //         name: 'Փետրվար',
-    //         Ծախս: 0,
-    //         Ինքնարժեք: 0,
-    //         Շահույթ: 0,
-    //     },
-    //     {
-    //         name: 'Մարտ',
-    //         Ծախս: 0,
-    //         Ինքնարժեք: 0,
-    //         Շահույթ: 0,
-    //     },
-    //     {
-    //         name: 'Ապրիլ',
-    //         Ծախս: 0,
-    //         Ինքնարժեք: 0,
-    //         Շահույթ: 0,
-    //     },
-    //     {
-    //         name: 'Մայիս',
-    //         Ծախս: 0,
-    //         Ինքնարժեք: 0,
-    //         Շահույթ: 0,
-    //     },
-    //     {
-    //         name: 'Հունիս',
-    //         Ծախս: 0,
-    //         Ինքնարժեք: 0,
-    //         Շահույթ: 0,
-    //     },
-    //     {
-    //         name: 'Հուլիս',
-    //         Ծախս: julyExpenses || 0,
-    //         Ինքնարժեք: julyData?.inqnarjeq || 0,
-    //         Շահույթ: julyData?.shahuyt || 0,
-    //     },
-    //     {
-    //         name: 'Օգոստոս',
-    //         Ծախս: augustExpenses || 0,
-    //         Ինքնարժեք: augustData?.inqnarjeq || 0,
-    //         Շահույթ: augustData?.shahuyt || 0,
-    //     },
-    //     {
-    //         name: 'Սեպտեմբեր',
-    //         Ծախս: septemberExpenses || 0,
-    //         Ինքնարժեք: septemberData?.inqnarjeq || 0,
-    //         Շահույթ: septemberData?.shahuyt || 0,
-    //     },
-    //     {
-    //         name: 'Հոկտեմբեր',
-    //         Ծախս: 0,
-    //         Ինքնարժեք: 0,
-    //         Շահույթ: 0,
-    //     },
-    //     {
-    //         name: 'Նոյեմբեր',
-    //         Ծախս: 0,
-    //         Ինքնարժեք: 0,
-    //         Շահույթ: 0,
-    //     },
-    //     {
-    //         name: 'Դեկտեմբեր',
-    //         Ծախս: 0,
-    //         Ինքնարժեք: 0,
-    //         Շահույթ: 0,
-    //     },
-    // ];
 
     const { Text } = Typography;
     const formatter = (value) => <CountUp end={value} separator=',' />;
@@ -300,6 +230,7 @@ const Home = () => {
                                 <XAxis dataKey='name' />
                                 <YAxis />
                                 <Tooltip />
+                                <Legend />
                                 <Area
                                     type='monotone'
                                     dataKey='Ծախսեր'
