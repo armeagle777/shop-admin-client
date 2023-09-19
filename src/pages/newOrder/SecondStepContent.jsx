@@ -116,7 +116,7 @@ const SecondStepContent = ({ countriesOptions, customerOptions }) => {
                         <Select
                             showSearch
                             style={{
-                                width: 200,
+                                width: 370,
                             }}
                             placeholder='Որոնել'
                             optionFilterProp='children'
