@@ -8,6 +8,7 @@ import {
     filterSegmentValues,
     segmentFilterValues,
     setgmentOptions,
+    setgmentMobileOptions,
 } from './Orders.constants';
 
 import { PlusOutlined } from '@ant-design/icons';
@@ -74,6 +75,13 @@ const Orders = () => {
                 />
             </BrowserView>
             <MobileView>
+                <Segmented
+                    onChange={onSegmentChange}
+                    block
+                    options={setgmentMobileOptions}
+                    defaultValue={filterSegmentValues[filter]}
+                    style={{ marginBottom: 10 }}
+                />
                 <OrdersMobileView filteredData={data} />
             </MobileView>
             <FloatButton

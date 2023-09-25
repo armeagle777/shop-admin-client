@@ -45,6 +45,8 @@ export const setgmentOptions = [
     'Վերադարձված',
 ];
 
+export const setgmentMobileOptions = ['Պատվիրված', 'Առկա', 'Առաքված'];
+
 export const segmentFilterValues = {
     Պատվիրված: 'ORDERED',
     Առկա: 'AVAILABLE',
