@@ -14,7 +14,8 @@ import { BrowserView, MobileView } from 'react-device-detect';
 import { GiftOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 import CountUp from 'react-countup';
 import {
-    AreaChart,
+    BarChart, 
+    Bar,
     Area,
     XAxis,
     YAxis,
@@ -31,6 +32,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { getCustomers, getExpenses, getOrders } from '../../api/serverApi';
 import { getCurrentYearAndPast11Months } from './Home.helpers';
+import { accessoryIds,accessoriesCategories } from '../../utils/constants';
 
 const Home = () => {
     const { data: customers } = useQuery(['customers'], () => getCustomers(), {
@@ -52,8 +54,12 @@ const Home = () => {
 
     const expenses = expensesResponse?.data?.filter(
         (ex) =>
-            ex.attributes.direction.data.id !== 23 &&
-            ex.attributes.direction.data.id !== 30
+        !accessoryIds.includes(ex.attributes.direction.data.id)
+    );
+
+    const accesorriesExpenses = expensesResponse?.data?.filter(
+        (ex) =>
+        accessoryIds.includes(ex.attributes.direction.data.id)
     );
 
     const { data: availableOrders } = useQuery(
@@ -79,6 +85,10 @@ const Home = () => {
         }
     );
 
+    const deliveredNonAccsorriesOrders = deliveredOrders?.filter((o) => !accessoriesCategories.includes(o.attributes.category.data.id))
+    const deliveredAccsorriesOrders = deliveredOrders?.filter((o) => accessoriesCategories.includes(o.attributes.category.data.id))
+console.log('deliveredNonAccsorriesOrders:::::: ',deliveredNonAccsorriesOrders);
+
     const availableOrdersSum = availableOrders
         ?.filter((o) => o.attributes.category.data.id !== 18)
         ?.reduce((acc, el) => {
@@ -98,9 +108,12 @@ const Home = () => {
     const ordersCount = orders?.length;
 
     const chartData = useMemo(
-        () => getCurrentYearAndPast11Months(expenses, deliveredOrders),
-        [expenses, deliveredOrders]
+        () => getCurrentYearAndPast11Months(expenses, deliveredNonAccsorriesOrders),
+        [expenses, deliveredNonAccsorriesOrders]
     );
+
+    const accessoriesChartData = useMemo(()=>getCurrentYearAndPast11Months(accesorriesExpenses,
+        deliveredAccsorriesOrders),[accesorriesExpenses,deliveredAccsorriesOrders])
 
     const { Text } = Typography;
     const formatter = (value) => <CountUp end={value} separator=',' />;
@@ -371,6 +384,37 @@ const Home = () => {
                                 </div>
                             </div>
                         </div>
+                        <div
+                            style={{
+                                width: '100%',
+                                height: 400,
+                                marginTop: 30,
+                            }}
+                        >
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                width={500}
+                                height={300}
+                                data={accessoriesChartData}
+                                margin={{
+                                    top: 5,
+                                    right: 30,
+                                    left: 20,
+                                    bottom: 5,
+                                }}
+                                >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="Ծախսեր" fill="#8884d8" />
+                                <Bar dataKey="Ինքնարժեք" fill="#82ca9d" />
+                                <Bar dataKey="Շահույթ" fill="#ffc658" />
+                                <Bar dataKey="Զուտ եկամուտ" fill="rgb(220, 53, 69)" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
                 </div>
             </BrowserView>
@@ -636,6 +680,36 @@ const Home = () => {
                                 />
                             </ComposedChart>
                         </ResponsiveContainer>
+                    </div>
+                    <div
+                        style={{
+                            width: '100%',
+                            height: 400,
+                        }}
+                    >
+                        <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                width={500}
+                                height={300}
+                                data={accessoriesChartData}
+                                margin={{
+                                    top: 5,
+                                    right: 30,
+                                    left: 20,
+                                    bottom: 5,
+                                }}
+                                >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="Ծախսեր" fill="#8884d8" />
+                                <Bar dataKey="Ինքնարժեք" fill="#82ca9d" />
+                                <Bar dataKey="Շահույթ" fill="#ffc658" />
+                                <Bar dataKey="Զուտ եկամուտ" fill="rgb(220, 53, 69)" />
+                                </BarChart>
+                            </ResponsiveContainer>
                     </div>
                 </div>
             </MobileView>

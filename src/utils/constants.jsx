@@ -64,3 +64,7 @@ export const messages = {
         createSuccess: 'Հաջողությամբ ավելացվել է',
     },
 };
+
+
+export const accessoryIds=[2]
+export const accessoriesCategories = [2]
