@@ -101,7 +101,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 title: 'Հաճախորդ',
                 render: (_, record) => {
                     const customer = delve(record, 'customer.data.attributes');
-                    console.log('customer:::::: ',customer);
+                    
                     const contacts = delve(
                         record,
                         'customer.data.attributes.contacts.data'
@@ -281,7 +281,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 title: 'Հաճախորդ',
                 render: (_, record) => {
                     const customer = delve(record, 'customer.data.attributes')
-                    console.log('customer:::::: ',customer);
+                    
                     const contacts = delve(
                         record,
                         'customer.data.attributes.contacts.data'
@@ -461,7 +461,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 title: 'Հաճախորդ',
                 render: (_, record) => {
                     const customer = delve(record, 'customer.data.attributes');
-                    console.log('customer:::::: ',customer);
+                    
                     
                     const contacts = delve(
                         record,

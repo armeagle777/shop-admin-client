@@ -100,7 +100,7 @@ export const addExpense = async (newExpense) => {
 
 export const getExpenses = async () => {
     const response = await serverApi.get(
-        '/expenses?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*&sort[0]=id:desc'
+        '/expenses?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*&sort[0]=expense_date:desc'
     );
     return response.data;
 };

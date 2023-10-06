@@ -48,7 +48,7 @@ const FirstStepContent = ({
                 <Select
                     // defaultValue='lucy'
                     style={{
-                        width: 150,
+                        width: 300,
                     }}
                     // onChange={handleChange}
                     options={categoriesOptions}
@@ -67,7 +67,7 @@ const FirstStepContent = ({
                 <Select
                     // defaultValue='lucy'
                     style={{
-                        width: 150,
+                        width: 300,
                     }}
                     // onChange={handleChange}
                     options={shopsOptions}

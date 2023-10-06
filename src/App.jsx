@@ -14,6 +14,7 @@ import Expenses from './pages/expenses/Expenses';
 import Orders from './pages/orders/Orders';
 import NotFound from './pages/notFound/NotFound';
 import Customer from './pages/customers/Customer';
+import Reports from './pages/reports/Reports'
 
 function App() {
     const { defaultAlgorithm, darkAlgorithm } = theme;
@@ -62,6 +63,10 @@ function App() {
                 {
                     path: '/expenses',
                     element: <Expenses />,
+                },
+                {
+                    path: '/reports',
+                    element: <Reports />,
                 },
                 {
                     path: '/orders',

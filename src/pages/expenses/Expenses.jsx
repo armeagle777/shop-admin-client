@@ -127,11 +127,13 @@ const Expenses = () => {
         },
         {
             title: 'Ա/թ',
-            dataIndex: 'createdAt',
-            render: (_, record) => {
-                const create_date = record.expense_date;
-                return format(new Date(create_date), 'dd-MM-yyy');
-            },
+            dataIndex: 'expense_date',
+            // render: (_, record) => {
+            //     const create_date = record.expense_date;
+            //     console.log('new Date(create_date):::::: ',new Date(create_date));
+                
+            //     return format(new Date(create_date), 'dd-MM-yyy');
+            // },
         },
         {
             title: 'Գործողություններ',

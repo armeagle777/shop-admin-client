@@ -1,4 +1,4 @@
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined,RiseOutlined } from '@ant-design/icons';
 import { AiFillInteraction } from 'react-icons/ai';
 import { BsBarChartFill } from 'react-icons/bs';
 import { FaTools } from 'react-icons/fa';
@@ -43,6 +43,14 @@ export const menuItems = [
             },
         ],
     },
+    {
+        label: 'Ֆինանսներ',
+        key: 'sub3',
+        icon: <RiseOutlined />,
+        children: [
+            { label: <Link to='/reports'>Հաշվետվություն</Link>, key: '8' },
+        ],
+    },
 ];
 
 export const loaderText = 'Բեռնում․․․․';
@@ -66,5 +74,5 @@ export const messages = {
 };
 
 
-export const accessoryIds=[2]
-export const accessoriesCategories = [2]
+export const accessoryIds=[32,39]
+export const accessoriesCategories = [74]

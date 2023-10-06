@@ -87,7 +87,6 @@ const Home = () => {
 
     const deliveredNonAccsorriesOrders = deliveredOrders?.filter((o) => !accessoriesCategories.includes(o.attributes.category.data.id))
     const deliveredAccsorriesOrders = deliveredOrders?.filter((o) => accessoriesCategories.includes(o.attributes.category.data.id))
-console.log('deliveredNonAccsorriesOrders:::::: ',deliveredNonAccsorriesOrders);
 
     const availableOrdersSum = availableOrders
         ?.filter((o) => o.attributes.category.data.id !== 18)
