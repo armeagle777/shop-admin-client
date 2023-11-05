@@ -33,11 +33,11 @@ export function getCurrentYearAndPast11Months(expenses, orders) {
 
     for (let i = 0; i < 12; i++) {
         const monthName = months[currentMonth];
+
         const currentMonthOrders = orders?.filter((item) => {
             const itemDate = new Date(item?.attributes?.order_date);
-            const category = item?.attributes?.category?.data?.id;
             return (
-                category !== 18 &&
+                item?.attributes?.status !== 'CANCELED' && item?.attributes?.status !== 'RETURNED' &&
                 isAfter(
                     itemDate,
                     getFirstDayOfMonth(currentYear, currentMonth)
@@ -45,6 +45,8 @@ export function getCurrentYearAndPast11Months(expenses, orders) {
                 isBefore(itemDate, getLastDayOfMonth(currentYear, currentMonth))
             );
         });
+console.log('orders::::::',orders);
+
         const expensesSum =
             expenses
                 ?.filter((item) => {
@@ -64,18 +66,21 @@ export function getCurrentYearAndPast11Months(expenses, orders) {
                     acc += el.attributes.amount;
                     return acc;
                 }, 0) || 0;
+
         const sellingsSum =
-            currentMonthOrders?.reduce((acc, el) => {
+            currentMonthOrders?.filter(o => o.attributes.status==='DELIVERED')?.reduce((acc, el) => {
                 const selling_price = delve(el, 'attributes.selling_price');
                 acc += selling_price;
                 return acc;
             }, 0) || 0;
+
         const netCostSum =
             currentMonthOrders?.reduce((acc, el) => {
                 const net_cost = delve(el, 'attributes.net_cost');
                 acc += net_cost;
                 return acc;
             }, 0) || 0;
+
         monthsData.push({
             name: monthName,
             Ծախսեր: expensesSum,

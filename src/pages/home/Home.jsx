@@ -22,9 +22,6 @@ import {
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    PieChart,
-    Pie,
-    Cell,
     Line,
     ComposedChart,
     Legend,
@@ -52,7 +49,7 @@ const Home = () => {
         }
     );
 
-    const expenses = expensesResponse?.data?.filter(
+    const nonAccessoriesExpenses = expensesResponse?.data?.filter(
         (ex) =>
         !accessoryIds.includes(ex.attributes.direction.data.id)
     );
@@ -77,16 +74,16 @@ const Home = () => {
         }
     );
 
-    const { data: deliveredOrders } = useQuery(
-        ['orders', { filter: 'DELIVERED' }],
-        () => getOrders('DELIVERED'),
-        {
-            keepPreviousData: false,
-        }
-    );
+    // const { data: deliveredOrders } = useQuery(
+    //     ['orders', { filter: 'DELIVERED' }],
+    //     () => getOrders('DELIVERED'),
+    //     {
+    //         keepPreviousData: false,
+    //     }
+    // );
 
-    const deliveredNonAccsorriesOrders = deliveredOrders?.filter((o) => !accessoriesCategories.includes(o.attributes.category.data.id))
-    const deliveredAccsorriesOrders = deliveredOrders?.filter((o) => accessoriesCategories.includes(o.attributes.category.data.id))
+    const nonAccsorriesOrders = orders?.filter((o) => !accessoriesCategories.includes(o.attributes.category.data.id))
+    const accsorriesOrders = orders?.filter((o) => accessoriesCategories.includes(o.attributes.category.data.id))
 
     const availableOrdersSum = availableOrders
         ?.filter((o) => o.attributes.category.data.id !== 18)
@@ -107,12 +104,12 @@ const Home = () => {
     const ordersCount = orders?.length;
 
     const chartData = useMemo(
-        () => getCurrentYearAndPast11Months(expenses, deliveredNonAccsorriesOrders),
-        [expenses, deliveredNonAccsorriesOrders]
+        () => getCurrentYearAndPast11Months(nonAccessoriesExpenses, nonAccsorriesOrders),
+        [nonAccessoriesExpenses, nonAccsorriesOrders]
     );
 
     const accessoriesChartData = useMemo(()=>getCurrentYearAndPast11Months(accesorriesExpenses,
-        deliveredAccsorriesOrders),[accesorriesExpenses,deliveredAccsorriesOrders])
+        accsorriesOrders),[accesorriesExpenses,accsorriesOrders])
 
     const { Text } = Typography;
     const formatter = (value) => <CountUp end={value} separator=',' />;
