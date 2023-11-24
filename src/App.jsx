@@ -3,6 +3,7 @@ import { ConfigProvider, theme, Button, Card } from 'antd';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { useTheme } from './store/ThemeContext';
 
+
 import AdminLayout from './components/adminLayout/AdminLayout';
 import Home from './pages/home/Home';
 import Shops from './pages/shops/Shops';
@@ -15,6 +16,8 @@ import Orders from './pages/orders/Orders';
 import NotFound from './pages/notFound/NotFound';
 import Customer from './pages/customers/Customer';
 import Reports from './pages/reports/Reports'
+import Login from './pages/login/Login';
+import RequireAuth from './components/requireAuth/RequireAuth';
 
 function App() {
     const { defaultAlgorithm, darkAlgorithm } = theme;
@@ -33,51 +36,52 @@ function App() {
             children: [
                 {
                     path: '/',
-                    element: <Home />,
+                    element:<RequireAuth element={<Home />} /> ,
                 },
+                
                 {
                     path: '/shops',
-                    element: <Shops />,
+                    element: <RequireAuth element={<Shops />} />,
                 },
                 {
                     path: '/customers',
                     children: [
                         {
                             index: true,
-                            element: <Customers />,
+                            element: <RequireAuth element={<Customers />} />,
                         },
                         {
                             path: ':customerId',
-                            element: <Customer />,
+                            element: <RequireAuth element={<Customer />} />,
                         },
                     ],
                 },
                 {
                     path: '/categories',
-                    element: <Categories />,
+                    element: <RequireAuth element={<Categories />} />,
                 },
                 {
                     path: '/expense-directions',
-                    element: <ExpenseDirections />,
+                    element: <RequireAuth element={<ExpenseDirections />} />,
                 },
                 {
                     path: '/expenses',
-                    element: <Expenses />,
+                    element:<RequireAuth element={<Expenses />} />,
                 },
                 {
                     path: '/reports',
-                    element: <Reports />,
+                    element: <RequireAuth element={<Reports />} />,
                 },
                 {
                     path: '/orders',
                     children: [
                         {
                             index: true,
-                            element: <Orders />,
+                            element: <RequireAuth element={<Orders />} />,
                         },
                         {
                             path: 'new-order',
-                            element: <NewOrder />,
+                            element: <RequireAuth element={<NewOrder />} />,
                         },
                     ],
                 },
@@ -89,7 +93,12 @@ function App() {
                 },
             ],
         },
+        {
+            path: '/login',
+            element: <Login />,
+        },
     ]);
+    
 
     return (
         <ConfigProvider
@@ -97,7 +106,7 @@ function App() {
                 algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
             }}
         >
-            <RouterProvider router={router} />
+                <RouterProvider router={router} />
         </ConfigProvider>
     );
 }
