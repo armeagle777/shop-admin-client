@@ -40,7 +40,7 @@ const Login = () => {
       setPassword('');
       signIn({
         token: signinData.jwt,
-        expiresIn: 3600,
+        expiresIn: 30 * 24 * 60,
         tokenType: 'Bearer',
         authState: signinData.user,
       });
