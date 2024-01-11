@@ -18,9 +18,9 @@ const AdminLayout = ({ handleThemeChange, isDarkMode }) => {
   } = theme.useToken();
 
   return (
-    <Layout style={{ width: '100vw', minHeight: '100vh' }}>
+    <Layout style={{ width: '100vw', height: '100vh' }}>
       <Menuslider isDarkMode={isDarkMode} collapsed={collapsed} />
-      <Layout>
+      <Layout style={{ maxHeight: '100vh', overflowY: 'auto' }}>
         <Header
           style={{
             padding: 0,
