@@ -20,6 +20,7 @@ import { Profile } from './pages/profile/Profile';
 // import AuthProvider from 'react-auth-kit/dist/AuthProvider';
 // import PrivateRoute from 'react-auth-kit/dist/PrivateRoute';
 import { AuthProvider, RequireAuth } from 'react-auth-kit';
+import Order from './pages/orders/Order';
 
 function App() {
   const { defaultAlgorithm, darkAlgorithm } = theme;
@@ -50,6 +51,7 @@ function App() {
           <Route path="/orders">
             <Route index element={<Orders />} />
             <Route path="new-order" element={<NewOrder />} />
+            <Route path=":orderId" element={<Order />} />
           </Route>
           <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound message="Կներեք, նման էջ գոյություն չունի" />} />
