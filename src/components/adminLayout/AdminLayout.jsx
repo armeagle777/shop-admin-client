@@ -67,6 +67,7 @@ const AdminLayout = ({ handleThemeChange, isDarkMode }) => {
             padding: isMobile ? '36px 0' : '36px 24px',
             minHeight: 280,
             background: colorBgContainer,
+            overflow: 'auto',
           }}
         >
           <Outlet />
