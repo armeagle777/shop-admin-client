@@ -10,6 +10,7 @@ import { getCustomerById, getOrderById } from '../../api/serverApi';
 import Alert from '../../components/alert/Alert';
 import NotFound from '../notFound/NotFound';
 import EditCustomerForm from '../customers/EditCustomerForm';
+import EditOrderForm from './EditOrderForm';
 
 const colorsMap = {
   ORDERED: 'gray',
@@ -54,55 +55,28 @@ const Order = () => {
   const info = delve(data, 'data.attributes');
 
   const {
-    first_name,
-    last_name,
-    phone_number,
-    Avatar,
-    addresses,
-    contacts,
-    orders,
-    segments,
-    orders_count,
+    cancel_date,
+    category,
     createdAt,
+    customer,
+    deliver_date,
+    description,
+    images,
+    isActive,
+    name,
+    net_cost,
+    order_date,
+    received_date,
+    reference_url,
+    return_date,
+    selling_price,
+    shop,
+    status,
+    tracking_id,
+    updatedAt,
   } = {
     ...info,
   };
-  const ordersInfo = delve(orders, 'data');
-  const ordersCount = ordersInfo?.length || 0;
-  const ordersSums = ordersInfo
-    ? ordersInfo.reduce(
-        (acc, el) => {
-          const status = delve(el, 'attributes.status');
-          const net_cost = delve(el, 'attributes.net_cost') || 0;
-          const selling_price = delve(el, 'attributes.selling_price') || 0;
-          const profit = selling_price - net_cost;
-          if (status !== 'CANCELED' && status !== 'RETURNED') acc.net_cost += net_cost;
-          acc.profit += profit;
-
-          return acc;
-        },
-        { net_cost: 0, profit: 0 },
-      )
-    : { net_cost: 0, profit: 0 };
-  const timeLineItems = ordersInfo
-    ? ordersInfo.map((el) => {
-        const info = delve(el, 'attributes');
-        const status = info.status;
-
-        return {
-          color: colorsMap[status],
-          children: (
-            <>
-              <p>{new Date(info[datesMap[status]]).toLocaleString()}</p>
-              <p>Պատվեր N {el.id}</p>
-              <p>
-                {info.net_cost.toLocaleString()}֏ - {info.selling_price.toLocaleString()}֏ - {statusesMap[status]}
-              </p>
-            </>
-          ),
-        };
-      })
-    : [];
 
   return (
     <>
@@ -135,124 +109,27 @@ const Order = () => {
                 </Space>
               </Space>
             ) : (
-              <EditCustomerForm
-                customerId={orderId}
-                isLoading={isLoading}
-                isFetching={isFetching}
-                isError={isError}
-                error={error}
-                first_name={first_name}
-                last_name={last_name}
-                phone_number={phone_number}
-                Avatar={Avatar}
-                addresses={addresses}
-                contacts={contacts}
+              <EditOrderForm
+                cancel_date={cancel_date}
+                category={category}
+                createdAt={createdAt}
+                customer={customer}
+                deliver_date={deliver_date}
+                description={description}
+                images={images}
+                isActive={isActive}
+                name={name}
+                net_cost={net_cost}
+                order_date={order_date}
+                received_date={received_date}
+                reference_url={reference_url}
+                return_date={return_date}
+                selling_price={selling_price}
+                shop={shop}
+                status={status}
+                tracking_id={tracking_id}
+                updatedAt={updatedAt}
               />
-            )}
-          </div>
-
-          <div
-            style={{
-              width: '30%',
-              padding: '0 20px',
-            }}
-          >
-            <Card
-              loading={isLoading || isFetching}
-              title="Պատմություն"
-              style={{
-                width: '100%',
-                marginBottom: '20px',
-              }}
-            >
-              <div
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                }}
-              >
-                <div
-                  style={{
-                    width: '50%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <Text style={{ fontSize: 16 }}>
-                      <FieldTimeOutlined style={{ marginRight: 8 }} />
-                      Գրանցվել է
-                    </Text>
-                    <Text type="secondary" style={{ fontSize: 16 }}>
-                      {createdAt && format(new Date(createdAt), 'dd-MM-yyy')}
-                    </Text>
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <Text style={{ fontSize: 16 }}>
-                      <SkinOutlined style={{ marginRight: 8 }} />
-                      Քանակը
-                    </Text>
-                    <Text type="secondary" style={{ fontSize: 16 }}>
-                      {ordersCount} - Պատվեր
-                    </Text>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    width: '50%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <Text style={{ fontSize: 16 }}>
-                      <GiftOutlined style={{ marginRight: 8 }} />
-                      Գումարը
-                    </Text>
-                    <Text type="secondary" style={{ fontSize: 16 }}>
-                      {ordersSums.net_cost.toLocaleString()}դ. Պատվեր
-                    </Text>
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <Text style={{ fontSize: 16 }}>
-                      <SmileOutlined style={{ marginRight: 8 }} />
-                      Եկամուտ
-                    </Text>
-                    <Text type="secondary" style={{ fontSize: 16 }}>
-                      {ordersSums.profit.toLocaleString()}դ. Եկամուտ
-                    </Text>
-                  </div>
-                </div>
-              </div>
-            </Card>
-            {isLoading || isFetching ? (
-              <Skeleton
-                paragraph={{
-                  rows: 6,
-                }}
-              />
-            ) : (
-              <Timeline items={timeLineItems} />
             )}
           </div>
         </div>

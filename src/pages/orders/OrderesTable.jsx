@@ -18,7 +18,7 @@ import {
 } from '@ant-design/icons';
 import { deleteOrder, editOrder, removeOrder } from '../../api/serverApi';
 import { messages } from '../../utils/constants';
-import { generateRandomColor } from '../../utils/helpers';
+import { formatImageUrl, generateRandomColor } from '../../utils/helpers';
 import Alert from '../../components/alert/Alert';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 import PopConfirmEdit from '../../components/shared/popConfirm/PopConfirmEdit';
@@ -68,7 +68,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                   <Image
                     key={index}
                     width={50}
-                    src={src}
+                    src={formatImageUrl(src)}
                     placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
                   />
                 );

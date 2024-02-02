@@ -134,9 +134,7 @@ export const getOrders = async (filter) => {
 };
 
 export const getOrderById = async (id) => {
-  const response = await serverApi.get(
-    `/orders/${id}?populate[customer][populate][0]=addresses&populate[customer][populate][1]=Avatar&populate[customer][populate][2]=contacts&populate[shop][populate][0]=logo&populate[images][populate]=url&populate[category][populate]=image`,
-  );
+  const response = await serverApi.get(`/orders/${id}?populate=*`);
   return response.data;
 };
 
