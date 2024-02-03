@@ -2,7 +2,7 @@ import { EditOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/ico
 import { Button, Cascader, Form, Image, Input, Select, Space, Upload } from 'antd';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { formatCountriesData } from '../../utils/helpers';
+import { formatCountriesData, formatImageUrl } from '../../utils/helpers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editCustomer, getCountries } from '../../api/serverApi';
 import Alert from '../../components/alert/Alert';
@@ -187,7 +187,7 @@ const EditCustomerForm = ({
     >
       <Form.Item name="image" label="Նկար" valuePropName="image" getValueFromEvent={normFile}>
         <Space align="start">
-          {avatarSrc && !uploadedFileId && <Image height={100} width={90} src={avatarSrc} />}
+          {avatarSrc && !uploadedFileId && <Image height={100} width={90} src={formatImageUrl(avatarSrc)} />}
           <Upload
             accept=".png,.jpeg,.jpg"
             name="files"
