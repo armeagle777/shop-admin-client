@@ -29,7 +29,7 @@ const OrderCard = ({ name, description, customer, images, net_cost, selling_pric
       actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
     >
       <Meta
-        avatar={<Avatar src={avatarUrl || ''} />}
+        avatar={<Avatar src={formatImageUrl(avatarUrl) || ''} />}
         title={
           <>
             {name} <br />
