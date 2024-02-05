@@ -19,10 +19,9 @@ import {
 } from 'antd';
 import { formatImageUrl } from '../../utils/helpers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addOrder, getCategories, getCountries, getCustomers, getShops } from '../../api/serverApi';
+import { addOrder, getCategories, getCustomers, getShops, addCustomer } from '../../api/serverApi';
 import { messages } from '../../utils/constants';
 import { toast } from 'react-toastify';
-import { formatCountriesData } from '../../utils/helpers';
 import dayjs from 'dayjs';
 import { format } from 'date-fns';
 import { PlusOutlined } from '@ant-design/icons';
@@ -51,13 +50,6 @@ const EditOrderForm = ({
   const navigate = useNavigate();
   const fileUploadUrl = `${import.meta.env.VITE_SERVER_URL}/upload`;
   const dateFormat = 'DD/MM/YYYY';
-  const {
-    data: countries,
-    isLoading,
-    isFetching,
-  } = useQuery(['countries'], getCountries, {
-    keepPreviousData: true,
-  });
 
   const { data: customers } = useQuery(['customers'], () => getCustomers(), {
     keepPreviousData: true,
@@ -89,11 +81,9 @@ const EditOrderForm = ({
     label: attributes.name,
   }));
 
-  const disabledNextButton = isLoading || isFetching;
-
-  const countriesOptions = formatCountriesData(countries);
-
   const onFinish = (values) => {
+    console.log('values::Edit Order:::: ', values);
+
     form.submit();
   };
   const [addCustomerForm] = Form.useForm();
@@ -118,7 +108,35 @@ const EditOrderForm = ({
     },
   });
 
+  const addCustomerMutation = useMutation((item) => addCustomer(item), {
+    onSuccess: (data) => {
+      if (data.data?.error) {
+        return toast.error(data.data?.error || 'Սխալ է տեղի ունեցել', {
+          progress: undefined,
+        });
+      }
+      queryClient.invalidateQueries('customers');
+      toast.success(messages.customers.createSuccess, {
+        progress: undefined,
+      });
+      setShowAddCustomerModal(false);
+      addCustomerForm.resetFields();
+    },
+    onError: (error, variables, context, mutation) => {
+      console.log('err:::::: ', error);
+
+      toast.error(error.response?.data?.error?.message || error.message, {
+        progress: undefined,
+      });
+    },
+  });
+
+  const onCustomerAddSubmit = (values) => {
+    addCustomerMutation.mutate(values);
+  };
   const onSubmit = () => {
+    console.log('formValues:::::: ', formValues);
+
     const orderAddress = {};
     const { address, order_date, ...restData } = { ...formValues };
 
@@ -230,7 +248,9 @@ const EditOrderForm = ({
           >
             <Space align="start" style={{ width: '100%' }}>
               {images?.data?.length &&
-                images.data.map((img) => <Image height={100} width={90} src={formatImageUrl(img.attributes.url)} />)}
+                images.data.map((img) => (
+                  <Image key={img.attributes.url} height={100} width={90} src={formatImageUrl(img.attributes.url)} />
+                ))}
               <Upload
                 accept=".png,.jpeg,.jpg"
                 name="files"
@@ -241,8 +261,9 @@ const EditOrderForm = ({
                 onChange={async (res) => {
                   if (!res.file?.response) return;
                   const fileId = res.file?.response[0].id;
-                  // setUploadedFileId(fileId);
+
                   setFormValues((prev) => {
+                    console.log('Prev >>>>', prev);
                     if (!prev.images) {
                       return { ...prev, images: [fileId] };
                     }
@@ -420,22 +441,35 @@ const EditOrderForm = ({
           >
             <AddCustomerForm
               onCancel={onCloseCustomerModal}
-              onSubmit={onSubmit}
+              onSubmit={onCustomerAddSubmit}
               isLoadingAdd={addItemMutation.isLoading}
               form={addCustomerForm}
             />
           </Modal>
+          <Button
+            type="primary"
+            htmlType="submit"
+            // onClick={onSubmit}
+            loading={addItemMutation.isLoading}
+          >
+            Հաստատել
+          </Button>
         </Form>
       </div>
-      <div
+      {/* <div
         style={{
           marginTop: 24,
         }}
       >
-        <Button type="primary" onClick={onSubmit} loading={addItemMutation.isLoading}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          // onClick={onSubmit}
+          loading={addItemMutation.isLoading}
+        >
           Հաստատել
         </Button>
-      </div>
+      </div> */}
     </>
   );
 };
