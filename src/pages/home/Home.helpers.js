@@ -42,10 +42,6 @@ export function getCurrentYearAndPast11Months(expenses, orders) {
       );
     });
 
-    if (currentMonth == 11) {
-      console.log('<<<<<monthName', monthName, '->', currentMonthExpenses);
-    }
-
     const expensesSum =
       currentMonthExpenses?.reduce((acc, el) => {
         acc += el.attributes.amount;
@@ -83,6 +79,5 @@ export function getCurrentYearAndPast11Months(expenses, orders) {
       currentMonth--; // Move to the previous month
     }
   }
-  console.log('monthsData', monthsData);
   return monthsData.reverse(); // Reverse the order to get past months first
 }

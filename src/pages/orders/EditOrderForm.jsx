@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import { formatImageUrl } from '../../utils/helpers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addOrder, getCategories, getCustomers, getShops, addCustomer } from '../../api/serverApi';
+import { editOrder, getCategories, getCustomers, getShops, addCustomer } from '../../api/serverApi';
 import { messages } from '../../utils/constants';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
@@ -28,6 +28,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import AddCustomerForm from '../../components/shared/addCutomerForm/AddCustomerForm';
 
 const EditOrderForm = ({
+  orderId,
   category,
   customer,
   description,
@@ -44,13 +45,33 @@ const EditOrderForm = ({
 }) => {
   const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
   const { token } = theme.useToken();
-  const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
-  const [formValues, setFormValues] = useState({});
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
+  const [uploads, setUploads] = useState(
+    images?.data?.map((img) => ({ id: img.id, ...img.attributes, url: formatImageUrl(img.attributes.url) })) || [],
+  );
   const navigate = useNavigate();
   const fileUploadUrl = `${import.meta.env.VITE_SERVER_URL}/upload`;
   const dateFormat = 'DD/MM/YYYY';
 
+  const handleChange = ({ fileList: newFileList, ...restData }) => {
+    console.log('newFileList:::::: ', newFileList);
+
+    setUploads(newFileList);
+  };
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  };
+
+  const onEditCancel = () => {
+    navigate('/orders');
+  };
   const { data: customers } = useQuery(['customers'], () => getCustomers(), {
     keepPreviousData: true,
   });
@@ -82,27 +103,39 @@ const EditOrderForm = ({
   }));
 
   const onFinish = (values) => {
-    console.log('values::Edit Order:::: ', values);
+    const { customer, category, description, name, net_cost, shop, selling_price, order_date } = values;
+    const formatedOrderDate = dayjs(order_date.$d).format('YYYY-MM-DD');
+    const newData = {
+      id: orderId,
+      customer,
+      category,
+      description,
+      name,
+      net_cost,
+      shop,
+      selling_price,
+      order_date: formatedOrderDate,
+      images: uploads.map((image) => image.id || image.response[0].id),
+    };
 
-    form.submit();
+    editItemMutation.mutate(newData);
   };
   const [addCustomerForm] = Form.useForm();
   const queryClient = useQueryClient();
 
-  const addItemMutation = useMutation({
-    mutationFn: (newOrder) => {
-      return addOrder(newOrder);
+  const editItemMutation = useMutation({
+    mutationFn: (newData) => {
+      return editOrder(newData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['orders', { filter: 'ORDERED' }]);
-      toast.success(messages.orders.createSuccess, {
+      toast.success(messages.orders.editSuccess, {
         progress: undefined,
       });
-      form.resetFields();
       navigate('/orders');
     },
     onError: () => {
-      toast.error(messages.shops.deleteError, {
+      toast.error(messages.orders.editError, {
         progress: undefined,
       });
     },
@@ -134,49 +167,7 @@ const EditOrderForm = ({
   const onCustomerAddSubmit = (values) => {
     addCustomerMutation.mutate(values);
   };
-  const onSubmit = () => {
-    console.log('formValues:::::: ', formValues);
 
-    const orderAddress = {};
-    const { address, order_date, ...restData } = { ...formValues };
-
-    const { district, street, index } = { ...address };
-    if (district) {
-      const [country, marz, community, settlement] = [...district];
-      if (country) {
-        orderAddress.country = country;
-      }
-      if (marz) {
-        orderAddress.marz = marz;
-      }
-      if (community) {
-        orderAddress.community = community;
-      }
-      if (settlement) {
-        orderAddress.settlement = settlement;
-      }
-      if (street) {
-        orderAddress.street = street;
-      }
-      if (index) {
-        orderAddress.index = index;
-      }
-    }
-
-    const newData = { ...restData, address: orderAddress };
-
-    newData.order_date = order_date ? new Date(order_date.$d) : new Date();
-
-    addItemMutation.mutate(newData);
-  };
-
-  const next = async () => {
-    try {
-      await form.validateFields(['name', 'description', 'net_cost', 'selling_price', 'shop', 'category', 'customer']);
-      setFormValues({ ...formValues, ...form.getFieldsValue() });
-      setCurrent((prev) => prev + 1);
-    } catch {}
-  };
   const onChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
   };
@@ -238,44 +229,41 @@ const EditOrderForm = ({
             net_cost,
             selling_price,
             customer: customer.data.id,
+            order_date: dayjs(order_date),
           }}
         >
           <Form.Item
-            name={['customer', 'image']}
+            name="image"
             label="Նկար"
-            // valuePropName={['customer', 'image']}
+            valuePropName="image"
             // getValueFromEvent={normFile}
           >
-            <Space align="start" style={{ width: '100%' }}>
-              {images?.data?.length &&
-                images.data.map((img) => (
-                  <Image key={img.attributes.url} height={100} width={90} src={formatImageUrl(img.attributes.url)} />
-                ))}
-              <Upload
-                accept=".png,.jpeg,.jpg"
-                name="files"
-                action={fileUploadUrl}
-                listType="picture-card"
-                multiple={true}
-                maxCount={5}
-                onChange={async (res) => {
-                  if (!res.file?.response) return;
-                  const fileId = res.file?.response[0].id;
+            {/* {uploads.length && uploads.map((img) => <Image key={img.url} height={100} width={90} src={img.url} />)} */}
+            <Upload
+              accept=".png,.jpeg,.jpg"
+              name="files"
+              fileList={uploads}
+              onPreview={handlePreview}
+              action={fileUploadUrl}
+              listType="picture-card"
+              multiple={true}
+              maxCount={5}
+              onChange={handleChange}
+              // onChange={async (res) => {
+              //   console.log('::::::uploaded ');
 
-                  setFormValues((prev) => {
-                    console.log('Prev >>>>', prev);
-                    if (!prev.images) {
-                      return { ...prev, images: [fileId] };
-                    }
-                    const newImages = [...prev.images, fileId];
-                    return { ...prev, images: newImages };
-                  });
-                }}
-                onRemove={async (file) => {
-                  if (!uploadedFileId) return;
-                  const res = await axios.delete(`${fileUploadUrl}/files/${uploadedFileId}`);
-                }}
-              >
+              //   if (!res.file?.response) return;
+              //   const newUploadedImage = res.file?.response[0];
+              //   // const { id, ...rest } = newUploadedImage;
+
+              //   setUploads((prev) => [...prev, newUploadedImage]);
+              // }}
+              // onRemove={async (file) => {
+              //   if (!uploadedFileId) return;
+              //   const res = await axios.delete(`${fileUploadUrl}/files/${uploadedFileId}`);
+              // }}
+            >
+              {uploads.length >= 5 ? null : (
                 <div>
                   <PlusOutlined />
                   <div
@@ -286,8 +274,8 @@ const EditOrderForm = ({
                     Բեռնել
                   </div>
                 </div>
-              </Upload>
-            </Space>
+              )}
+            </Upload>
           </Form.Item>
           <Form.Item
             name="name"
@@ -381,9 +369,19 @@ const EditOrderForm = ({
           >
             <InputNumber />
           </Form.Item>
-          <Form.Item name="order_date" label="Պատվերի ա/թ">
+          <Form.Item
+            name="order_date"
+            label="Պատվերի ա/թ"
+            rules={[
+              {
+                required: true,
+                message: 'Պատվերի ա/թ պարտադիր է',
+                // whitespace: true,
+              },
+            ]}
+          >
             <DatePicker
-              defaultValue={dayjs(order_date)}
+              // defaultValue={dayjs(order_date)}
               format={dateFormat}
               placeholder="Ընտրեք ամսաթիվը"
               style={{ width: '100%' }}
@@ -442,34 +440,29 @@ const EditOrderForm = ({
             <AddCustomerForm
               onCancel={onCloseCustomerModal}
               onSubmit={onCustomerAddSubmit}
-              isLoadingAdd={addItemMutation.isLoading}
+              isLoadingAdd={addCustomerMutation.isLoading}
               form={addCustomerForm}
             />
           </Modal>
-          <Button
-            type="primary"
-            htmlType="submit"
-            // onClick={onSubmit}
-            loading={addItemMutation.isLoading}
-          >
-            Հաստատել
-          </Button>
+          <div style={{ padding: '15px 0' }}>
+            <Button onClick={onEditCancel} style={{ marginRight: 10 }}>
+              Չեղարկել
+            </Button>
+            <Button type="primary" htmlType="submit" loading={editItemMutation.isLoading}>
+              Պահպանել
+            </Button>
+          </div>
         </Form>
       </div>
-      {/* <div
-        style={{
-          marginTop: 24,
-        }}
-      >
-        <Button
-          type="primary"
-          htmlType="submit"
-          // onClick={onSubmit}
-          loading={addItemMutation.isLoading}
-        >
-          Հաստատել
-        </Button>
-      </div> */}
+      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+        <img
+          alt="example"
+          style={{
+            width: '100%',
+          }}
+          src={previewImage}
+        />
+      </Modal>
     </>
   );
 };

@@ -44,7 +44,7 @@ const Home = () => {
   const accesorriesExpenses = expensesResponse?.data?.filter((ex) =>
     accessoryIds.includes(ex.attributes.direction.data.id),
   );
-  console.log('<<<<<<<<<accesorriesExpenses', accesorriesExpenses);
+
   const { data: availableOrders } = useQuery(['orders', { filter: 'AVAILABLE' }], () => getOrders('AVAILABLE'), {
     keepPreviousData: false,
   });
@@ -84,7 +84,7 @@ const Home = () => {
   const chartData = getCurrentYearAndPast11Months(nonAccessoriesExpenses, nonAccsorriesOrders);
 
   const accessoriesChartData = getCurrentYearAndPast11Months(accesorriesExpenses, accsorriesOrders);
-  console.log('????accessoriesChartData', accessoriesChartData);
+
   const { Text } = Typography;
   const formatter = (value) => <CountUp end={value} separator="," />;
   return (

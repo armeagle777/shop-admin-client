@@ -30,7 +30,6 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const handleEditClick = (id) => {
-    console.log('Edit', id);
     navigate(`${id}`);
   };
   const columns = {
@@ -119,7 +118,8 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Նկար',
         dataIndex: 'Avatar',
         render: (_, record) => {
-          const src = record.customer?.data?.attributes?.Avatar.data?.attributes?.formats?.thumbnail?.url || '';
+          const src =
+            formatImageUrl(record.customer?.data?.attributes?.Avatar.data?.attributes?.formats?.thumbnail?.url) || '';
           return (
             <Avatar
               style={{

@@ -41,7 +41,6 @@ const Order = () => {
   const { data, isLoading, isFetching, isError, error } = useQuery(['orders', orderId], () => getOrderById(orderId), {
     keepPreviousData: true,
   });
-  console.log('data:::::: ', data);
 
   if (isError) {
     return <Alert type="error" message={error.message} />;
@@ -110,6 +109,7 @@ const Order = () => {
               </Space>
             ) : (
               <EditOrderForm
+                orderId={orderId}
                 cancel_date={cancel_date}
                 category={category}
                 createdAt={createdAt}
