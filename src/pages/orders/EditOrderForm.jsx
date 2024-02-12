@@ -228,17 +228,11 @@ const EditOrderForm = ({
             shop: shop.data.id,
             net_cost,
             selling_price,
-            customer: customer.data.id,
+            customer: customer?.data?.id,
             order_date: dayjs(order_date),
           }}
         >
-          <Form.Item
-            name="image"
-            label="Նկար"
-            valuePropName="image"
-            // getValueFromEvent={normFile}
-          >
-            {/* {uploads.length && uploads.map((img) => <Image key={img.url} height={100} width={90} src={img.url} />)} */}
+          <Form.Item name="image" label="Նկար" valuePropName="image">
             <Upload
               accept=".png,.jpeg,.jpg"
               name="files"
@@ -333,11 +327,9 @@ const EditOrderForm = ({
             ]}
           >
             <Select
-              // defaultValue='lucy'
               style={{
                 width: 300,
               }}
-              // onChange={handleChange}
               options={shopsOptions}
             />
           </Form.Item>
@@ -353,7 +345,7 @@ const EditOrderForm = ({
               },
             ]}
           >
-            <InputNumber />
+            <InputNumber style={{ width: 300 }} />
           </Form.Item>
           <Form.Item
             name="selling_price"
@@ -367,7 +359,7 @@ const EditOrderForm = ({
               },
             ]}
           >
-            <InputNumber />
+            <InputNumber style={{ width: 300 }} />
           </Form.Item>
           <Form.Item
             name="order_date"
@@ -376,16 +368,10 @@ const EditOrderForm = ({
               {
                 required: true,
                 message: 'Պատվերի ա/թ պարտադիր է',
-                // whitespace: true,
               },
             ]}
           >
-            <DatePicker
-              // defaultValue={dayjs(order_date)}
-              format={dateFormat}
-              placeholder="Ընտրեք ամսաթիվը"
-              style={{ width: '100%' }}
-            />
+            <DatePicker format={dateFormat} placeholder="Ընտրեք ամսաթիվը" style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
             label="Հաճախորդ"
@@ -444,7 +430,14 @@ const EditOrderForm = ({
               form={addCustomerForm}
             />
           </Modal>
-          <div style={{ padding: '15px 0' }}>
+          <div
+            style={{
+              padding: '15px 0',
+              width: '80%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
             <Button onClick={onEditCancel} style={{ marginRight: 10 }}>
               Չեղարկել
             </Button>

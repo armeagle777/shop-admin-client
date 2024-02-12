@@ -1,27 +1,28 @@
-import React, { useMemo } from 'react';
-import { ConfigProvider, theme, Button, Card, Space, Typography, Statistic } from 'antd';
+import { Statistic, Typography } from 'antd';
 import delve from 'dlv';
+import React from 'react';
+import _ from 'lodash';
 
-import { BrowserView, MobileView } from 'react-device-detect';
 import { GiftOutlined, UsergroupAddOutlined } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
 import CountUp from 'react-countup';
+import { BrowserView, MobileView } from 'react-device-detect';
 import {
-  BarChart,
-  Bar,
   Area,
-  XAxis,
-  YAxis,
+  Bar,
+  BarChart,
   CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Line,
   ComposedChart,
   Legend,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
-import { useQuery } from '@tanstack/react-query';
 import { getCustomers, getExpenses, getOrders } from '../../api/serverApi';
+import { accessoriesCategories, accessoryIds } from '../../utils/constants';
 import { getCurrentYearAndPast11Months } from './Home.helpers';
-import { accessoryIds, accessoriesCategories } from '../../utils/constants';
 
 const Home = () => {
   const { data: customers } = useQuery(['customers'], () => getCustomers(), {
@@ -44,7 +45,6 @@ const Home = () => {
   const accesorriesExpenses = expensesResponse?.data?.filter((ex) =>
     accessoryIds.includes(ex.attributes.direction.data.id),
   );
-
   const { data: availableOrders } = useQuery(['orders', { filter: 'AVAILABLE' }], () => getOrders('AVAILABLE'), {
     keepPreviousData: false,
   });
@@ -82,6 +82,8 @@ const Home = () => {
   const ordersCount = orders?.length;
 
   const chartData = getCurrentYearAndPast11Months(nonAccessoriesExpenses, nonAccsorriesOrders);
+  const incomes = chartData.map((monthData) => monthData['Զուտ եկամուտ']);
+  const meanIncome = _.mean(incomes);
 
   const accessoriesChartData = getCurrentYearAndPast11Months(accesorriesExpenses, accsorriesOrders);
 
@@ -133,18 +135,7 @@ const Home = () => {
                     alignItems: 'flex-end',
                   }}
                 >
-                  <Statistic
-                    title="Ամսական Եկամուտ"
-                    value={
-                      0
-                      // septemberExpenses && septemberData
-                      //     ? septemberData?.shahuyt -
-                      //       septemberData?.inqnarjeq -
-                      //       septemberExpenses
-                      //     : 0
-                    }
-                    formatter={formatter}
-                  />
+                  <Statistic title="Ամսական Եկամուտ" value={meanIncome} formatter={formatter} />
                 </div>
               </div>
               <div

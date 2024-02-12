@@ -1,12 +1,4 @@
-import { useState } from 'react';
-import delve from 'dlv';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Avatar, Button, Image, Space, Tooltip } from 'antd';
-import { format } from 'date-fns';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import {
-  AntDesignOutlined,
   CloseOutlined,
   DashOutlined,
   DeleteOutlined,
@@ -14,15 +6,22 @@ import {
   InfoCircleFilled,
   RedoOutlined,
   StepForwardOutlined,
-  UserOutlined,
 } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Avatar, Button, Image, Space, Tooltip } from 'antd';
+import { format } from 'date-fns';
+import delve from 'dlv';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { deleteOrder, editOrder, removeOrder } from '../../api/serverApi';
-import { messages } from '../../utils/constants';
-import { formatImageUrl, generateRandomColor } from '../../utils/helpers';
 import Alert from '../../components/alert/Alert';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 import PopConfirmEdit from '../../components/shared/popConfirm/PopConfirmEdit';
 import Table from '../../components/table/Table';
+import { messages } from '../../utils/constants';
+import { formatImageUrl, generateRandomColor } from '../../utils/helpers';
 
 const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
   const [showProgress, setShowProgress] = useState(false);
@@ -53,25 +52,15 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
       {
         title: 'Նկարներ',
         render: (_, record) => {
-          const images = record.images?.data;
+          const images = record.images?.data?.map((img) => formatImageUrl(delve(img, 'attributes.url'))) || [];
 
           return (
-            <Image.PreviewGroup
-              preview={{
-                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-              }}
-            >
-              {images?.map((image, index) => {
-                const src = delve(image, 'attributes.url');
-                return (
-                  <Image
-                    key={index}
-                    width={50}
-                    src={formatImageUrl(src)}
-                    placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
-                  />
-                );
-              })}
+            <Image.PreviewGroup items={images}>
+              <Image
+                width={50}
+                src={images[0]}
+                placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
+              />
             </Image.PreviewGroup>
           );
         },
@@ -95,6 +84,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Հաճախորդ',
         render: (_, record) => {
           const customer = delve(record, 'customer.data.attributes');
+          const customerId = delve(record, 'customer.data.id');
 
           const contacts = delve(record, 'customer.data.attributes.contacts.data');
 
@@ -104,7 +94,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
           const customerExtraInfo = `${phone_number}  ${extraContacts}`;
           return (
             <>
-              {customer?.first_name || ''} {customer?.last_name || ''}
+              <Link to={`/customers/${customerId}`}>
+                {customer?.first_name || ''} {customer?.last_name || ''}
+              </Link>
               {(phone_number || contacts?.length > 0) && (
                 <Tooltip title={customerExtraInfo} placement="top">
                   <InfoCircleFilled style={{ marginLeft: 2 }} />
@@ -118,8 +110,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Նկար',
         dataIndex: 'Avatar',
         render: (_, record) => {
-          const src =
-            formatImageUrl(record.customer?.data?.attributes?.Avatar.data?.attributes?.formats?.thumbnail?.url) || '';
+          const src = record.customer?.data?.attributes?.Avatar?.data
+            ? formatImageUrl(record.customer?.data?.attributes?.Avatar?.data?.attributes?.formats?.thumbnail?.url)
+            : '';
           return (
             <Avatar
               style={{
@@ -207,25 +200,15 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
       {
         title: 'Նկարներ',
         render: (_, record) => {
-          const images = record.images?.data;
+          const images = record.images?.data?.map((img) => formatImageUrl(delve(img, 'attributes.url'))) || [];
 
           return (
-            <Image.PreviewGroup
-              preview={{
-                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-              }}
-            >
-              {images?.map((image, index) => {
-                const src = delve(image, 'attributes.url');
-                return (
-                  <Image
-                    key={index}
-                    width={50}
-                    src={src}
-                    placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
-                  />
-                );
-              })}
+            <Image.PreviewGroup items={images}>
+              <Image
+                width={50}
+                src={images[0]}
+                placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
+              />
             </Image.PreviewGroup>
           );
         },
@@ -250,7 +233,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Հաճախորդ',
         render: (_, record) => {
           const customer = delve(record, 'customer.data.attributes');
-
+          const customerId = delve(record, 'customer.data.id');
           const contacts = delve(record, 'customer.data.attributes.contacts.data');
 
           const extraContacts =
@@ -259,7 +242,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
           const customerExtraInfo = `${phone_number}  ${extraContacts}`;
           return (
             <>
-              {customer?.first_name || ''} {customer?.last_name || ''}
+              <Link to={`/customers/${customerId}`}>
+                {customer?.first_name || ''} {customer?.last_name || ''}
+              </Link>
               {(phone_number || contacts?.length > 0) && (
                 <Tooltip title={customerExtraInfo} placement="top">
                   <InfoCircleFilled style={{ marginLeft: 2 }} />
@@ -273,7 +258,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Նկար',
         dataIndex: 'Avatar',
         render: (_, record) => {
-          const src = record.customer?.data?.attributes?.Avatar.data?.attributes?.formats?.thumbnail?.url || '';
+          const src = record.customer?.data?.attributes?.Avatar?.data
+            ? formatImageUrl(record.customer?.data?.attributes?.Avatar?.data?.attributes?.formats?.thumbnail?.url)
+            : '';
           return (
             <Avatar
               style={{
@@ -300,7 +287,15 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
 
           return (
             <Space>
-              <Button icon={<EditOutlined />} size="small" title="Խմբագրել" type="default" />
+              <Button
+                icon={<EditOutlined />}
+                size="small"
+                title="Խմբագրել"
+                type="default"
+                onClick={() => {
+                  handleEditClick(record.key);
+                }}
+              />
               <PopConfirmEdit
                 loading={isLoading}
                 itemId={itemId}
@@ -354,25 +349,15 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
       {
         title: 'Նկարներ',
         render: (_, record) => {
-          const images = record.images?.data;
+          const images = record.images?.data?.map((img) => formatImageUrl(delve(img, 'attributes.url'))) || [];
 
           return (
-            <Image.PreviewGroup
-              preview={{
-                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-              }}
-            >
-              {images?.map((image, index) => {
-                const src = delve(image, 'attributes.url');
-                return (
-                  <Image
-                    key={index}
-                    width={50}
-                    src={src}
-                    placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
-                  />
-                );
-              })}
+            <Image.PreviewGroup items={images}>
+              <Image
+                width={50}
+                src={images[0]}
+                placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
+              />
             </Image.PreviewGroup>
           );
         },
@@ -397,6 +382,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Հաճախորդ',
         render: (_, record) => {
           const customer = delve(record, 'customer.data.attributes');
+          const customerId = delve(record, 'customer.data.id');
 
           const contacts = delve(record, 'customer.data.attributes.contacts.data');
 
@@ -406,7 +392,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
           const customerExtraInfo = `${phone_number}  ${extraContacts}`;
           return (
             <>
-              {customer?.first_name || ''} {customer?.last_name || ''}
+              <Link to={`/customers/${customerId}`}>
+                {customer?.first_name || ''} {customer?.last_name || ''}
+              </Link>
               {(phone_number || contacts?.length > 0) && (
                 <Tooltip title={customerExtraInfo} placement="top">
                   <InfoCircleFilled style={{ marginLeft: 2 }} />
@@ -420,7 +408,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Նկար',
         dataIndex: 'Avatar',
         render: (_, record) => {
-          const src = record.customer?.data?.attributes?.Avatar.data?.attributes?.formats?.thumbnail?.url || '';
+          const src = record.customer?.data?.attributes?.Avatar?.data
+            ? formatImageUrl(record.customer?.data?.attributes?.Avatar?.data?.attributes?.formats?.thumbnail?.url)
+            : '';
           return (
             <Avatar
               style={{
@@ -485,25 +475,15 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
       {
         title: 'Նկարներ',
         render: (_, record) => {
-          const images = record.images?.data;
+          const images = record.images?.data?.map((img) => formatImageUrl(delve(img, 'attributes.url'))) || [];
 
           return (
-            <Image.PreviewGroup
-              preview={{
-                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-              }}
-            >
-              {images?.map((image, index) => {
-                const src = delve(image, 'attributes.url');
-                return (
-                  <Image
-                    key={index}
-                    width={50}
-                    src={src}
-                    placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
-                  />
-                );
-              })}
+            <Image.PreviewGroup items={images}>
+              <Image
+                width={50}
+                src={images[0]}
+                placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
+              />
             </Image.PreviewGroup>
           );
         },
@@ -521,9 +501,12 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Հաճախորդ',
         render: (_, record) => {
           const customer = record?.customer?.data?.attributes;
+          const customerId = delve(record, 'customer.data.id');
           return (
             <Tooltip title={customer?.phone_number} placement="top">
-              {customer?.first_name ? customer?.first_name + ' ' + customer?.last_name : ''}
+              <Link to={`/customers/${customerId}`}>
+                {customer?.first_name ? customer?.first_name + ' ' + customer?.last_name : ''}
+              </Link>
             </Tooltip>
           );
         },
@@ -532,7 +515,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Նկար',
         dataIndex: 'Avatar',
         render: (_, record) => {
-          const src = record.customer?.data?.attributes?.Avatar.data?.attributes?.formats?.thumbnail?.url || '';
+          const src = record.customer?.data?.attributes?.Avatar?.data
+            ? formatImageUrl(record.customer?.data?.attributes?.Avatar?.data?.attributes?.formats?.thumbnail?.url)
+            : '';
           return (
             <Avatar
               style={{
@@ -570,25 +555,15 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
       {
         title: 'Նկարներ',
         render: (_, record) => {
-          const images = record.images?.data;
+          const images = record.images?.data?.map((img) => formatImageUrl(delve(img, 'attributes.url'))) || [];
 
           return (
-            <Image.PreviewGroup
-              preview={{
-                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
-              }}
-            >
-              {images?.map((image, index) => {
-                const src = delve(image, 'attributes.url');
-                return (
-                  <Image
-                    key={index}
-                    width={50}
-                    src={src}
-                    placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
-                  />
-                );
-              })}
+            <Image.PreviewGroup items={images}>
+              <Image
+                width={50}
+                src={images[0]}
+                placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
+              />
             </Image.PreviewGroup>
           );
         },
@@ -606,9 +581,12 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Հաճախորդ',
         render: (_, record) => {
           const customer = record?.customer?.data?.attributes;
+          const customerId = delve(record, 'customer.data.id');
           return (
             <Tooltip title={customer?.phone_number} placement="top">
-              {customer?.first_name ? customer?.first_name + ' ' + customer?.last_name : ''}
+              <Link to={`/customers/${customerId}`}>
+                {customer?.first_name ? customer?.first_name + ' ' + customer?.last_name : ''}
+              </Link>
             </Tooltip>
           );
         },
@@ -617,7 +595,9 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
         title: 'Նկար',
         dataIndex: 'Avatar',
         render: (_, record) => {
-          const src = record.customer?.data?.attributes?.Avatar.data?.attributes?.formats?.thumbnail?.url || '';
+          const src = record.customer?.data?.attributes?.Avatar?.data
+            ? formatImageUrl(record.customer?.data?.attributes?.Avatar?.data?.attributes?.formats?.thumbnail?.url)
+            : '';
           return (
             <Avatar
               style={{

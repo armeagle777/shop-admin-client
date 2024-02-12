@@ -1,15 +1,12 @@
-import { FieldTimeOutlined, GiftOutlined, SkinOutlined, SmileOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { Card, Skeleton, Space, Timeline, Typography } from 'antd';
-import { format } from 'date-fns';
+import { Skeleton, Space, Typography } from 'antd';
 import delve from 'dlv';
 import React from 'react';
 import { BrowserView, MobileView } from 'react-device-detect';
 import { useParams } from 'react-router-dom';
-import { getCustomerById, getOrderById } from '../../api/serverApi';
+import { getOrderById } from '../../api/serverApi';
 import Alert from '../../components/alert/Alert';
 import NotFound from '../notFound/NotFound';
-import EditCustomerForm from '../customers/EditCustomerForm';
 import EditOrderForm from './EditOrderForm';
 
 const colorsMap = {
