@@ -52,15 +52,25 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
       {
         title: 'Նկարներ',
         render: (_, record) => {
-          const images = record.images?.data?.map((img) => formatImageUrl(delve(img, 'attributes.url'))) || [];
+          const images = record.images?.data;
 
           return (
-            <Image.PreviewGroup items={images}>
-              <Image
-                width={50}
-                src={images[0]}
-                placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
-              />
+            <Image.PreviewGroup
+              preview={{
+                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+              }}
+            >
+              {images?.map((image, index) => {
+                const src = delve(image, 'attributes.url');
+                return (
+                  <Image
+                    key={index}
+                    width={50}
+                    src={formatImageUrl(src)}
+                    placeholder={<Image preview={false} src="/image_placeholder.jpg" width={50} />}
+                  />
+                );
+              })}
             </Image.PreviewGroup>
           );
         },
