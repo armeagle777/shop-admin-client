@@ -11,6 +11,7 @@ const OrderCard = ({ name, description, customer, images, net_cost, selling_pric
   const avatarUrl = delve(customer, 'data.attributes.Avatar.data.attributes.url');
   const image = images.data[0];
   const orderImage = delve(image, 'attributes.url');
+
   return (
     <Card
       style={{
@@ -29,7 +30,7 @@ const OrderCard = ({ name, description, customer, images, net_cost, selling_pric
       actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
     >
       <Meta
-        avatar={<Avatar src={formatImageUrl(avatarUrl) || ''} />}
+        avatar={<Avatar src={avatarUrl ? formatImageUrl(avatarUrl) : ''} />}
         title={
           <>
             {name} <br />
