@@ -195,7 +195,13 @@ const Customers = () => {
   return (
     <>
       <BrowserView>
-        <CustomersBrowserView />
+        <CustomersBrowserView
+          columns={columns}
+          modifiedData={modifiedData}
+          form={form}
+          onOpenCustomerModal={onOpenCustomerModal}
+          isLoading={isLoading}
+        />
       </BrowserView>
       <MobileView>
         <CustomersMobileView />

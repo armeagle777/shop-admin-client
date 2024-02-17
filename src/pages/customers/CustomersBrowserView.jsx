@@ -1,6 +1,7 @@
 import Table from '../../components/table/Table';
+import { Avatar, Button, Form, Image, Modal, Space } from 'antd';
 
-const CustomersBrowserView = () => {
+const CustomersBrowserView = ({ onOpenCustomerModal, isLoading, columns, modifiedData, form }) => {
   return (
     <>
       <Button
