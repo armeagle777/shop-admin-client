@@ -10,8 +10,11 @@ import { addCustomer, deleteCustomer, getCustomers } from '../../api/serverApi';
 import Alert from '../../components/alert/Alert';
 import AddCustomerForm from '../../components/shared/addCutomerForm/AddCustomerForm';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
-import Table from '../../components/table/Table';
+
 import { useNavigate } from 'react-router-dom';
+import { BrowserView, MobileView } from 'react-device-detect';
+import CustomersBrowserView from './CustomersBrowserView';
+import CustomersMobileView from './CustomersMobileView';
 
 const Customers = () => {
   const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
@@ -191,17 +194,12 @@ const Customers = () => {
 
   return (
     <>
-      <Button
-        onClick={onOpenCustomerModal}
-        type="primary"
-        style={{
-          marginBottom: 16,
-        }}
-      >
-        Ավելացնել
-      </Button>
-      <Table loading={!!isLoading} columns={columns} dataSource={modifiedData} form={form} />
-
+      <BrowserView>
+        <CustomersBrowserView />
+      </BrowserView>
+      <MobileView>
+        <CustomersMobileView />
+      </MobileView>
       <Modal
         title="Ավելացնել նոր հաճախորդ"
         centered

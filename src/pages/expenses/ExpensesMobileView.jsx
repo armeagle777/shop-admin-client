@@ -1,6 +1,6 @@
-import { DeleteOutlined, DollarOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, List, Skeleton, Space } from 'antd';
 import React from 'react';
+import { Avatar, Button, FloatButton, List, Skeleton, Space } from 'antd';
+import { DeleteOutlined, EditOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 
 const IconText = ({ icon, text }) => (
@@ -10,21 +10,19 @@ const IconText = ({ icon, text }) => (
   </Space>
 );
 
-const ExpenseDirectionsMobileView = ({
-  validateMessages,
-  onFinish,
-  newDirectionForm,
-  addItemMutation,
+const ExpensesMobileView = ({
+  showProgress,
+  handleDelete,
   isLoading,
   modifiedData,
-  handleDelete,
-  showProgress,
+  onOpenExpenseModal,
+  onCloseExpenseModal,
   allowPopConfirm,
   setAllowPopConfirm,
 }) => {
   return (
     <Space direction="vertical" style={{ width: '100%' }}>
-      <Form name="add-category" validateMessages={validateMessages} onFinish={onFinish} form={newDirectionForm}>
+      {/* <Form name="add-category" validateMessages={validateMessages} onFinish={onFinish} form={newCategoryForm}>
         <Space.Compact block style={{ justifyContent: 'center' }}>
           <Form.Item
             name="name"
@@ -37,7 +35,7 @@ const ExpenseDirectionsMobileView = ({
               width: '80%',
             }}
           >
-            <Input placeholder="Նոր ուղղություն" />
+            <Input placeholder="Նոր կատեգորիա" />
           </Form.Item>
           <Button
             style={{ outline: 'none' }}
@@ -47,7 +45,7 @@ const ExpenseDirectionsMobileView = ({
             loading={addItemMutation.isLoading}
           />
         </Space.Compact>
-      </Form>
+      </Form> */}
       <List
         pagination={{
           position: 'bottom',
@@ -57,23 +55,14 @@ const ExpenseDirectionsMobileView = ({
         dataSource={modifiedData}
         itemLayout="vertical"
         renderItem={(item, index) => {
-          const { key, name, expenses } = { ...item };
-          const totalExpense = expenses?.data.reduce((acc, el) => {
-            acc += el.attributes.amount;
-            return acc;
-          }, 0);
+          const { amount, key, direction, expense_date } = { ...item };
           return (
             <List.Item
               key={key}
               actions={
                 !isLoading
                   ? [
-                      //   <Button
-                      //       icon={<EditOutlined />}
-                      //       size='small'
-                      //       title='Խմբագրել'
-                      //       type='default'
-                      //   />,
+                      //   <Button icon={<EditOutlined />} size="small" title="Խմբագրել" type="default" />,
                       <PopConfirm
                         loading={isLoading}
                         itemId={key}
@@ -84,24 +73,31 @@ const ExpenseDirectionsMobileView = ({
                         icon={<DeleteOutlined />}
                         buttonTitle="Հեռացնել"
                       />,
-                      <IconText
-                        icon={DollarOutlined}
-                        text={`${totalExpense} դրամ`}
-                        key="list-vertical-total-expenses"
-                      />,
+                      <IconText icon={StarOutlined} text={expense_date} key="list-vertical-total-categories" />,
                     ]
                   : undefined
               }
             >
               <Skeleton loading={isLoading} active>
-                <List.Item.Meta title={name} />
+                <List.Item.Meta title={`${amount} դր -> ${direction.data.attributes.name}`} />
               </Skeleton>
             </List.Item>
           );
         }}
       />
+      <FloatButton
+        shape="circle"
+        type="primary"
+        style={{
+          right: 20,
+          bottom: 20,
+          outline: 'none',
+        }}
+        onClick={onOpenExpenseModal}
+        icon={<PlusOutlined />}
+      />
     </Space>
   );
 };
 
-export default ExpenseDirectionsMobileView;
+export default ExpensesMobileView;

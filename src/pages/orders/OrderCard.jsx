@@ -9,8 +9,8 @@ const OrderCard = ({ name, description, customer, images, net_cost, selling_pric
   const first_name = delve(customer, 'data.attributes.first_name');
   const last_name = delve(customer, 'data.attributes.last_name');
   const avatarUrl = delve(customer, 'data.attributes.Avatar.data.attributes.url');
-  const image = images.data[0];
-  const orderImage = delve(image, 'attributes.url');
+  const image = images?.data ? images?.data[0] : undefined;
+  const orderImage = image ? delve(image, 'attributes.url') : '';
 
   return (
     <Card

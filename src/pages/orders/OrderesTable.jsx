@@ -330,6 +330,16 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
               <PopConfirm
                 loading={isLoading}
                 itemId={itemId}
+                onConfirm={handleDelete}
+                showProgress={showProgress}
+                allowPopConfirm={allowPopConfirm}
+                setAllowPopConfirm={setAllowPopConfirm}
+                icon={<DeleteOutlined />}
+                buttonTitle="Հեռացնել"
+              />
+              {/* <PopConfirm
+                loading={isLoading}
+                itemId={itemId}
                 onConfirm={() =>
                   onReturnOrCancel({
                     id: itemId,
@@ -343,7 +353,7 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
                 disabled={cancelDisabled}
                 icon={<CloseOutlined />}
                 buttonTitle="Հրաժարվել"
-              />
+              /> */}
             </Space>
           );
         },

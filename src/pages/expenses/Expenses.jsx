@@ -2,22 +2,26 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, DatePicker, Form, InputNumber, Select, Space } from 'antd';
+import { Button, DatePicker, Form, InputNumber, Select, Space, Modal } from 'antd';
 import { addExpense, deleteExpense, getExpenseDirections, getExpenses } from '../../api/serverApi';
 import { messages } from '../../utils/constants';
 import Alert from '../../components/alert/Alert';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
-import Table from '../../components/table/Table';
+
 import { format } from 'date-fns';
+import { BrowserView, MobileView } from 'react-device-detect';
+import ExpensesBrowserView from './ExpensesBrowserView';
+import ExpensesMobileView from './ExpensesMobileView';
+import AddExpenseForm from './AddExpenseForm';
 
 const Expenses = () => {
   const [showProgress, setShowProgress] = useState(false);
+  const [showExpenseModal, setShowExpenseModal] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
   const { data, isFetching, isLoading, isError, error } = useQuery(['expenses'], () => getExpenses(), {
     keepPreviousData: false,
   });
   const { data: expenses = [], meta } = { ...data };
-  console.log('expenses>>>>>>', expenses);
   const modifiedData = expenses.map(({ id, attributes }) => ({
     key: id,
     ...attributes,
@@ -56,6 +60,14 @@ const Expenses = () => {
     },
   };
 
+  const onOpenExpenseModal = () => {
+    setShowExpenseModal(true);
+  };
+
+  const onCloseExpenseModal = () => {
+    setShowExpenseModal(false);
+  };
+
   const deleteItemMutation = useMutation((itemId) => deleteExpense(itemId), {
     onSuccess: () => {
       queryClient.invalidateQueries('expenses');
@@ -81,6 +93,7 @@ const Expenses = () => {
         progress: undefined,
       });
       newExpenseForm.resetFields();
+      setShowExpenseModal(false);
     },
     onError: (error, variables, context, mutation) => {
       console.log('err:::::: ', error);
@@ -155,82 +168,50 @@ const Expenses = () => {
 
   return (
     <>
-      <Form
-        name="add-expenses-direction"
-        validateMessages={validateMessages}
-        onFinish={onFinish}
-        labelCol={{
-          span: 8,
-        }}
-        form={newExpenseForm}
-        wrapperCol={{
-          span: 20,
-        }}
-        style={{
-          maxWidth: 900,
-        }}
+      <BrowserView>
+        <ExpensesBrowserView
+          eDOptions={eDOptions}
+          validateMessages={validateMessages}
+          onFinish={onFinish}
+          newExpenseForm={newExpenseForm}
+          dateFormat={dateFormat}
+          addItemMutation={addItemMutation}
+          isAddButtonDisabled={isAddButtonDisabled}
+          isLoading={isLoading}
+          columns={columns}
+          modifiedData={modifiedData}
+          form={form}
+        />
+      </BrowserView>
+      <MobileView>
+        <ExpensesMobileView
+          modifiedData={modifiedData}
+          isLoading={isLoading}
+          onOpenExpenseModal={onOpenExpenseModal}
+          onCloseExpenseModal={onCloseExpenseModal}
+          handleDelete={handleDelete}
+          showProgress={showProgress}
+          allowPopConfirm={allowPopConfirm}
+          setAllowPopConfirm={setAllowPopConfirm}
+        />
+      </MobileView>
+      <Modal
+        title="Ավելացնել նոր ծախս"
+        centered
+        open={showExpenseModal}
+        onCancel={onCloseExpenseModal}
+        width={800}
+        footer={null}
       >
-        <Form.Item
-          name="amount"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          style={{
-            display: 'inline-block',
-            width: '100px',
-          }}
-        >
-          <InputNumber min={0} placeholder="Գումար" />
-        </Form.Item>
-        <Form.Item
-          name="direction"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          style={{
-            display: 'inline-block',
-            width: '220px',
-          }}
-        >
-          <Select
-            showSearch
-            style={{
-              width: 200,
-            }}
-            placeholder="Ուղղություն"
-            optionFilterProp="children"
-            filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input.toLocaleLowerCase())}
-            filterSort={(optionA, optionB) =>
-              (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-            }
-            options={eDOptions}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="expense_date"
-          style={{
-            display: 'inline-block',
-            width: '320px',
-          }}
-        >
-          <DatePicker format={dateFormat} placeholder="Ընտրեք ամսաթիվը" style={{ width: '100%' }} />
-        </Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={addItemMutation.isLoading}
-          style={{ marginBottom: 16 }}
-          disabled={isAddButtonDisabled}
-        >
-          Ավելացնել
-        </Button>
-      </Form>
-      <Table loading={!!isLoading} columns={columns} dataSource={modifiedData} form={form} size="medium" />
+        <AddExpenseForm
+          onCancel={onCloseExpenseModal}
+          onSubmit={onFinish}
+          isLoadingAdd={addItemMutation.isLoading}
+          form={newExpenseForm}
+          eDOptions={eDOptions}
+          dateFormat={dateFormat}
+        />
+      </Modal>
     </>
   );
 };
