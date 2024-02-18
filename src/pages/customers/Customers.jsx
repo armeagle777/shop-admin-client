@@ -204,7 +204,15 @@ const Customers = () => {
         />
       </BrowserView>
       <MobileView>
-        <CustomersMobileView />
+        <CustomersMobileView
+          showProgress={showProgress}
+          handleDelete={handleDelete}
+          modifiedData={modifiedData}
+          isLoading={isLoading}
+          allowPopConfirm={allowPopConfirm}
+          setAllowPopConfirm={setAllowPopConfirm}
+          onOpenCustomerModal={onOpenCustomerModal}
+        />
       </MobileView>
       <Modal
         title="Ավելացնել նոր հաճախորդ"
