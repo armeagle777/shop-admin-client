@@ -40,7 +40,11 @@ const Order = () => {
   });
 
   if (isError) {
-    return <Alert type="error" message={error.message} />;
+    return error.response?.status === 404 ? (
+      <NotFound message="Չի գտնվել" redirectUrl="/orders" redirectButtonText="Պատվերներ" />
+    ) : (
+      <Alert type="error" message={error.message} />
+    );
   }
 
   if (data && data.data?.length === 0) {

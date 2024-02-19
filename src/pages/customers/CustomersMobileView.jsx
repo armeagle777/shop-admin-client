@@ -84,7 +84,7 @@ const CustomersMobileView = ({
                       {first_name} {last_name}
                     </Link>
                   }
-                  description={addresses?.data ? addresses?.data[0].attributes.street : ''}
+                  description={addresses?.data.length ? addresses?.data[0].attributes.street : ''}
                 />
               </Skeleton>
             </List.Item>

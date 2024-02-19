@@ -68,8 +68,8 @@ export const messages = {
   orders: {
     deleteError: 'Ինչ որ բան այնպես չէ',
     statusChangeSuccess: 'Հաջողությամբ փոփոխվել է',
-    editError: 'Չհաջողվեց ղմբագրել',
-    editSuccess: 'Հաջողությամբ ղմբագրվեց',
+    editError: 'Չհաջողվեց խմբագրել',
+    editSuccess: 'Հաջողությամբ խմբագրվեց',
     deleteSuccess: 'Հաջողությամբ հեռացվել է',
     createSuccess: 'Հաջողությամբ ավելացվել է',
   },
