@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import delve from 'dlv';
 import { toast } from 'react-toastify';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -17,12 +17,18 @@ import CustomersBrowserView from './CustomersBrowserView';
 import CustomersMobileView from './CustomersMobileView';
 
 const Customers = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [queryString, setQueryString] = useState('');
   const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
-  const { data, isLoading, isError, error } = useQuery(['customers'], () => getCustomers(), {
-    keepPreviousData: true,
-  });
+  const { data, isLoading, isError, error } = useQuery(
+    ['customers', queryString],
+    () => getCustomers({ query: queryString }),
+    {
+      keepPreviousData: true,
+    },
+  );
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -32,6 +38,13 @@ const Customers = () => {
     key: id,
     ...attributes,
   }));
+
+  useEffect(() => {
+    const url = new URL(window.location);
+    const query = url.searchParams.get('query');
+    setSearchTerm(query || '');
+    setQueryString(query);
+  }, []);
 
   const [form] = Form.useForm();
 
@@ -87,6 +100,19 @@ const Customers = () => {
       setAllowPopConfirm(false);
     },
   });
+
+  const handleSearch = () => {
+    const url = new URL(window.location);
+
+    if (searchTerm.trim() === '') {
+      url.searchParams.delete('query');
+    } else {
+      url.searchParams.set('query', searchTerm);
+    }
+
+    window.history.pushState({}, '', url);
+    setQueryString(searchTerm.trim());
+  };
 
   const handleDelete = (id) => {
     setShowProgress(true);
@@ -201,6 +227,9 @@ const Customers = () => {
           form={form}
           onOpenCustomerModal={onOpenCustomerModal}
           isLoading={isLoading}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          handleSearch={handleSearch}
         />
       </BrowserView>
       <MobileView>
@@ -212,6 +241,9 @@ const Customers = () => {
           allowPopConfirm={allowPopConfirm}
           setAllowPopConfirm={setAllowPopConfirm}
           onOpenCustomerModal={onOpenCustomerModal}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          handleSearch={handleSearch}
         />
       </MobileView>
       <Modal

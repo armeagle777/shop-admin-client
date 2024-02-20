@@ -8,9 +8,12 @@ export const login = async (credentials) => {
   return await serverApi.post('/auth/local', credentials);
 };
 
-export const getCustomers = async () => {
+export const getCustomers = async ({ query }) => {
+  const searchString = query
+    ? `&filters[$or][0][first_name][$containsi]=${query}&filters[$or][1][last_name][$containsi]=${query}&filters[$or][2][phone_number][$containsi]=${query}`
+    : '';
   const response = await serverApi.get(
-    '/customers?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*&sort[0]=id:desc',
+    `/customers?filters[isActive][$eq]=true${searchString}&populate=*&sort[0]=id:desc`,
   );
   return response.data;
 };

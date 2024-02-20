@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Button, FloatButton, List, Skeleton, Space } from 'antd';
+import { Avatar, Button, FloatButton, List, Skeleton, Space, Input } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined, PhoneOutlined } from '@ant-design/icons';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 import { Link } from 'react-router-dom';
@@ -20,9 +20,25 @@ const CustomersMobileView = ({
   handleDelete,
   showProgress,
   onOpenCustomerModal,
+  searchTerm,
+  setSearchTerm,
+  handleSearch,
 }) => {
+  const { Search } = Input;
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
   return (
     <>
+      <Search
+        placeholder="Որոնում"
+        allowClear
+        enterButton="Որոնել"
+        size="large"
+        value={searchTerm}
+        onChange={handleInputChange}
+        onSearch={handleSearch}
+      />
       <List
         pagination={{
           position: 'bottom',
@@ -43,7 +59,6 @@ const CustomersMobileView = ({
             Avatar: avatarImage,
           } = { ...item };
           const avatarUrl = avatarImage?.data?.attributes?.url || '';
-          console.log('addresses:::::: ', addresses);
 
           return (
             <List.Item
