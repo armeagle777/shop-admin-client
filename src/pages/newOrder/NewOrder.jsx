@@ -27,7 +27,7 @@ const NewOrder = () => {
     keepPreviousData: true,
   });
 
-  const { data: customers } = useQuery(['customers'], () => getCustomers(), {
+  const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
     keepPreviousData: true,
   });
   const customerOptions = customers?.data.map(({ id, attributes }) => {

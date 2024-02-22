@@ -25,7 +25,7 @@ import { accessoriesCategories, accessoryIds } from '../../utils/constants';
 import { getCurrentYearAndPast11Months } from './Home.helpers';
 
 const Home = () => {
-  const { data: customers } = useQuery(['customers'], () => getCustomers(), {
+  const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
     keepPreviousData: true,
   });
   const customersCount = delve(customers, 'meta.pagination.total');
