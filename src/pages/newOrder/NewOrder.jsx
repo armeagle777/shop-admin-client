@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Form, message, Steps, theme } from 'antd';
+import { Button, Form, message, Steps, theme, Typography } from 'antd';
 import FirstStepContent from './FirstStepContent';
 import SecondStepContent from './SecondStepContent';
 import ThirdStepContent from './ThirdStepContent';
@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { addOrder, getCategories, getCountries, getCustomers, getShops } from '../../api/serverApi';
 import { messages } from '../../utils/constants';
 import { toast } from 'react-toastify';
-import { formatCountriesData } from '../../utils/helpers';
+import { formatCountriesData, formatImageUrl } from '../../utils/helpers';
 import dayjs from 'dayjs';
 import { format } from 'date-fns';
 
@@ -18,7 +18,7 @@ const NewOrder = () => {
   const [form] = Form.useForm();
   const [formValues, setFormValues] = useState({});
   const navigate = useNavigate();
-
+  const { Text } = Typography;
   const {
     data: countries,
     isLoading,
@@ -31,11 +31,22 @@ const NewOrder = () => {
     keepPreviousData: true,
   });
   const customerOptions = customers?.data.map(({ id, attributes }) => {
-    const { first_name, last_name, phone_number } = { ...attributes };
+    const { first_name, last_name, phone_number, Avatar } = { ...attributes };
 
     return {
       value: id,
-      label: `${first_name} ${last_name} ${phone_number}`,
+      label: (
+        <div>
+          <img
+            src={formatImageUrl(`${Avatar.data.attributes.url}`)}
+            alt="Image Alt Text"
+            style={{ width: '30px', height: '30px' }}
+          />
+          {first_name} {last_name} {phone_number}
+        </div>
+      ),
+      style: { padding: '8px' },
+      // label: `${first_name} ${last_name} ${phone_number}`,
     };
   });
 
