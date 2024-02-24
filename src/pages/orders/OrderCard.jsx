@@ -1,16 +1,38 @@
 import delve from 'dlv';
 import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
-import { Avatar, Card, Image } from 'antd';
+import { Avatar, Card, Image, Dropdown } from 'antd';
 import Meta from 'antd/es/card/Meta';
-import React from 'react';
+import React, { useState } from 'react';
 import { formatImageUrl } from '../../utils/helpers';
+import { useNavigate } from 'react-router-dom';
+import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
+import { DeleteOutlined } from '@ant-design/icons';
 
-const OrderCard = ({ name, description, customer, images, net_cost, selling_price }) => {
+const OrderCard = ({
+  orderId,
+  name,
+  description,
+  customer,
+  images,
+  net_cost,
+  selling_price,
+  isLoading,
+  handleDelete,
+  showProgress,
+  status,
+}) => {
   const first_name = delve(customer, 'data.attributes.first_name');
   const last_name = delve(customer, 'data.attributes.last_name');
   const avatarUrl = delve(customer, 'data.attributes.Avatar.data.attributes.url');
   const image = images?.data ? images?.data[0] : undefined;
   const orderImage = image ? delve(image, 'attributes.url') : '';
+  const [allowPopConfirm, setAllowPopConfirm] = useState(false);
+  const navigate = useNavigate();
+
+  const onEditClick = (id) => {
+    navigate(`${id}`);
+  };
+  console.log('status:::::: ', status);
 
   return (
     <Card
@@ -27,7 +49,22 @@ const OrderCard = ({ name, description, customer, images, net_cost, selling_pric
           />
         )
       }
-      actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
+      actions={[
+        // <SettingOutlined key="setting" />,
+        <EditOutlined key="edit" onClick={() => onEditClick(orderId)} />,
+        <PopConfirm
+          loading={isLoading}
+          itemId={orderId}
+          onConfirm={handleDelete}
+          showProgress={showProgress}
+          allowPopConfirm={allowPopConfirm}
+          setAllowPopConfirm={setAllowPopConfirm}
+          icon={<DeleteOutlined />}
+          buttonTitle="Հեռացնել"
+          disabled={status !== 'ORDERED' && status !== 'AVAILABLE'}
+        />,
+        <EllipsisOutlined key="ellipsis" />,
+      ]}
     >
       <Meta
         avatar={<Avatar src={avatarUrl ? formatImageUrl(avatarUrl) : ''} />}
