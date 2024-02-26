@@ -101,7 +101,6 @@ const AddCustomerForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
     };
 
     const normFile = (e) => {
-        console.log('e:::::: ', e);
 
         if (Array.isArray(e)) {
             return e;

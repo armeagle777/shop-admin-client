@@ -40,7 +40,7 @@ const NewOrder = () => {
           <img
             src={formatImageUrl(`${Avatar.data.attributes.url}`)}
             alt="Image Alt Text"
-            style={{ width: '30px', height: '30px' }}
+            style={{ width: '30px', height: '30px', borderRadius: '50%' }}
           />
           {first_name} {last_name} {phone_number}
         </div>

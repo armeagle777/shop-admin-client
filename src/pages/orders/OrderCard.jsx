@@ -32,7 +32,6 @@ const OrderCard = ({
   const onEditClick = (id) => {
     navigate(`${id}`);
   };
-  console.log('status:::::: ', status);
 
   return (
     <Card

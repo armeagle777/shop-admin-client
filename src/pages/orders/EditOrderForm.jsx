@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isMobile } from 'react-device-detect';
 
 import {
   InputNumber,
@@ -58,8 +59,6 @@ const EditOrderForm = ({
   const dateFormat = 'DD/MM/YYYY';
 
   const handleChange = ({ fileList: newFileList, ...restData }) => {
-    console.log('newFileList:::::: ', newFileList);
-
     setUploads(newFileList);
   };
   const handleCancel = () => setPreviewOpen(false);
@@ -399,7 +398,7 @@ const EditOrderForm = ({
                 <Select
                   showSearch
                   style={{
-                    width: 370,
+                    width: isMobile ? 300 : 370,
                   }}
                   placeholder="Որոնել"
                   optionFilterProp="children"

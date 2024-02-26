@@ -150,8 +150,6 @@ const EditCustomerForm = ({
   };
 
   const normFile = (e) => {
-    console.log('e:::::: ', e);
-
     if (Array.isArray(e)) {
       return e;
     }
