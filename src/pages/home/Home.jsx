@@ -30,7 +30,7 @@ const Home = () => {
   });
   const customersCount = delve(customers, 'meta.pagination.total');
 
-  const { data: orders } = useQuery(['orders'], () => getOrders(), {
+  const { data: orders } = useQuery(['orders'], () => getOrders({}), {
     keepPreviousData: false,
   });
 
@@ -45,10 +45,14 @@ const Home = () => {
   const accesorriesExpenses = expensesResponse?.data?.filter((ex) =>
     accessoryIds.includes(ex.attributes.direction.data.id),
   );
-  const { data: availableOrders } = useQuery(['orders', { filter: 'AVAILABLE' }], () => getOrders('AVAILABLE'), {
-    keepPreviousData: false,
-  });
-  const { data: orderedOrders } = useQuery(['orders', { filter: 'ORDERED' }], () => getOrders('ORDERED'), {
+  const { data: availableOrders } = useQuery(
+    ['orders', { filter: 'AVAILABLE' }],
+    () => getOrders({ filter: 'AVAILABLE' }),
+    {
+      keepPreviousData: false,
+    },
+  );
+  const { data: orderedOrders } = useQuery(['orders', { filter: 'ORDERED' }], () => getOrders({ filter: 'ORDERED' }), {
     keepPreviousData: false,
   });
 
