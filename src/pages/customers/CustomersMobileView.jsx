@@ -13,16 +13,16 @@ const IconText = ({ icon, text }) => (
 );
 
 const CustomersMobileView = ({
-  setAllowPopConfirm,
-  allowPopConfirm,
-  modifiedData,
   isLoading,
+  searchTerm,
+  modifiedData,
   handleDelete,
   showProgress,
-  onOpenCustomerModal,
-  searchTerm,
-  setSearchTerm,
   handleSearch,
+  setSearchTerm,
+  allowPopConfirm,
+  setAllowPopConfirm,
+  onOpenCustomerModal,
 }) => {
   const { Search } = Input;
   const handleInputChange = (e) => {

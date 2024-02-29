@@ -1,7 +1,9 @@
 import React from 'react';
+import { Input } from 'antd';
 import OrderCard from './OrderCard';
 
-const OrdersMobileView = ({ filteredData, showProgress }) => {
+const OrdersMobileView = ({ filteredData, showProgress, searchTerm, handleInputChange, handleSearch }) => {
+  const { Search } = Input;
   return (
     <div
       style={{

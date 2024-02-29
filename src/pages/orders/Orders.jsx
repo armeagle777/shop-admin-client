@@ -97,6 +97,16 @@ const Orders = () => {
         <OrderesTable data={data} isLoading={isLoading} error={error} isError={isError} form={form} filter={filter} />
       </BrowserView>
       <MobileView>
+        <Search
+          placeholder="Որոնում"
+          allowClear={false}
+          enterButton="Որոնել"
+          size="large"
+          value={searchTerm}
+          onChange={handleInputChange}
+          onSearch={handleSearch}
+          style={{ marginBottom: 10 }}
+        />
         <Segmented
           onChange={onSegmentChange}
           block
