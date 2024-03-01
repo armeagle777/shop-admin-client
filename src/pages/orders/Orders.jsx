@@ -94,7 +94,15 @@ const Orders = () => {
           defaultValue={filterSegmentValues[filter]}
           style={{ marginBottom: 10 }}
         />
-        <OrderesTable data={data} isLoading={isLoading} error={error} isError={isError} form={form} filter={filter} />
+        <OrderesTable
+          data={data}
+          queryString={queryString}
+          isLoading={isLoading}
+          error={error}
+          isError={isError}
+          form={form}
+          filter={filter}
+        />
       </BrowserView>
       <MobileView>
         <Search

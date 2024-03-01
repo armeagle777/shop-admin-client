@@ -23,7 +23,7 @@ import Table from '../../components/table/Table';
 import { messages } from '../../utils/constants';
 import { formatImageUrl, generateRandomColor } from '../../utils/helpers';
 
-const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
+const OrderedTable = ({ data, isLoading, error, isError, form, filter, queryString }) => {
   const [showProgress, setShowProgress] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
   const navigate = useNavigate();
@@ -721,12 +721,12 @@ const OrderedTable = ({ data, isLoading, error, isError, form, filter }) => {
     },
     onMutate: async ({ record, newStatus }) => {
       await queryClient.cancelQueries({
-        queryKey: ['orders', { filter: record.status.toUpperCase() }, record.key],
+        queryKey: ['orders', record.status.toUpperCase(), record.key],
       });
 
-      const previousOrders = queryClient.getQueryData(['orders', { filter: record.status.toUpperCase() }]);
+      const previousOrders = queryClient.getQueryData(['orders', record.status.toUpperCase(), queryString]);
 
-      queryClient.setQueryData(['orders', { filter: record.status.toUpperCase() }], (old) => {
+      queryClient.setQueryData(['orders', record.status.toUpperCase(), queryString], (old) => {
         const newData = old.filter((o) => o.id !== record.key);
 
         return newData;
