@@ -1,12 +1,17 @@
 import delve from 'dlv';
-import { EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
+import { EditOutlined, EllipsisOutlined, SettingOutlined, StepForwardOutlined } from '@ant-design/icons';
 import { Avatar, Card, Image, Dropdown } from 'antd';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteOrder, editOrder, removeOrder } from '../../api/serverApi';
 import Meta from 'antd/es/card/Meta';
 import React, { useState } from 'react';
 import { formatImageUrl } from '../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
 import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
+import PopConfirmEdit from '../../components/shared/popConfirm/PopConfirmEdit';
 import { DeleteOutlined } from '@ant-design/icons';
+import { toast } from 'react-toastify';
+import { messages } from '../../utils/constants';
 
 const OrderCard = ({
   orderId,
@@ -19,8 +24,11 @@ const OrderCard = ({
   isLoading,
   handleDelete,
   showProgress,
+  setShowProgress,
+  queryString,
   status,
 }) => {
+  const queryClient = useQueryClient();
   const first_name = delve(customer, 'data.attributes.first_name');
   const last_name = delve(customer, 'data.attributes.last_name');
   const avatarUrl = delve(customer, 'data.attributes.Avatar.data.attributes.url');
@@ -31,6 +39,60 @@ const OrderCard = ({
 
   const onEditClick = (id) => {
     navigate(`${id}`);
+  };
+
+  const editItemMutation = useMutation({
+    mutationFn: ({ record, newStatus }) => {
+      const editObj = { id: record.key, status: newStatus };
+      if (newStatus === 'AVAILABLE') {
+        editObj.received_date = new Date();
+      }
+      if (newStatus === 'DELIVERED') {
+        editObj.deliver_date = new Date();
+      }
+      return editOrder(editObj);
+    },
+    onMutate: async ({ record, newStatus }) => {
+      await queryClient.cancelQueries({
+        queryKey: ['orders', record.status.toUpperCase(), record.key],
+      });
+
+      const previousOrders = queryClient.getQueryData(['orders', record.status.toUpperCase(), queryString]);
+
+      queryClient.setQueryData(['orders', record.status.toUpperCase(), queryString], (old) => {
+        const newData = old.filter((o) => o.id !== record.key);
+
+        return newData;
+      });
+
+      return { previousOrders };
+    },
+    onSuccess: () => {
+      toast.success(messages.orders.statusChangeSuccess, {
+        progress: undefined,
+      });
+    },
+    onSettled: (record) => {
+      queryClient.invalidateQueries(['orders']);
+      setShowProgress(false);
+      setAllowPopConfirm(false);
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['orders', { filter: variables.record.status.toUpperCase() }], context.previousOrders);
+      toast.error(messages.orders.deleteError, {
+        progress: undefined,
+      });
+    },
+  });
+
+  const onChangeStatusToAvailable = (record) => {
+    setShowProgress(true);
+    editItemMutation.mutate({ record, newStatus: 'AVAILABLE' });
+  };
+
+  const onChangeStatusToDelivered = (record) => {
+    setShowProgress(true);
+    editItemMutation.mutate({ record, newStatus: 'DELIVERED' });
   };
 
   return (
@@ -62,7 +124,23 @@ const OrderCard = ({
           buttonTitle="Հեռացնել"
           disabled={status !== 'ORDERED' && status !== 'AVAILABLE'}
         />,
-        <EllipsisOutlined key="ellipsis" />,
+        <PopConfirmEdit
+          loading={isLoading}
+          itemId={orderId}
+          onConfirm={() =>
+            status === 'ORDERED'
+              ? onChangeStatusToAvailable({ status, key: orderId })
+              : status === 'AVAILABLE'
+              ? onChangeStatusToDelivered({ status, key: orderId })
+              : () => {}
+          }
+          showProgress={showProgress}
+          allowPopConfirm={allowPopConfirm}
+          setAllowPopConfirm={setAllowPopConfirm}
+          buttonTitle="Ստացվել է"
+          icon={<StepForwardOutlined />}
+          disabled={status !== 'ORDERED' && status !== 'AVAILABLE'}
+        />,
       ]}
     >
       <Meta

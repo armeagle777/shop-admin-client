@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from 'antd';
 import OrderCard from './OrderCard';
 
-const OrdersMobileView = ({ filteredData, showProgress, searchTerm, handleInputChange, handleSearch }) => {
+const OrdersMobileView = ({ queryString, filteredData, showProgress, setShowProgress }) => {
   const { Search } = Input;
   return (
     <div
@@ -44,7 +44,9 @@ const OrdersMobileView = ({ filteredData, showProgress, searchTerm, handleInputC
             key={id}
             orderId={id}
             showProgress={showProgress}
+            setShowProgress={setShowProgress}
             status={status}
+            queryString={queryString}
           />
         );
       })}

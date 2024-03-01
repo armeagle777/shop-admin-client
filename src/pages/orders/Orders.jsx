@@ -122,7 +122,12 @@ const Orders = () => {
           defaultValue={filterSegmentValues[filter]}
           style={{ marginBottom: 10 }}
         />
-        <OrdersMobileView showProgress={showProgress} filteredData={data} />
+        <OrdersMobileView
+          queryString={queryString}
+          showProgress={showProgress}
+          setShowProgress={setShowProgress}
+          filteredData={data}
+        />
       </MobileView>
       <FloatButton
         shape="square"
