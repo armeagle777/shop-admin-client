@@ -36,6 +36,7 @@ const OrderCard = ({
   const orderImage = image ? delve(image, 'attributes.url') : '';
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
   const navigate = useNavigate();
+  console.log('handleDelete:::::: ', handleDelete);
 
   const onEditClick = (id) => {
     navigate(`${id}`);

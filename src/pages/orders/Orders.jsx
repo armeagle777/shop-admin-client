@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FloatButton, Form, Segmented, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getOrders } from '../../api/serverApi';
+import { deleteOrder, getOrders } from '../../api/serverApi';
 import OrderesTable from './OrderesTable';
 import { filterSegmentValues, segmentFilterValues, setgmentOptions, setgmentMobileOptions } from './Orders.constants';
 
@@ -10,6 +10,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import { BrowserView, MobileView } from 'react-device-detect';
 import OrdersMobileView from './OrdersMobileView';
 import './orders.styles.css';
+import { toast } from 'react-toastify';
+import { messages } from '../../utils/constants';
 
 const Orders = () => {
   const [showProgress, setShowProgress] = useState(false);
@@ -24,6 +26,8 @@ const Orders = () => {
   const handleNavigate = () => {
     navigate('/orders/new-order');
   };
+
+  const queryClient = useQueryClient();
   const handleSearch = () => {
     const url = new URL(window.location);
 
@@ -72,6 +76,29 @@ const Orders = () => {
     setSearchTerm('');
   };
   const { Search } = Input;
+
+  const handleDelete = (id) => {
+    setShowProgress(true);
+    deleteItemMutation.mutate(id);
+  };
+
+  const deleteItemMutation = useMutation((itemId) => deleteOrder(itemId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['orders']);
+      toast.success(messages.shops.deleteSuccess, {
+        progress: undefined,
+      });
+      setShowProgress(false);
+      setAllowPopConfirm(false);
+    },
+    onError: () => {
+      toast.error(messages.shops.deleteError, {
+        progress: undefined,
+      });
+      setShowProgress(false);
+      setAllowPopConfirm(false);
+    },
+  });
 
   return (
     <>
@@ -127,6 +154,7 @@ const Orders = () => {
           showProgress={showProgress}
           setShowProgress={setShowProgress}
           filteredData={data}
+          handleDelete={handleDelete}
         />
       </MobileView>
       <FloatButton
