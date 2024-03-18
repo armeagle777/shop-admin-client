@@ -1,9 +1,9 @@
-import React from 'react';
-import { Avatar, Button, FloatButton, List, Skeleton, Space, Input } from 'antd';
-import { DeleteOutlined, EditOutlined, PlusOutlined, PhoneOutlined } from '@ant-design/icons';
-import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
+import { Avatar, FloatButton, Input, List, Skeleton, Space } from 'antd';
+import { DeleteOutlined, PhoneOutlined, PlusOutlined } from '@ant-design/icons';
+
 import { Link } from 'react-router-dom';
 import { formatImageUrl } from '../../utils/helpers';
+import { PopConfirm } from '../../components';
 
 const IconText = ({ icon, text }) => (
   <Space>
@@ -84,7 +84,9 @@ const CustomersMobileView = ({
                       />,
                       <IconText
                         icon={PhoneOutlined}
-                        text={<a href={`tel:${phone_number}`}>{phone_number}</a>}
+                        text={
+                          <a href={`tel:${phone_number}`}>{phone_number}</a>
+                        }
                         key="list-vertical-total-orders"
                       />,
                     ]
@@ -99,7 +101,11 @@ const CustomersMobileView = ({
                       {first_name} {last_name}
                     </Link>
                   }
-                  description={addresses?.data.length ? addresses?.data[0].attributes.street : ''}
+                  description={
+                    addresses?.data.length
+                      ? addresses?.data[0].attributes.street
+                      : ''
+                  }
                 />
               </Skeleton>
             </List.Item>

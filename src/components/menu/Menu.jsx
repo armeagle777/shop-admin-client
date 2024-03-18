@@ -1,20 +1,24 @@
-import { UploadOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Layout, Menu, Flex, Divider } from 'antd';
-import { MdSpaceDashboard } from 'react-icons/md';
-import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+import { Flex, Layout, Menu } from 'antd';
+import { isMobile } from 'react-device-detect';
+import { useDrawMenu } from '../../hooks';
 
-import { menuItems } from '../../utils/constants';
 import ProfileSection from './profileSection.jsx/ProfileSection';
 
 const { Sider } = Layout;
 
 const Menuslider = ({ isDarkMode, collapsed }) => {
+  const menuItems = useDrawMenu();
   const menuColapseOptions = isMobile
     ? { breakpoint: 'lg', collapsedWidth: '0' }
     : { trigger: null, collapsible: true, collapsed: collapsed };
   return (
     <Sider {...menuColapseOptions} theme={isDarkMode ? 'dark' : 'light'}>
-      <Flex gap="middle" vertical justify="space-between" style={{ height: '100vh' }}>
+      <Flex
+        gap="middle"
+        vertical
+        justify="space-between"
+        style={{ height: '100vh' }}
+      >
         <div style={{ height: '100vh' }}>
           <div className="demo-logo-vertical" />
           <Menu

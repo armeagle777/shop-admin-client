@@ -1,7 +1,11 @@
-import { DeleteOutlined, DollarOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, List, Skeleton, Space } from 'antd';
-import React from 'react';
-import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
+import {
+  PlusOutlined,
+  DeleteOutlined,
+  DollarOutlined,
+} from '@ant-design/icons';
+
+import { PopConfirm } from '../../components';
 
 const IconText = ({ icon, text }) => (
   <Space>
@@ -24,7 +28,12 @@ const ExpenseDirectionsMobileView = ({
 }) => {
   return (
     <Space direction="vertical" style={{ width: '100%' }}>
-      <Form name="add-category" validateMessages={validateMessages} onFinish={onFinish} form={newDirectionForm}>
+      <Form
+        name="add-category"
+        validateMessages={validateMessages}
+        onFinish={onFinish}
+        form={newDirectionForm}
+      >
         <Space.Compact block style={{ justifyContent: 'center' }}>
           <Form.Item
             name="name"

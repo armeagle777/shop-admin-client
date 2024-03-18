@@ -1,26 +1,33 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { Button, Form, Modal, Space } from 'antd';
+import { BrowserView, MobileView } from 'react-device-detect';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, DatePicker, Form, InputNumber, Select, Space, Modal } from 'antd';
-import { addExpense, deleteExpense, getExpenseDirections, getExpenses } from '../../api/serverApi';
-import { messages } from '../../utils/constants';
-import Alert from '../../components/alert/Alert';
-import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
 
-import { format } from 'date-fns';
-import { BrowserView, MobileView } from 'react-device-detect';
+import { AddExpenseForm } from './components';
+import { messages } from '../../utils/constants';
+import { Alert, PopConfirm } from '../../components';
 import ExpensesBrowserView from './ExpensesBrowserView';
 import ExpensesMobileView from './ExpensesMobileView';
-import AddExpenseForm from './AddExpenseForm';
+import {
+  addExpense,
+  getExpenses,
+  deleteExpense,
+  getExpenseDirections,
+} from '../../api/serverApi';
 
 const Expenses = () => {
   const [showProgress, setShowProgress] = useState(false);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
-  const { data, isFetching, isLoading, isError, error } = useQuery(['expenses'], () => getExpenses(), {
-    keepPreviousData: false,
-  });
+  const { data, isFetching, isLoading, isError, error } = useQuery(
+    ['expenses'],
+    () => getExpenses(),
+    {
+      keepPreviousData: false,
+    },
+  );
   const { data: expenses = [], meta } = { ...data };
   const modifiedData = expenses.map(({ id, attributes }) => ({
     key: id,
@@ -145,7 +152,12 @@ const Expenses = () => {
         const itemId = record.key;
         return (
           <Space>
-            <Button icon={<EditOutlined />} size="small" title="Խմբագրել" type="default" />
+            <Button
+              icon={<EditOutlined />}
+              size="small"
+              title="Խմբագրել"
+              type="default"
+            />
             <PopConfirm
               loading={isLoading}
               itemId={itemId}

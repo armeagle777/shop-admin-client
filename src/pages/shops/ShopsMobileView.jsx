@@ -1,7 +1,7 @@
-import React from 'react';
-import { Avatar, Button, FloatButton, List, Skeleton, Space } from 'antd';
-import { DeleteOutlined, EditOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
-import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
+import { Avatar, FloatButton, List, Skeleton, Space } from 'antd';
+import { DeleteOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
+
+import { PopConfirm } from '../../components';
 
 const IconText = ({ icon, text }) => (
   <Space>

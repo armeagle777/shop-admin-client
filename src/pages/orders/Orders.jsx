@@ -1,17 +1,23 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { FloatButton, Form, Segmented, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { deleteOrder, getOrders } from '../../api/serverApi';
-import OrderesTable from './OrderesTable';
-import { filterSegmentValues, segmentFilterValues, setgmentOptions, setgmentMobileOptions } from './Orders.constants';
-
+import { toast } from 'react-toastify';
 import { PlusOutlined } from '@ant-design/icons';
 import { BrowserView, MobileView } from 'react-device-detect';
-import OrdersMobileView from './OrdersMobileView';
-import './orders.styles.css';
-import { toast } from 'react-toastify';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { FloatButton, Form, Input, Segmented } from 'antd';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { messages } from '../../utils/constants';
+import { deleteOrder, getOrders } from '../../api/serverApi';
+import {
+  setgmentOptions,
+  filterSegmentValues,
+  segmentFilterValues,
+  setgmentMobileOptions,
+} from './Orders.constants';
+import { OrdersTable } from './components';
+import OrdersMobileView from './OrdersMobileView';
+
+import './orders.styles.css';
 
 const Orders = () => {
   const [showProgress, setShowProgress] = useState(false);
@@ -55,7 +61,11 @@ const Orders = () => {
     } else {
       updatedParams.delete('filter');
     }
-    window.history.replaceState({}, '', `${location.pathname}?${updatedParams}`);
+    window.history.replaceState(
+      {},
+      '',
+      `${location.pathname}?${updatedParams}`,
+    );
   }, [filter, location]);
 
   const {
@@ -63,9 +73,13 @@ const Orders = () => {
     isLoading,
     isError,
     error,
-  } = useQuery(['orders', filter, queryString], () => getOrders({ filter, query: queryString }), {
-    keepPreviousData: false,
-  });
+  } = useQuery(
+    ['orders', filter, queryString],
+    () => getOrders({ filter, query: queryString }),
+    {
+      keepPreviousData: false,
+    },
+  );
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
     if (e.target.value === '') setQueryString('');
@@ -121,7 +135,7 @@ const Orders = () => {
           defaultValue={filterSegmentValues[filter]}
           style={{ marginBottom: 10 }}
         />
-        <OrderesTable
+        <OrdersTable
           data={data}
           queryString={queryString}
           isLoading={isLoading}

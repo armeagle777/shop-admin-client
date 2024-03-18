@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-// import { useAuth } from '../../store/AuthContext';
 import { useSignIn } from 'react-auth-kit';
 import { useMutation } from '@tanstack/react-query';
-import { login } from '../../api/serverApi';
 import LinearProgress from '@mui/material/LinearProgress';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+import { login } from '../../api/serverApi';
 
 import './mdb.min.css';
 import './custom.css';
@@ -62,7 +62,10 @@ const Login = () => {
   };
   const { isLoading, error, isError } = loginMutation;
 
-  const validClassName = checkErrors && isError && error?.response.status === 400 ? 'is-invalid' : '';
+  const validClassName =
+    checkErrors && isError && error?.response.status === 400
+      ? 'is-invalid'
+      : '';
   const emailInputCn = `form-control form-control-lg ${validClassName}`;
   return (
     <>
@@ -102,7 +105,9 @@ const Login = () => {
                   <label className="form-label" htmlFor="form1Example23">
                     Password
                   </label>
-                  <div className="invalid-feedback">Մուտքանունը կամ գաղտնաբառը սխալ են:</div>
+                  <div className="invalid-feedback">
+                    Մուտքանունը կամ գաղտնաբառը սխալ են:
+                  </div>
                 </div>
                 <div className="d-flex justify-content-around align-items-center mb-4">
                   <div className="form-check">
@@ -121,7 +126,10 @@ const Login = () => {
                   </div>
                   <a href="#!">Forgot password?</a>
                 </div>
-                <button type="submit" className="btn btn-primary btn-lg btn-block">
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-lg btn-block"
+                >
                   Sign in
                 </button>
 
@@ -135,7 +143,8 @@ const Login = () => {
                   href="#!"
                   role="button"
                 >
-                  <i className="fab fa-facebook-f me-2"></i>Continue with Facebook
+                  <i className="fab fa-facebook-f me-2"></i>Continue with
+                  Facebook
                 </a>
                 <a
                   className="btn btn-primary btn-lg btn-block"

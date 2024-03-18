@@ -1,15 +1,15 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
+import { Button, Layout, theme } from 'antd';
 import { useState } from 'react';
-import { BsMoonFill, BsSunFill } from 'react-icons/bs';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import { isMobile } from 'react-device-detect';
+import { BsMoonFill, BsSunFill } from 'react-icons/bs';
+import { Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 const { Header, Content } = Layout;
 
+import 'react-toastify/dist/ReactToastify.css';
 import Menuslider from '../menu/Menu';
 import './AdminLayout.scss';
-import 'react-toastify/dist/ReactToastify.css';
 
 const AdminLayout = ({ handleThemeChange, isDarkMode }) => {
   const [collapsed, setCollapsed] = useState(false);

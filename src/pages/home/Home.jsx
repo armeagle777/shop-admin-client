@@ -1,28 +1,27 @@
-import { Statistic, Typography } from 'antd';
 import delve from 'dlv';
-import React from 'react';
 import _ from 'lodash';
-
-import { GiftOutlined, UsergroupAddOutlined } from '@ant-design/icons';
-import { useQuery } from '@tanstack/react-query';
 import CountUp from 'react-countup';
+import { Statistic, Typography } from 'antd';
+import { useQuery } from '@tanstack/react-query';
 import { BrowserView, MobileView } from 'react-device-detect';
+import { GiftOutlined, UsergroupAddOutlined } from '@ant-design/icons';
 import {
-  Area,
   Bar,
-  BarChart,
-  CartesianGrid,
-  ComposedChart,
-  Legend,
+  Area,
   Line,
-  ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
+  Legend,
+  Tooltip,
+  BarChart,
+  ComposedChart,
+  CartesianGrid,
+  ResponsiveContainer,
 } from 'recharts';
+
+import { getCurrentYearAndPast11Months } from './Home.helpers';
 import { getCustomers, getExpenses, getOrders } from '../../api/serverApi';
 import { accessoriesCategories, accessoryIds } from '../../utils/constants';
-import { getCurrentYearAndPast11Months } from './Home.helpers';
 
 const Home = () => {
   const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
@@ -34,9 +33,13 @@ const Home = () => {
     keepPreviousData: false,
   });
 
-  const { data: expensesResponse } = useQuery(['expenses'], () => getExpenses(), {
-    keepPreviousData: false,
-  });
+  const { data: expensesResponse } = useQuery(
+    ['expenses'],
+    () => getExpenses(),
+    {
+      keepPreviousData: false,
+    },
+  );
 
   const nonAccessoriesExpenses = expensesResponse?.data?.filter(
     (ex) => !accessoryIds.includes(ex.attributes.direction.data.id),
@@ -52,9 +55,13 @@ const Home = () => {
       keepPreviousData: false,
     },
   );
-  const { data: orderedOrders } = useQuery(['orders', { filter: 'ORDERED' }], () => getOrders({ filter: 'ORDERED' }), {
-    keepPreviousData: false,
-  });
+  const { data: orderedOrders } = useQuery(
+    ['orders', { filter: 'ORDERED' }],
+    () => getOrders({ filter: 'ORDERED' }),
+    {
+      keepPreviousData: false,
+    },
+  );
 
   // const { data: deliveredOrders } = useQuery(
   //     ['orders', { filter: 'DELIVERED' }],
@@ -64,8 +71,12 @@ const Home = () => {
   //     }
   // );
 
-  const nonAccsorriesOrders = orders?.filter((o) => !accessoriesCategories.includes(o.attributes.category.data.id));
-  const accsorriesOrders = orders?.filter((o) => accessoriesCategories.includes(o.attributes.category.data.id));
+  const nonAccsorriesOrders = orders?.filter(
+    (o) => !accessoriesCategories.includes(o.attributes.category.data.id),
+  );
+  const accsorriesOrders = orders?.filter((o) =>
+    accessoriesCategories.includes(o.attributes.category.data.id),
+  );
 
   const availableOrdersSum = availableOrders
     ?.filter((o) => o.attributes.category.data.id !== 18)
@@ -85,11 +96,17 @@ const Home = () => {
 
   const ordersCount = orders?.length;
 
-  const chartData = getCurrentYearAndPast11Months(nonAccessoriesExpenses, nonAccsorriesOrders);
+  const chartData = getCurrentYearAndPast11Months(
+    nonAccessoriesExpenses,
+    nonAccsorriesOrders,
+  );
   const incomes = chartData.map((monthData) => monthData['Զուտ եկամուտ']);
   const meanIncome = _.mean(incomes);
 
-  const accessoriesChartData = getCurrentYearAndPast11Months(accesorriesExpenses, accsorriesOrders);
+  const accessoriesChartData = getCurrentYearAndPast11Months(
+    accesorriesExpenses,
+    accsorriesOrders,
+  );
 
   const { Text } = Typography;
   const formatter = (value) => <CountUp end={value} separator="," />;
@@ -139,7 +156,11 @@ const Home = () => {
                     alignItems: 'flex-end',
                   }}
                 >
-                  <Statistic title="Ամսական Եկամուտ" value={meanIncome} formatter={formatter} />
+                  <Statistic
+                    title="Ամսական Եկամուտ"
+                    value={meanIncome}
+                    formatter={formatter}
+                  />
                 </div>
               </div>
               <div
@@ -183,7 +204,11 @@ const Home = () => {
                     alignItems: 'flex-end',
                   }}
                 >
-                  <Statistic title="Պատվեր" value={ordersCount || 0} formatter={formatter} />
+                  <Statistic
+                    title="Պատվեր"
+                    value={ordersCount || 0}
+                    formatter={formatter}
+                  />
                 </div>
               </div>
             </div>
@@ -211,10 +236,32 @@ const Home = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Area type="monotone" dataKey="Ծախսեր" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                  <Area type="monotone" dataKey="Ինքնարժեք" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                  <Area type="monotone" dataKey="Շահույթ" stackId="1" stroke="#ffc658" fill="#ffc658" />
-                  <Line type="monotone" dataKey="Զուտ եկամուտ" stroke="rgb(220, 53, 69)" />
+                  <Area
+                    type="monotone"
+                    dataKey="Ծախսեր"
+                    stackId="1"
+                    stroke="#8884d8"
+                    fill="#8884d8"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Ինքնարժեք"
+                    stackId="1"
+                    stroke="#82ca9d"
+                    fill="#82ca9d"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Շահույթ"
+                    stackId="1"
+                    stroke="#ffc658"
+                    fill="#ffc658"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="Զուտ եկամուտ"
+                    stroke="rgb(220, 53, 69)"
+                  />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -261,7 +308,11 @@ const Home = () => {
                     alignItems: 'flex-end',
                   }}
                 >
-                  <Statistic title="Հաճախորդ" value={customersCount || 0} formatter={formatter} />
+                  <Statistic
+                    title="Հաճախորդ"
+                    value={customersCount || 0}
+                    formatter={formatter}
+                  />
                 </div>
               </div>
               <div
@@ -307,7 +358,11 @@ const Home = () => {
                 >
                   <Statistic
                     title="Մնացորդ"
-                    value={availableOrdersSum && orderedOrdersSum ? availableOrdersSum + orderedOrdersSum : 0}
+                    value={
+                      availableOrdersSum && orderedOrdersSum
+                        ? availableOrdersSum + orderedOrdersSum
+                        : 0
+                    }
                     formatter={formatter}
                   />
                 </div>
@@ -452,7 +507,11 @@ const Home = () => {
                 alignItems: 'flex-end',
               }}
             >
-              <Statistic title="Պատվեր" value={ordersCount || 0} formatter={formatter} />
+              <Statistic
+                title="Պատվեր"
+                value={ordersCount || 0}
+                formatter={formatter}
+              />
             </div>
           </div>
           <div
@@ -495,7 +554,11 @@ const Home = () => {
                 alignItems: 'flex-end',
               }}
             >
-              <Statistic title="Հաճախորդ" value={customersCount || 0} formatter={formatter} />
+              <Statistic
+                title="Հաճախորդ"
+                value={customersCount || 0}
+                formatter={formatter}
+              />
             </div>
           </div>
           <div
@@ -541,7 +604,11 @@ const Home = () => {
             >
               <Statistic
                 title="Մնացորդ"
-                value={availableOrdersSum && orderedOrdersSum ? availableOrdersSum + orderedOrdersSum : 0}
+                value={
+                  availableOrdersSum && orderedOrdersSum
+                    ? availableOrdersSum + orderedOrdersSum
+                    : 0
+                }
                 formatter={formatter}
               />
             </div>
@@ -569,10 +636,32 @@ const Home = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Area type="monotone" dataKey="Ծախսեր" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                <Area type="monotone" dataKey="Ինքնարժեք" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                <Area type="monotone" dataKey="Շահույթ" stackId="1" stroke="#ffc658" fill="#ffc658" />
-                <Line type="monotone" dataKey="Զուտ եկամուտ" stroke="rgb(220, 53, 69)" />
+                <Area
+                  type="monotone"
+                  dataKey="Ծախսեր"
+                  stackId="1"
+                  stroke="#8884d8"
+                  fill="#8884d8"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="Ինքնարժեք"
+                  stackId="1"
+                  stroke="#82ca9d"
+                  fill="#82ca9d"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="Շահույթ"
+                  stackId="1"
+                  stroke="#ffc658"
+                  fill="#ffc658"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="Զուտ եկամուտ"
+                  stroke="rgb(220, 53, 69)"
+                />
               </ComposedChart>
             </ResponsiveContainer>
           </div>

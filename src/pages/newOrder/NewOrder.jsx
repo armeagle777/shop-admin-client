@@ -1,16 +1,24 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Form, message, Steps, theme, Typography } from 'antd';
-import FirstStepContent from './FirstStepContent';
-import SecondStepContent from './SecondStepContent';
-import ThirdStepContent from './ThirdStepContent';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addOrder, getCategories, getCountries, getCustomers, getShops } from '../../api/serverApi';
-import { messages } from '../../utils/constants';
-import { toast } from 'react-toastify';
-import { formatCountriesData, formatImageUrl } from '../../utils/helpers';
 import dayjs from 'dayjs';
-import { format } from 'date-fns';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { Button, Form, Steps, theme, Typography } from 'antd';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import {
+  addOrder,
+  getShops,
+  getCountries,
+  getCustomers,
+  getCategories,
+} from '../../api/serverApi';
+import { messages } from '../../utils/constants';
+import { formatCountriesData, formatImageUrl } from '../../utils/helpers';
+import {
+  FirstStepContent,
+  SecondStepContent,
+  ThirdStepContent,
+} from './components';
 
 const NewOrder = () => {
   const { token } = theme.useToken();
@@ -147,7 +155,12 @@ const NewOrder = () => {
     },
     {
       title: 'Ընտրովի',
-      content: <SecondStepContent countriesOptions={countriesOptions} customerOptions={customerOptions || []} />,
+      content: (
+        <SecondStepContent
+          countriesOptions={countriesOptions}
+          customerOptions={customerOptions || []}
+        />
+      ),
     },
     {
       title: 'Նկար',
@@ -157,7 +170,15 @@ const NewOrder = () => {
 
   const next = async () => {
     try {
-      await form.validateFields(['name', 'description', 'net_cost', 'selling_price', 'shop', 'category', 'customer']);
+      await form.validateFields([
+        'name',
+        'description',
+        'net_cost',
+        'selling_price',
+        'shop',
+        'category',
+        'customer',
+      ]);
       setFormValues({ ...formValues, ...form.getFieldsValue() });
       setCurrent((prev) => prev + 1);
     } catch {}
@@ -222,12 +243,20 @@ const NewOrder = () => {
         }}
       >
         {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => next()} disabled={disabledNextButton}>
+          <Button
+            type="primary"
+            onClick={() => next()}
+            disabled={disabledNextButton}
+          >
             Հաջորդը
           </Button>
         )}
         {current === steps.length - 1 && (
-          <Button type="primary" onClick={onSubmit} loading={addItemMutation.isLoading}>
+          <Button
+            type="primary"
+            onClick={onSubmit}
+            loading={addItemMutation.isLoading}
+          >
             Հաստատել
           </Button>
         )}

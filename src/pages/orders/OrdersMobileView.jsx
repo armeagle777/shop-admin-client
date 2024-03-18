@@ -1,8 +1,13 @@
-import React from 'react';
 import { Input } from 'antd';
-import OrderCard from './OrderCard';
+import { OrderCard } from '../order/components';
 
-const OrdersMobileView = ({ queryString, filteredData, showProgress, setShowProgress, handleDelete }) => {
+const OrdersMobileView = ({
+  queryString,
+  filteredData,
+  showProgress,
+  setShowProgress,
+  handleDelete,
+}) => {
   const { Search } = Input;
   return (
     <div

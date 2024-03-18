@@ -1,6 +1,5 @@
-import React from 'react';
 import Table from '../../components/table/Table';
-import { Button, DatePicker, Form, InputNumber, Select, Space } from 'antd';
+import { Button, DatePicker, Form, InputNumber, Select } from 'antd';
 
 const ExpensesBrowserView = ({
   addItemMutation,
@@ -65,9 +64,15 @@ const ExpensesBrowserView = ({
             }}
             placeholder="Ուղղություն"
             optionFilterProp="children"
-            filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input.toLocaleLowerCase())}
+            filterOption={(input, option) =>
+              (option?.label.toLowerCase() ?? '').includes(
+                input.toLocaleLowerCase(),
+              )
+            }
             filterSort={(optionA, optionB) =>
-              (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+              (optionA?.label ?? '')
+                .toLowerCase()
+                .localeCompare((optionB?.label ?? '').toLowerCase())
             }
             options={eDOptions}
           />
@@ -80,7 +85,11 @@ const ExpensesBrowserView = ({
             width: '320px',
           }}
         >
-          <DatePicker format={dateFormat} placeholder="Ընտրեք ամսաթիվը" style={{ width: '100%' }} />
+          <DatePicker
+            format={dateFormat}
+            placeholder="Ընտրեք ամսաթիվը"
+            style={{ width: '100%' }}
+          />
         </Form.Item>
         <Button
           type="primary"
@@ -92,7 +101,13 @@ const ExpensesBrowserView = ({
           Ավելացնել
         </Button>
       </Form>
-      <Table loading={!!isLoading} columns={columns} dataSource={modifiedData} form={form} size="medium" />
+      <Table
+        loading={!!isLoading}
+        columns={columns}
+        dataSource={modifiedData}
+        form={form}
+        size="medium"
+      />
     </>
   );
 };

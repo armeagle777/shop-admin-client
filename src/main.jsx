@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+import { ThemeProvider } from './store/ThemeContext.jsx';
 import App from './App.jsx';
 import './index.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ThemeProvider } from './store/ThemeContext.jsx';
-// import { AuthProvider } from './store/AuthContext.jsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,8 +21,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ThemeProvider>
         <App />
       </ThemeProvider>
-
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   </React.StrictMode>,
 );

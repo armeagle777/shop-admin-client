@@ -1,7 +1,7 @@
-import React from 'react';
-import { Avatar, Button, FloatButton, List, Skeleton, Space } from 'antd';
-import { DeleteOutlined, EditOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
-import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
+import { FloatButton, List, Skeleton, Space } from 'antd';
+import { DeleteOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
+
+import { PopConfirm } from '../../components';
 
 const IconText = ({ icon, text }) => (
   <Space>
@@ -73,13 +73,19 @@ const ExpensesMobileView = ({
                         icon={<DeleteOutlined />}
                         buttonTitle="Հեռացնել"
                       />,
-                      <IconText icon={StarOutlined} text={expense_date} key="list-vertical-total-categories" />,
+                      <IconText
+                        icon={StarOutlined}
+                        text={expense_date}
+                        key="list-vertical-total-categories"
+                      />,
                     ]
                   : undefined
               }
             >
               <Skeleton loading={isLoading} active>
-                <List.Item.Meta title={`${amount} դր -> ${direction.data.attributes.name}`} />
+                <List.Item.Meta
+                  title={`${amount} դր -> ${direction.data.attributes.name}`}
+                />
               </Skeleton>
             </List.Item>
           );

@@ -1,7 +1,7 @@
-import React from 'react';
-import { DeleteOutlined, EditOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Form, Input, List, Skeleton, Space } from 'antd';
-import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
+import { DeleteOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
+
+import { PopConfirm } from '../../components';
 
 const IconText = ({ icon, text }) => (
   <Space>
@@ -24,7 +24,12 @@ const CategoriesMobileView = ({
 }) => {
   return (
     <Space direction="vertical" style={{ width: '100%' }}>
-      <Form name="add-category" validateMessages={validateMessages} onFinish={onFinish} form={newCategoryForm}>
+      <Form
+        name="add-category"
+        validateMessages={validateMessages}
+        onFinish={onFinish}
+        form={newCategoryForm}
+      >
         <Space.Compact block style={{ justifyContent: 'center' }}>
           <Form.Item
             name="name"

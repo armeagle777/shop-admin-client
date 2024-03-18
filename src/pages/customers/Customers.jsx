@@ -1,20 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import delve from 'dlv';
 import { toast } from 'react-toastify';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Avatar, Button, Form, Image, Modal, Space } from 'antd';
-import { messages } from '../../utils/constants';
-import { formatImageUrl, generateRandomColor } from '../../utils/helpers';
-import { addCustomer, deleteCustomer, getCustomers } from '../../api/serverApi';
-import Alert from '../../components/alert/Alert';
-import AddCustomerForm from '../../components/shared/addCutomerForm/AddCustomerForm';
-import PopConfirm from '../../components/shared/popConfirm/PopConfirm';
-
 import { useNavigate } from 'react-router-dom';
 import { BrowserView, MobileView } from 'react-device-detect';
-import CustomersBrowserView from './CustomersBrowserView';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Avatar, Button, Form, Image, Modal, Space } from 'antd';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { messages } from '../../utils/constants';
 import CustomersMobileView from './CustomersMobileView';
+import CustomersBrowserView from './CustomersBrowserView';
+import { Alert, PopConfirm, AddCustomerForm } from '../../components';
+import { formatImageUrl, generateRandomColor } from '../../utils/helpers';
+import { addCustomer, deleteCustomer, getCustomers } from '../../api/serverApi';
 
 const Customers = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -145,7 +143,14 @@ const Customers = () => {
             width={60}
             height={70}
             src={formatImageUrl(src)}
-            placeholder={<Image preview={false} src="/image_placeholder.jpg" width={60} height={70} />}
+            placeholder={
+              <Image
+                preview={false}
+                src="/image_placeholder.jpg"
+                width={60}
+                height={70}
+              />
+            }
           />
         ) : (
           <Avatar
@@ -170,7 +175,9 @@ const Customers = () => {
         const contacts = delve(record, 'contacts.data');
 
         const extraContacts =
-          !contacts || contacts?.length === 0 ? '' : '/' + contacts.map((c) => c.attributes.phone_number).join(',');
+          !contacts || contacts?.length === 0
+            ? ''
+            : '/' + contacts.map((c) => c.attributes.phone_number).join(',');
         const phone_number = record.phone_number;
         return `${phone_number}  ${extraContacts}`;
       },

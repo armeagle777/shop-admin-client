@@ -1,6 +1,6 @@
+import { Button, Flex, Input } from 'antd';
+
 import Table from '../../components/table/Table';
-import { useState, useEffect } from 'react';
-import { Avatar, Button, Form, Image, Modal, Space, Flex, Input } from 'antd';
 
 const CustomersBrowserView = ({
   onOpenCustomerModal,
@@ -44,7 +44,12 @@ const CustomersBrowserView = ({
           </Button>
         </div>
       </Flex>
-      <Table loading={!!isLoading} columns={columns} dataSource={modifiedData} form={form} />
+      <Table
+        loading={!!isLoading}
+        columns={columns}
+        dataSource={modifiedData}
+        form={form}
+      />
     </>
   );
 };
