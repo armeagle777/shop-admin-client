@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 
 import { useTheme } from '../../store/ThemeContext';
-import AdminLayout from '../../components/adminLayout/AdminLayout';
+import AdminLayout from '../../components/adminLayout_/AdminLayout';
 import {
   Home,
   Shops,
