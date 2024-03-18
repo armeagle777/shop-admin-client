@@ -6,7 +6,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FloatButton, Form, Input, Segmented } from 'antd';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { OrdersTable } from '../../components';
 import { messages } from '../../utils/constants';
+import OrdersMobileView from './OrdersMobileView';
 import { deleteOrder, getOrders } from '../../api/serverApi';
 import {
   setgmentOptions,
@@ -14,8 +16,6 @@ import {
   segmentFilterValues,
   setgmentMobileOptions,
 } from './Orders.constants';
-import { OrdersTable } from './components';
-import OrdersMobileView from './OrdersMobileView';
 
 import './orders.styles.css';
 

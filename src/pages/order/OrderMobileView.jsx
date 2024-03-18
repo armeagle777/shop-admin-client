@@ -1,6 +1,6 @@
 import { Skeleton, Space, Typography } from 'antd';
 
-import { EditOrderForm } from './components';
+import { EditOrderForm } from '../../components';
 
 const OrderMobileView = ({
   isLoading,

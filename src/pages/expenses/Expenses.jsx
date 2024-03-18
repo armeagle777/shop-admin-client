@@ -5,11 +5,10 @@ import { BrowserView, MobileView } from 'react-device-detect';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { AddExpenseForm } from './components';
 import { messages } from '../../utils/constants';
-import { Alert, PopConfirm } from '../../components';
-import ExpensesBrowserView from './ExpensesBrowserView';
 import ExpensesMobileView from './ExpensesMobileView';
+import ExpensesBrowserView from './ExpensesBrowserView';
+import { Alert, PopConfirm, AddExpenseForm } from '../../components';
 import {
   addExpense,
   getExpenses,

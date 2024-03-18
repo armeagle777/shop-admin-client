@@ -1,6 +1,6 @@
 import { Skeleton, Space, Typography } from 'antd';
 
-import { EditCustomerForm } from './components';
+import { EditCustomerForm } from '../../components';
 
 const CustomerMobileView = ({
   error,

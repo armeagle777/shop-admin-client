@@ -14,10 +14,10 @@ import {
   StepForwardOutlined,
 } from '@ant-design/icons';
 
-import { messages } from '../../../utils/constants';
-import { PopConfirm, Alert, PopConfirmEdit, Table } from '../../../components';
-import { deleteOrder, editOrder, removeOrder } from '../../../api/serverApi';
-import { formatImageUrl, generateRandomColor } from '../../../utils/helpers';
+import { messages } from '../../utils/constants';
+import { PopConfirm, Alert, PopConfirmEdit, Table } from '..';
+import { deleteOrder, editOrder, removeOrder } from '../../api/serverApi';
+import { formatImageUrl, generateRandomColor } from '../../utils/helpers';
 
 const OrdersTable = ({
   data,

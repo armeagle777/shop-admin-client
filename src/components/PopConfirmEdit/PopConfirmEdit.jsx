@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Popconfirm as AntPopConfirm, Button } from 'antd';
 
-const PopConfirm = ({
+const PopConfirmEdit = ({
   itemId,
   onConfirm,
   confirmData,
   showProgress,
   allowPopConfirm,
   setAllowPopConfirm,
-  icon,
-  disabled,
   buttonTitle,
+  disabled,
+  icon,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -34,7 +34,7 @@ const PopConfirm = ({
 
   return (
     <AntPopConfirm
-      title="Համեզվա՞ծ եք, որ ցանկանում եք հեռացնել"
+      title="Համեզվա՞ծ եք, որ ցանկանում եք փոխել կարգավիճակը"
       okText="Այո"
       cancelText="Ոչ"
       onConfirm={handleOk}
@@ -49,7 +49,7 @@ const PopConfirm = ({
         icon={icon}
         size="small"
         title={buttonTitle}
-        danger
+        type="primary"
         onClick={handelOpen}
         disabled={disabled}
       />
@@ -57,4 +57,4 @@ const PopConfirm = ({
   );
 };
 
-export default PopConfirm;
+export default PopConfirmEdit;

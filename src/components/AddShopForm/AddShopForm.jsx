@@ -1,8 +1,8 @@
+import { useState } from 'react';
+import axios from 'axios';
+import { isMobile } from 'react-device-detect';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Upload } from 'antd';
-import axios from 'axios';
-import React, { useState } from 'react';
-import { isMobile } from 'react-device-detect';
 
 const layout = {
   labelCol: {
@@ -48,7 +48,12 @@ const AddShopForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
       validateMessages={validateMessages}
       form={form}
     >
-      <Form.Item name={['shop', 'logo']} label="Նկար" valuePropName={['shop', 'logo']} getValueFromEvent={normFile}>
+      <Form.Item
+        name={['shop', 'logo']}
+        label="Նկար"
+        valuePropName={['shop', 'logo']}
+        getValueFromEvent={normFile}
+      >
         <Upload
           accept=".png,.jpeg,.jpg"
           name="files"
@@ -64,7 +69,9 @@ const AddShopForm = ({ onSubmit, onCancel, isLoadingAdd, form }) => {
           }}
           onRemove={async (file) => {
             if (!uploadedFileId) return;
-            const res = await axios.delete(`${fileUploadUrl}/files/${uploadedFileId}`);
+            const res = await axios.delete(
+              `${fileUploadUrl}/files/${uploadedFileId}`,
+            );
           }}
         >
           <div>

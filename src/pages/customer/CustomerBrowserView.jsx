@@ -7,7 +7,7 @@ import {
   FieldTimeOutlined,
 } from '@ant-design/icons';
 
-import { EditCustomerForm } from './components';
+import { EditCustomerForm } from '../../components';
 
 const CustomerBrowserView = ({
   error,

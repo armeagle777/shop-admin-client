@@ -20,10 +20,10 @@ import {
   MinusCircleOutlined,
 } from '@ant-design/icons';
 
-import { Alert } from '../../../components';
-import { messages } from '../../../utils/constants';
-import { editCustomer, getCountries } from '../../../api/serverApi';
-import { formatCountriesData, formatImageUrl } from '../../../utils/helpers';
+import { Alert } from '..';
+import { messages } from '../../utils/constants';
+import { editCustomer, getCountries } from '../../api/serverApi';
+import { formatCountriesData, formatImageUrl } from '../../utils/helpers';
 
 const layout = {
   labelCol: {

@@ -1,6 +1,6 @@
 import { Button, Flex, Input } from 'antd';
 
-import Table from '../../components/Table/Table';
+import { Table } from '../../components';
 
 const CustomersBrowserView = ({
   onOpenCustomerModal,

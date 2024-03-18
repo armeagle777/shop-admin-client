@@ -11,10 +11,10 @@ import {
   StepForwardOutlined,
 } from '@ant-design/icons';
 
-import { editOrder } from '../../../api/serverApi';
-import { messages } from '../../../utils/constants';
-import { formatImageUrl } from '../../../utils/helpers';
-import { PopConfirm, PopConfirmEdit } from '../../../components';
+import { editOrder } from '../../api/serverApi';
+import { messages } from '../../utils/constants';
+import { formatImageUrl } from '../../utils/helpers';
+import { PopConfirm, PopConfirmEdit } from '..';
 
 const OrderCard = ({
   name,

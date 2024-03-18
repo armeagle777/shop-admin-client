@@ -1,5 +1,5 @@
 import { Input } from 'antd';
-import { OrderCard } from '../order/components';
+import { OrderCard } from '../../components';
 
 const OrdersMobileView = ({
   queryString,

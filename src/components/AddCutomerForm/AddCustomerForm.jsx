@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Upload,
-  Space,
-  Select,
-  Cascader,
-} from 'antd';
-import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
+import { Button, Cascader, Form, Input, Select, Upload } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+
 import { getCountries } from '../../api/serverApi';
 import { formatCountriesData } from '../../utils/helpers';
 

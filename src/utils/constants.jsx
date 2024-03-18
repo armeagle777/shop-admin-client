@@ -1,4 +1,3 @@
-export const loaderText = 'Բեռնում․․․․';
 export const messages = {
   customers: {
     deleteError: 'Ինչ որ բան այնպես չէ',

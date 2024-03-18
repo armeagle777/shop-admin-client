@@ -4,10 +4,12 @@ const serverApi = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
 });
 
+// Auth endpoints
 export const login = async (credentials) => {
   return await serverApi.post('/auth/local', credentials);
 };
 
+//Customer endpoints
 export const getCustomers = async ({ query }) => {
   const searchString = query
     ? `&filters[$or][0][first_name][$containsi]=${query}&filters[$or][1][last_name][$containsi]=${query}&filters[$or][2][phone_number][$containsi]=${query}`
@@ -30,6 +32,7 @@ export const addCustomer = async (customer) => {
     data: customer,
   });
 };
+
 export const editCustomer = async ({ item, customerId }) => {
   return await serverApi.put(`/customers/edit-customers/${customerId}`, {
     data: item,
@@ -42,8 +45,11 @@ export const deleteCustomer = async (id) => {
   });
 };
 
+//Shop endpoints
 export const getShops = async () => {
-  const response = await serverApi.get('/shops?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*');
+  const response = await serverApi.get(
+    '/shops?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*',
+  );
   return response.data;
 };
 
@@ -59,6 +65,7 @@ export const deleteShop = async (id) => {
   });
 };
 
+//ExpenseDirection endpoints
 export const addExpenseDirection = async (newDirection) => {
   return await serverApi.post('/expense-directions', {
     data: newDirection,
@@ -78,8 +85,11 @@ export const deleteExpenseDirections = async (id) => {
   });
 };
 
+//Category endpoints
 export const getCategories = async () => {
-  const response = await serverApi.get('/categories?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*');
+  const response = await serverApi.get(
+    '/categories?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*',
+  );
   return response.data;
 };
 
@@ -95,6 +105,7 @@ export const deleteCategory = async (id) => {
   });
 };
 
+//Expense endpoints
 export const addExpense = async (newExpense) => {
   return await serverApi.post('/expenses', {
     data: newExpense,
@@ -114,6 +125,7 @@ export const deleteExpense = async (id) => {
   });
 };
 
+//Order endpoits
 export const addOrder = async (newOrder) => {
   return await serverApi.post('/orders', {
     data: newOrder,
@@ -158,6 +170,7 @@ export const deleteOrder = async (id) => {
   });
 };
 
+//Country endpoints
 export const getCountries = async () => {
   const response = await serverApi.get(
     `/countries?pagination[pageSize]=1000&populate[marzs][populate][communities][populate]=*`,

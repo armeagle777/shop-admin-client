@@ -18,16 +18,16 @@ import {
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 
-import { messages } from '../../../utils/constants';
-import { AddCustomerForm } from '../../../components';
-import { formatImageUrl } from '../../../utils/helpers';
+import { messages } from '../../utils/constants';
+import { AddCustomerForm } from '..';
+import { formatImageUrl } from '../../utils/helpers';
 import {
   getShops,
   editOrder,
   addCustomer,
   getCustomers,
   getCategories,
-} from '../../../api/serverApi';
+} from '../../api/serverApi';
 
 const EditOrderForm = ({
   orderId,
