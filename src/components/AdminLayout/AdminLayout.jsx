@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 const { Header, Content } = Layout;
 
 import 'react-toastify/dist/ReactToastify.css';
-import Menuslider from '../menu_/Menu';
+import Menuslider from '../Menu/Menu';
 import './AdminLayout.scss';
 
 const AdminLayout = ({ handleThemeChange, isDarkMode }) => {

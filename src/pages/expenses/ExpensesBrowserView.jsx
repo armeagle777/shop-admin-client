@@ -1,4 +1,4 @@
-import Table from '../../components/table_/Table';
+import Table from '../../components/Table/Table';
 import { Button, DatePicker, Form, InputNumber, Select } from 'antd';
 
 const ExpensesBrowserView = ({
