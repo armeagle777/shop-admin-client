@@ -4,7 +4,8 @@
     "DELETE_SUCCESS_MESSAGE": "Խանութը հաջողությամբ հեռացվել է",
     "DELETE_ERROR_MESSAGE": "Խանութը չհաջողվեց հեռացնել",
     "CREATE_SUCCESS_MESSAGE": "Խանութը հաջողությամբ գրանցվեց",
-    "CREATE_ERROR_MESSAGE": "Խանութը չհաջողվեց գրանցել"
+    "CREATE_ERROR_MESSAGE": "Խանութը չհաջողվեց գրանցել",
+    "ADD_SHOP_BUTTON_TEXT": "Ավելացնել"
   },
   "SHARED": {
     "TOAST_ERROR": "Սխալ է տեղի ունեցել"

@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { Avatar, Button, Space } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { PopConfirm } from '../../components';
+import { generateRandomColor } from '../../utils/helpers';
 import translations from '../../utils/translations/am.json';
 import { addShop, deleteShop, getShops } from '../../api/serverApi';
 
@@ -68,22 +72,95 @@ const useShopsData = ({ addShopForm }) => {
 
   const addNewShop = (newShop) => addItemMutation.mutate(newShop);
 
-  const deleteShopById = (id) => deleteItemMutation.mutate(id);
+  const handleDelete = (id) => {
+    setShowProgress(true);
+    deleteItemMutation.mutate(id);
+  };
+
+  const shopsTableColumns = [
+    {
+      title: 'Անուն',
+      dataIndex: 'name',
+      width: '25%',
+    },
+    {
+      title: 'Նկար',
+      dataIndex: 'logo',
+      width: '10%',
+      render: (_, record) => {
+        const src = record.logo.data?.attributes.formats.thumbnail.url;
+        return (
+          <Avatar
+            style={{
+              backgroundColor: generateRandomColor(),
+              verticalAlign: 'middle',
+              border: 'none',
+            }}
+            size="large"
+            gap={2}
+            src={src}
+          >
+            {record.name || ''}
+          </Avatar>
+        );
+      },
+    },
+    {
+      title: 'Հասցե',
+      dataIndex: 'url',
+      width: '40%',
+      render: (_, record) => {
+        return (
+          <a target="_blank" href={record.url}>
+            {record.url}
+          </a>
+        );
+      },
+    },
+
+    {
+      title: 'Գործողություններ',
+      dataIndex: 'operation',
+      render: (_, record) => {
+        const itemId = record.key;
+        return (
+          <Space key={itemId}>
+            <Button
+              icon={<EditOutlined />}
+              size="small"
+              title="Խմբագրել"
+              type="default"
+            />
+            <PopConfirm
+              loading={isLoading}
+              itemId={itemId}
+              onConfirm={handleDelete}
+              showProgress={showProgress}
+              allowPopConfirm={allowPopConfirm}
+              setAllowPopConfirm={setAllowPopConfirm}
+              icon={<DeleteOutlined />}
+              buttonTitle="Հեռացնել"
+            />
+          </Space>
+        );
+      },
+    },
+  ];
 
   return {
     error,
     isError,
     addNewShop,
     showProgress,
+    handleDelete,
     showShopModal,
-    deleteShopById,
     allowPopConfirm,
-    setShowProgress,
     setShowShopModal,
+    shopsTableColumns,
     setAllowPopConfirm,
     shopsList: modifiedData,
-    isShopListLoading: isFetching || isLoading,
     isLoadingOnAdd: addItemMutation.isLoading,
+    isShopListLoading: isFetching || isLoading,
   };
 };
 

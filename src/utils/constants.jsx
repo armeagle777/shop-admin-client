@@ -15,5 +15,21 @@ export const messages = {
   },
 };
 
+export const BUTTON_TYPES = {
+  PRIMAARY: 'primary',
+};
+
+export const ANT_SIZES = {
+  LARGE: 'large',
+};
+
+export const ANT_SHAPES = {
+  CIRCLE: 'circle',
+};
+
+export const ANT_LAYOUTS = {
+  VERTICAL: 'vertical',
+};
+
 export const accessoryIds = [32, 39];
 export const accessoriesCategories = [74];

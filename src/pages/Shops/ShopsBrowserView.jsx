@@ -1,106 +1,34 @@
-import { Avatar, Button, Space } from 'antd';
+import { Button } from 'antd';
 import { BrowserView } from 'react-device-detect';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
-import { Table, PopConfirm } from '../../components';
-import { generateRandomColor } from '../../utils/helpers';
+import { Table } from '../../components';
+import { addButtonStyles } from './Shops.constants';
+import { BUTTON_TYPES } from '../../utils/constants';
+import translations from '../../utils/translations/am.json';
 
 const ShopsBrowserView = ({
-  onOpenShopModal,
+  form,
   isLoading,
   modifiedData,
-  form,
-  allowPopConfirm,
-  setAllowPopConfirm,
-  handleDelete,
-  showProgress,
+  onOpenShopModal,
+  shopsTableColumns,
 }) => {
-  const columns = [
-    {
-      title: 'Անուն',
-      dataIndex: 'name',
-      width: '25%',
-    },
-    {
-      title: 'Նկար',
-      dataIndex: 'logo',
-      width: '10%',
-      render: (_, record) => {
-        const src = record.logo.data?.attributes.formats.thumbnail.url;
-        return (
-          <Avatar
-            style={{
-              backgroundColor: generateRandomColor(),
-              verticalAlign: 'middle',
-              border: 'none',
-            }}
-            size="large"
-            gap={2}
-            src={src}
-          >
-            {record.name || ''}
-          </Avatar>
-        );
-      },
-    },
-    {
-      title: 'Հասցե',
-      dataIndex: 'url',
-      width: '40%',
-      render: (_, record) => {
-        return (
-          <a target="_blank" href={record.url}>
-            {record.url}
-          </a>
-        );
-      },
-    },
-
-    {
-      title: 'Գործողություններ',
-      dataIndex: 'operation',
-      render: (_, record) => {
-        const itemId = record.key;
-        return (
-          <Space key={itemId}>
-            <Button
-              icon={<EditOutlined />}
-              size="small"
-              title="Խմբագրել"
-              type="default"
-            />
-            <PopConfirm
-              loading={isLoading}
-              itemId={itemId}
-              onConfirm={handleDelete}
-              showProgress={showProgress}
-              allowPopConfirm={allowPopConfirm}
-              setAllowPopConfirm={setAllowPopConfirm}
-              icon={<DeleteOutlined />}
-              buttonTitle="Հեռացնել"
-            />
-          </Space>
-        );
-      },
-    },
-  ];
+  const { SHOPS_PAGE } = translations;
 
   return (
     <BrowserView>
       <Button
+        style={addButtonStyles}
         onClick={onOpenShopModal}
-        type="primary"
-        style={{
-          marginBottom: 16,
-        }}
+        type={BUTTON_TYPES.PRIMAARY}
       >
-        Ավելացնել
+        {SHOPS_PAGE.ADD_SHOP_BUTTON_TEXT}
       </Button>
       <Table
-        loading={!!isLoading}
-        columns={columns}
-        dataSource={modifiedData}
         form={form}
+        loading={isLoading}
+        dataSource={modifiedData}
+        columns={shopsTableColumns}
       />
     </BrowserView>
   );

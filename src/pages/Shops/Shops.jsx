@@ -7,8 +7,8 @@ import { AddShopForm, Alert } from '../../components';
 import translations from '../../utils/translations/am.json';
 
 const Shops = () => {
-  const { SHOPS_PAGE } = translations;
   const [form] = Form.useForm();
+  const { SHOPS_PAGE } = translations;
   const [addShopForm] = Form.useForm();
   const {
     error,
@@ -16,12 +16,12 @@ const Shops = () => {
     shopsList,
     addNewShop,
     showProgress,
+    handleDelete,
     showShopModal,
     isLoadingOnAdd,
-    deleteShopById,
-    setShowProgress,
     allowPopConfirm,
     setShowShopModal,
+    shopsTableColumns,
     isShopListLoading,
     setAllowPopConfirm,
   } = useShopsData({ addShopForm });
@@ -45,11 +45,6 @@ const Shops = () => {
     addNewShop(newShop);
   };
 
-  const handleDelete = (id) => {
-    setShowProgress(true);
-    deleteShopById(id);
-  };
-
   if (isError) {
     return <Alert message={error.message} />;
   }
@@ -59,12 +54,9 @@ const Shops = () => {
       <ShopsBrowserView
         form={form}
         modifiedData={shopsList}
-        handleDelete={handleDelete}
-        showProgress={showProgress}
         isLoading={isShopListLoading}
         onOpenShopModal={handleOpenModal}
-        allowPopConfirm={allowPopConfirm}
-        setAllowPopConfirm={setAllowPopConfirm}
+        shopsTableColumns={shopsTableColumns}
       />
 
       <ShopsMobileView
