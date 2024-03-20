@@ -5,8 +5,8 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 
+import { useTheme } from '../../store';
 import { AdminLayout } from '../../components';
-import { useTheme } from '../../store/ThemeContext';
 import {
   Home,
   Shops,

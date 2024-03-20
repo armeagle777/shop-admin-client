@@ -1,3 +1,5 @@
+import React from 'react';
+import { MobileView } from 'react-device-detect';
 import { Avatar, FloatButton, List, Skeleton, Space } from 'antd';
 import { DeleteOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
 
@@ -20,7 +22,7 @@ const ShopsMobileView = ({
   setAllowPopConfirm,
 }) => {
   return (
-    <>
+    <MobileView>
       <List
         pagination={{
           position: 'bottom',
@@ -90,7 +92,7 @@ const ShopsMobileView = ({
         onClick={onOpenShopModal}
         icon={<PlusOutlined />}
       />
-    </>
+    </MobileView>
   );
 };
 

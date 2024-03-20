@@ -2,7 +2,7 @@ import { AuthProvider } from 'react-auth-kit';
 import { RouterProvider } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
 
-import { useTheme } from './store/ThemeContext';
+import { useTheme } from './store';
 import { useCreateRouter } from './hooks';
 
 function App() {

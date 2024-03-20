@@ -1,0 +1,12 @@
+{
+  "SHOPS_PAGE": {
+    "ADD_SHOP_MODAL_TITLE": "Ավելացնել նոր Խանութ",
+    "DELETE_SUCCESS_MESSAGE": "Խանութը հաջողությամբ հեռացվել է",
+    "DELETE_ERROR_MESSAGE": "Խանութը չհաջողվեց հեռացնել",
+    "CREATE_SUCCESS_MESSAGE": "Խանութը հաջողությամբ գրանցվեց",
+    "CREATE_ERROR_MESSAGE": "Խանութը չհաջողվեց գրանցել"
+  },
+  "SHARED": {
+    "TOAST_ERROR": "Սխալ է տեղի ունեցել"
+  }
+}

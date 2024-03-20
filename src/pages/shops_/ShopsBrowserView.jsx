@@ -1,4 +1,5 @@
 import { Avatar, Button, Space } from 'antd';
+import { BrowserView } from 'react-device-detect';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import { Table, PopConfirm } from '../../components';
@@ -85,7 +86,7 @@ const ShopsBrowserView = ({
   ];
 
   return (
-    <>
+    <BrowserView>
       <Button
         onClick={onOpenShopModal}
         type="primary"
@@ -101,7 +102,7 @@ const ShopsBrowserView = ({
         dataSource={modifiedData}
         form={form}
       />
-    </>
+    </BrowserView>
   );
 };
 

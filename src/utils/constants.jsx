@@ -5,12 +5,6 @@ export const messages = {
     createError: 'Չհաջողվեց հեռացնել',
     createSuccess: 'Հաջողությամբ ավելացվել է',
   },
-  shops: {
-    deleteError: 'Ինչ որ բան այնպես չէ',
-    editError: 'Չհաջողվեց ղմբագրել',
-    editSuccess: 'Հաջողությամբ ղմբագրվեց',
-    deleteSuccess: 'Հաջողությամբ հեռացվել է',
-  },
   orders: {
     deleteError: 'Ինչ որ բան այնպես չէ',
     statusChangeSuccess: 'Հաջողությամբ փոփոխվել է',
