@@ -3,7 +3,7 @@ export * from './Shops';
 export * from './login';
 export * from './order';
 export * from './orders';
-export * from './reports';
+export * from './Reports';
 export * from './profile';
 export * from './newOrder';
 export * from './notFound';
