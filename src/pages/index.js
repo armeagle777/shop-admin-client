@@ -1,5 +1,5 @@
 export * from './home';
-export * from './shops';
+export * from './Shops';
 export * from './login';
 export * from './order';
 export * from './orders';
