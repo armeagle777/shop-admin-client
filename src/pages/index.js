@@ -1,6 +1,6 @@
 export * from './home';
 export * from './Shops';
-export * from './login';
+export * from './Login';
 export * from './order';
 export * from './orders';
 export * from './Reports';
