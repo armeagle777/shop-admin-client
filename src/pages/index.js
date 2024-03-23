@@ -10,5 +10,5 @@ export * from './notFound';
 export * from './expenses';
 export * from './customer';
 export * from './customers';
-export * from './categories_';
+export * from './Categories';
 export * from './expenseDirections';
