@@ -19,6 +19,7 @@
     "LOGIN_BUTTON_TEXT": "Մուտք"
   },
   "SHARED": {
-    "TOAST_ERROR": "Սխալ է տեղի ունեցել"
+    "TOAST_ERROR": "Սխալ է տեղի ունեցել",
+    "REDIRECT_BUTTON_TEXT": "Հինական էջ"
   }
 }
