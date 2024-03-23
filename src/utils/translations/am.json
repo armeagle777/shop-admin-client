@@ -11,6 +11,13 @@
     "ADD_BUTTON_TEXT": "Ավելացնել",
     "NAME_INPUT_PLACEHOLDER": "Նոր կատեգորիա"
   },
+  "LOGIN_PAGE": {
+    "EMAIL_LABEL": "Էլեկտրոնային հասցեն",
+    "PASSWORD_LABEL": "Գաղտնաբառ",
+    "INVALID_CREDENTIALS_MESSAGE": "Մուտքանունը կամ գաղտնաբառը սխալ են:",
+    "REMEMBER_LABEL": "Հիշել ինձ",
+    "LOGIN_BUTTON_TEXT": "Մուտք"
+  },
   "SHARED": {
     "TOAST_ERROR": "Սխալ է տեղի ունեցել"
   }

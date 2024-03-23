@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 
+import translations from '../../utils/translations/am.json';
 import useAuthData from '../../hooks/useAuthData/useAuthData';
 
 import './mdb.min.css';
 import './custom.css';
 
 const Login = () => {
-  const [checkErrors, setCheckErrors] = useState(false);
   const [rememberCheckbox, setRememberCheckbox] = useState(false);
 
   const {
@@ -18,23 +18,20 @@ const Login = () => {
     isLoading,
     identifier,
     setPassword,
+    checkErrors,
     setIdentifier,
   } = useAuthData();
 
-  useEffect(() => {
-    setCheckErrors(false);
-  }, [identifier, password]);
-
-  const handleCheckboxChange = () => {
-    setRememberCheckbox((prev) => !prev);
-  };
-
+  const { LOGIN_PAGE } = translations;
   const validClassName =
     checkErrors && isError && error?.response.status === 400
       ? 'is-invalid'
       : '';
   const emailInputCn = `form-control form-control-lg ${validClassName}`;
 
+  const handleCheckboxChange = () => {
+    setRememberCheckbox((prev) => !prev);
+  };
   return (
     <>
       {isLoading && <LinearProgress color="secondary" />}
@@ -59,7 +56,7 @@ const Login = () => {
                     className="form-control form-control-lg"
                   />
                   <label className="form-label" htmlFor="form1Example13">
-                    Email address
+                    {LOGIN_PAGE.EMAIL_LABEL}
                   </label>
                 </div>
                 <div className="form-outline mb-4">
@@ -71,10 +68,10 @@ const Login = () => {
                     className={`${emailInputCn}`}
                   />
                   <label className="form-label" htmlFor="form1Example23">
-                    Password
+                    {LOGIN_PAGE.PASSWORD_LABEL}
                   </label>
                   <div className="invalid-feedback">
-                    Մուտքանունը կամ գաղտնաբառը սխալ են:
+                    {LOGIN_PAGE.INVALID_CREDENTIALS_MESSAGE}
                   </div>
                 </div>
                 <div className="d-flex justify-content-around align-items-center mb-4">
@@ -88,8 +85,7 @@ const Login = () => {
                       onChange={handleCheckboxChange}
                     />
                     <label className="form-check-label" htmlFor="form1Example3">
-                      {' '}
-                      Remember me{' '}
+                      {LOGIN_PAGE.REMEMBER_LABEL}
                     </label>
                   </div>
                   <a href="#!">Forgot password?</a>
@@ -98,7 +94,7 @@ const Login = () => {
                   type="submit"
                   className="btn btn-primary btn-lg btn-block"
                 >
-                  Sign in
+                  {LOGIN_PAGE.LOGIN_BUTTON_TEXT}
                 </button>
 
                 <div className="divider d-flex align-items-center my-4">

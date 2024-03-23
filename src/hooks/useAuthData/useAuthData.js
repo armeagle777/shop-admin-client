@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSignIn } from 'react-auth-kit';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
@@ -6,11 +6,16 @@ import { useMutation } from '@tanstack/react-query';
 import { login } from '../../api/serverApi';
 
 const useAuthData = () => {
+  const [checkErrors, setCheckErrors] = useState(false);
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   const signIn = useSignIn();
+
+  useEffect(() => {
+    setCheckErrors(false);
+  }, [identifier, password]);
 
   const redirectPath = location.state?.path || '/';
 
@@ -27,9 +32,7 @@ const useAuthData = () => {
       });
       return navigate(redirectPath, { replace: true });
     },
-    onError: (error, variables, context, mutation) => {
-      console.log('err:::::: >>>>>', error);
-    },
+    onError: (error, variables, context, mutation) => {},
   });
 
   const { isLoading, error, isError } = loginMutation;
@@ -47,6 +50,7 @@ const useAuthData = () => {
     isLoading,
     identifier,
     setPassword,
+    checkErrors,
     setIdentifier,
     onSubmit: handleSubmit,
   };

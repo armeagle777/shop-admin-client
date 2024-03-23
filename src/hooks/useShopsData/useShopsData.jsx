@@ -88,7 +88,9 @@ const useShopsData = ({ addShopForm }) => {
       dataIndex: 'logo',
       width: '10%',
       render: (_, record) => {
-        const src = record.logo.data?.attributes.formats.thumbnail.url;
+        const src =
+          record.logo?.data?.attributes?.formats?.thumbnail?.url ||
+          record.logo?.data?.attributes.url;
         return (
           <Avatar
             style={{
