@@ -29,6 +29,7 @@ export const ANT_SIZES = {
 
 export const ANT_SHAPES = {
   CIRCLE: 'circle',
+  SQUARE: 'square',
 };
 
 export const ANT_LAYOUTS = {

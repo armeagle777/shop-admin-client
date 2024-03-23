@@ -1,24 +1,18 @@
 import delve from 'dlv';
-import { Typography } from 'antd';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { BrowserView, MobileView } from 'react-device-detect';
 
-import { getOrderById } from '../../api/serverApi';
 import { Alert } from '../../components';
-import { NotFound } from '../';
+import { NotFound } from '..';
 import OrderBrowserView from './OrderBrowserView';
 import OrderMobileView from './OrderMobileView';
+import { useOrderData } from '../../hooks';
 
 const Order = () => {
   const { orderId } = useParams();
-  const { data, isLoading, isFetching, isError, error } = useQuery(
-    ['orders', orderId],
-    () => getOrderById(orderId),
-    {
-      keepPreviousData: true,
-    },
-  );
+  const { data, isLoading, isFetching, isError, error } = useOrderData({
+    orderId,
+  });
 
   if (isError) {
     return error.response?.status === 404 ? (
@@ -35,30 +29,29 @@ const Order = () => {
   if (data && data.data?.length === 0) {
     return <NotFound message="Նման հաճապորդ գոյություն չունի" />;
   }
-  const { Text, Link } = Typography;
 
   const info = delve(data, 'data.attributes');
 
   const {
-    cancel_date,
-    category,
-    createdAt,
-    customer,
-    deliver_date,
-    description,
-    images,
-    isActive,
-    name,
-    net_cost,
-    order_date,
-    received_date,
-    reference_url,
-    return_date,
-    selling_price,
     shop,
+    name,
     status,
-    tracking_id,
+    images,
+    customer,
+    net_cost,
+    category,
+    isActive,
+    createdAt,
     updatedAt,
+    order_date,
+    description,
+    return_date,
+    tracking_id,
+    cancel_date,
+    deliver_date,
+    received_date,
+    selling_price,
+    reference_url,
   } = {
     ...info,
   };
@@ -67,54 +60,54 @@ const Order = () => {
     <>
       <BrowserView>
         <OrderBrowserView
-          isLoading={isLoading}
-          isFetching={isFetching}
-          orderId={orderId}
-          cancel_date={cancel_date}
-          category={category}
-          createdAt={createdAt}
-          customer={customer}
-          deliver_date={deliver_date}
-          description={description}
-          images={images}
-          isActive={isActive}
           name={name}
-          net_cost={net_cost}
-          order_date={order_date}
-          received_date={received_date}
-          reference_url={reference_url}
-          return_date={return_date}
-          selling_price={selling_price}
           shop={shop}
           status={status}
-          tracking_id={tracking_id}
+          images={images}
+          orderId={orderId}
+          isActive={isActive}
+          net_cost={net_cost}
+          customer={customer}
+          category={category}
+          createdAt={createdAt}
+          isLoading={isLoading}
           updatedAt={updatedAt}
+          order_date={order_date}
+          isFetching={isFetching}
+          tracking_id={tracking_id}
+          return_date={return_date}
+          description={description}
+          cancel_date={cancel_date}
+          deliver_date={deliver_date}
+          received_date={received_date}
+          reference_url={reference_url}
+          selling_price={selling_price}
         />
       </BrowserView>
       <MobileView>
         <OrderMobileView
-          isLoading={isLoading}
-          isFetching={isFetching}
-          orderId={orderId}
-          cancel_date={cancel_date}
-          category={category}
-          createdAt={createdAt}
-          customer={customer}
-          deliver_date={deliver_date}
-          description={description}
-          images={images}
-          isActive={isActive}
           name={name}
+          shop={shop}
+          images={images}
+          status={status}
+          orderId={orderId}
+          isActive={isActive}
           net_cost={net_cost}
+          category={category}
+          customer={customer}
+          updatedAt={updatedAt}
+          createdAt={createdAt}
+          isLoading={isLoading}
           order_date={order_date}
+          isFetching={isFetching}
+          description={description}
+          return_date={return_date}
+          tracking_id={tracking_id}
+          cancel_date={cancel_date}
+          deliver_date={deliver_date}
           received_date={received_date}
           reference_url={reference_url}
-          return_date={return_date}
           selling_price={selling_price}
-          shop={shop}
-          status={status}
-          tracking_id={tracking_id}
-          updatedAt={updatedAt}
         />
       </MobileView>
     </>
