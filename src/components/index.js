@@ -17,3 +17,4 @@ export * from './AddCutomerForm';
 export * from './CategoryListItem';
 export * from './EditCustomerForm';
 export * from './OrderFormSkileton';
+export * from './CustomerOptionLabel';

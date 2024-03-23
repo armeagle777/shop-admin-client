@@ -60,7 +60,9 @@ export const formatCountriesData = (countries) => {
 };
 
 export const formatImageUrl = (url) => {
-  return url.startsWith('https://')
+  return !url
+    ? ''
+    : url.startsWith('https://')
     ? url
     : `${import.meta.env.VITE_IMAGE_SERVER_URL}${url}`;
 };

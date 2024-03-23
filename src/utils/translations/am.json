@@ -18,6 +18,14 @@
     "REMEMBER_LABEL": "Հիշել ինձ",
     "LOGIN_BUTTON_TEXT": "Մուտք"
   },
+  "NEW_ORDER_PAGE": {
+    "NEXT_BUTTON_TEXT": "Հաջորդը",
+    "PREV_BUTTON_TEXT": "Նախորդը",
+    "SUBMIT_BUTTON_TEXT": "Հաստատել",
+    "FIRST_STEP_TITLE": "Պարտադիր",
+    "SECOND_STEP_TITLE": "Ընտրովի",
+    "THIRD_STEP_TITLE": "Նկար"
+  },
   "SHARED": {
     "TOAST_ERROR": "Սխալ է տեղի ունեցել",
     "REDIRECT_BUTTON_TEXT": "Հինական էջ"

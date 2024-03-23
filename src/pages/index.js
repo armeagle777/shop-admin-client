@@ -5,7 +5,7 @@ export * from './Order';
 export * from './orders';
 export * from './Reports';
 export * from './Profile';
-export * from './newOrder';
+export * from './newOrder_';
 export * from './NotFound';
 export * from './expenses';
 export * from './customer';
