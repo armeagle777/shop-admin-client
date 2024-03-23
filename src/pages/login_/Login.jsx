@@ -1,72 +1,40 @@
 import { useEffect, useState } from 'react';
-import { useSignIn } from 'react-auth-kit';
-import { useMutation } from '@tanstack/react-query';
 import LinearProgress from '@mui/material/LinearProgress';
-import { useNavigate, useLocation } from 'react-router-dom';
 
-import { login } from '../../api/serverApi';
+import useAuthData from '../../hooks/useAuthData/useAuthData';
 
 import './mdb.min.css';
 import './custom.css';
 
 const Login = () => {
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
   const [checkErrors, setCheckErrors] = useState(false);
   const [rememberCheckbox, setRememberCheckbox] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
-  const signIn = useSignIn();
+
+  const {
+    error,
+    isError,
+    onSubmit,
+    password,
+    isLoading,
+    identifier,
+    setPassword,
+    setIdentifier,
+  } = useAuthData();
 
   useEffect(() => {
     setCheckErrors(false);
   }, [identifier, password]);
 
-  const redirectPath = location.state?.path || '/';
-
   const handleCheckboxChange = () => {
     setRememberCheckbox((prev) => !prev);
   };
-
-  const loginMutation = useMutation((credentials) => login(credentials), {
-    onSuccess: (data) => {
-      const { data: signinData } = data;
-      // if (data.data?.error) {
-      //   return toast.error(data.data?.error || 'Սխալ է տեղի ունեցել', {
-      //     progress: undefined,
-      //   });
-      // }
-      setIdentifier('');
-      setPassword('');
-      signIn({
-        token: signinData.jwt,
-        expiresIn: 30 * 24 * 60,
-        tokenType: 'Bearer',
-        authState: signinData.user,
-      });
-      return navigate(redirectPath, { replace: true });
-    },
-    onError: (error, variables, context, mutation) => {
-      console.log('err:::::: >>>>>', error);
-
-      // toast.error(error.response?.data?.error?.message || error.message, {
-      //   progress: undefined,
-      // });
-    },
-  });
-
-  const handleSubmit = async (e) => {
-    setCheckErrors(true);
-    e.preventDefault();
-    loginMutation.mutate({ identifier, password });
-  };
-  const { isLoading, error, isError } = loginMutation;
 
   const validClassName =
     checkErrors && isError && error?.response.status === 400
       ? 'is-invalid'
       : '';
   const emailInputCn = `form-control form-control-lg ${validClassName}`;
+
   return (
     <>
       {isLoading && <LinearProgress color="secondary" />}
@@ -81,7 +49,7 @@ const Login = () => {
               />
             </div>
             <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={onSubmit}>
                 <div className="form-outline mb-4">
                   <input
                     value={identifier}
