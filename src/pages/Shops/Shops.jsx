@@ -1,4 +1,5 @@
 import { Form, Modal } from 'antd';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 import { useShopsData } from '../../hooks';
 import ShopsMobileView from './ShopsMobileView';
@@ -51,23 +52,26 @@ const Shops = () => {
 
   return (
     <>
-      <ShopsBrowserView
-        form={form}
-        modifiedData={shopsList}
-        isLoading={isShopListLoading}
-        onOpenShopModal={handleOpenModal}
-        shopsTableColumns={shopsTableColumns}
-      />
-
-      <ShopsMobileView
-        modifiedData={shopsList}
-        showProgress={showProgress}
-        handleDelete={handleDelete}
-        isLoading={isShopListLoading}
-        onOpenShopModal={handleOpenModal}
-        allowPopConfirm={allowPopConfirm}
-        setAllowPopConfirm={setAllowPopConfirm}
-      />
+      <BrowserView>
+        <ShopsBrowserView
+          form={form}
+          modifiedData={shopsList}
+          isLoading={isShopListLoading}
+          onOpenShopModal={handleOpenModal}
+          shopsTableColumns={shopsTableColumns}
+        />
+      </BrowserView>
+      <MobileView>
+        <ShopsMobileView
+          modifiedData={shopsList}
+          showProgress={showProgress}
+          handleDelete={handleDelete}
+          isLoading={isShopListLoading}
+          onOpenShopModal={handleOpenModal}
+          allowPopConfirm={allowPopConfirm}
+          setAllowPopConfirm={setAllowPopConfirm}
+        />
+      </MobileView>
       <Modal
         centered
         width={800}

@@ -1,5 +1,4 @@
 import { Button } from 'antd';
-import { BrowserView } from 'react-device-detect';
 
 import { Table } from '../../components';
 import { addButtonStyles } from './Shops.constants';
@@ -16,7 +15,7 @@ const ShopsBrowserView = ({
   const { SHOPS_PAGE } = translations;
 
   return (
-    <BrowserView>
+    <>
       <Button
         style={addButtonStyles}
         onClick={onOpenShopModal}
@@ -30,7 +29,7 @@ const ShopsBrowserView = ({
         dataSource={modifiedData}
         columns={shopsTableColumns}
       />
-    </BrowserView>
+    </>
   );
 };
 

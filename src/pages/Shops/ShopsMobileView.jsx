@@ -1,5 +1,4 @@
 import { List } from 'antd';
-import { MobileView } from 'react-device-detect';
 
 import { paginationStyles } from './Shops.constants';
 import { ANT_LAYOUTS, ANT_SIZES } from '../../utils/constants';
@@ -26,7 +25,7 @@ const ShopsMobileView = ({
   );
 
   return (
-    <MobileView>
+    <>
       <List
         size={ANT_SIZES.LARGE}
         dataSource={modifiedData}
@@ -35,7 +34,7 @@ const ShopsMobileView = ({
         itemLayout={ANT_LAYOUTS.VERTICAL}
       />
       <FloatButton onClick={onOpenShopModal} />
-    </MobileView>
+    </>
   );
 };
 

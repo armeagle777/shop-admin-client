@@ -7,6 +7,10 @@
     "CREATE_ERROR_MESSAGE": "Խանութը չհաջողվեց գրանցել",
     "ADD_SHOP_BUTTON_TEXT": "Ավելացնել"
   },
+  "CATEGORIES_PAGE": {
+    "ADD_BUTTON_TEXT": "Ավելացնել",
+    "NAME_INPUT_PLACEHOLDER": "Նոր կատեգորիա"
+  },
   "SHARED": {
     "TOAST_ERROR": "Սխալ է տեղի ունեցել"
   }

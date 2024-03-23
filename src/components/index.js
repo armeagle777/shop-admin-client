@@ -14,4 +14,5 @@ export * from './ShopsListItem';
 export * from './PopConfirmEdit';
 export * from './AddExpenseForm';
 export * from './AddCutomerForm';
+export * from './CategoryListItem';
 export * from './EditCustomerForm';

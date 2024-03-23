@@ -19,6 +19,10 @@ export const BUTTON_TYPES = {
   PRIMAARY: 'primary',
 };
 
+export const BUTTON_HTML_TYPES = {
+  SUBMIT: 'submit',
+};
+
 export const ANT_SIZES = {
   LARGE: 'large',
 };
