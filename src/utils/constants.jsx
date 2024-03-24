@@ -16,7 +16,7 @@ export const messages = {
 };
 
 export const BUTTON_TYPES = {
-  PRIMAARY: 'primary',
+  PRIMARY: 'primary',
 };
 
 export const BUTTON_HTML_TYPES = {
@@ -25,6 +25,7 @@ export const BUTTON_HTML_TYPES = {
 
 export const ANT_SIZES = {
   LARGE: 'large',
+  MEDIUM: 'medium',
 };
 
 export const ANT_SHAPES = {
@@ -35,6 +36,8 @@ export const ANT_SHAPES = {
 export const ANT_LAYOUTS = {
   VERTICAL: 'vertical',
 };
+
+export const dateFormat = 'DD/MM/YYYY';
 
 export const accessoryIds = [32, 39];
 export const accessoriesCategories = [74];

@@ -19,7 +19,7 @@ const ShopsBrowserView = ({
       <Button
         style={addButtonStyles}
         onClick={onOpenShopModal}
-        type={BUTTON_TYPES.PRIMAARY}
+        type={BUTTON_TYPES.PRIMARY}
       >
         {SHOPS_PAGE.ADD_SHOP_BUTTON_TEXT}
       </Button>

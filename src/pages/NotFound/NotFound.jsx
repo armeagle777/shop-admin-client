@@ -18,7 +18,7 @@ const NotFound = ({
       status={statusText}
       extra={
         <Link to={redirectUrl}>
-          <Button type={BUTTON_TYPES.PRIMAARY}>{redirectButtonText}</Button>
+          <Button type={BUTTON_TYPES.PRIMARY}>{redirectButtonText}</Button>
         </Link>
       }
     />

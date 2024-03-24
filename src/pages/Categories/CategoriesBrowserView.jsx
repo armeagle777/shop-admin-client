@@ -37,7 +37,7 @@ const CategoriesBrowserView = ({
         </Form.Item>
         <Button
           loading={isLoadingOnAdd}
-          type={BUTTON_TYPES.PRIMAARY}
+          type={BUTTON_TYPES.PRIMARY}
           htmlType={BUTTON_HTML_TYPES.SUBMIT}
         >
           {CATEGORIES_PAGE.ADD_BUTTON_TEXT}

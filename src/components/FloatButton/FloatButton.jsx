@@ -11,7 +11,7 @@ const FloatButton = ({ onClick }) => {
       icon={<PlusOutlined />}
       shape={ANT_SHAPES.CIRCLE}
       style={floatButtonStyles}
-      type={BUTTON_TYPES.PRIMAARY}
+      type={BUTTON_TYPES.PRIMARY}
     />
   );
 };

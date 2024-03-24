@@ -8,9 +8,9 @@ import {
 } from './components';
 import {
   formStyles,
+  prevBtnStyles,
   formItemLayout,
   btnsWrapperStyles,
-  prevBtnStyles,
 } from './NewOrder.constants';
 import { useNewOrderData } from '../../hooks';
 import { BUTTON_TYPES } from '../../utils/constants';
@@ -116,7 +116,7 @@ const NewOrder = () => {
         {current < steps.length - 1 && (
           <Button
             onClick={onNext}
-            type={BUTTON_TYPES.PRIMAARY}
+            type={BUTTON_TYPES.PRIMARY}
             disabled={disabledNextButton}
           >
             {NEW_ORDER_PAGE.NEXT_BUTTON_TEXT}
@@ -125,7 +125,7 @@ const NewOrder = () => {
         {current === steps.length - 1 && (
           <Button
             onClick={onSubmit}
-            type={BUTTON_TYPES.PRIMAARY}
+            type={BUTTON_TYPES.PRIMARY}
             loading={onAddItemIsloading}
           >
             {NEW_ORDER_PAGE.SUBMIT_BUTTON_TEXT}

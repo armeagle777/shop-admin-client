@@ -67,7 +67,7 @@ const CategoriesMobileView = ({
           <Button
             icon={<PlusOutlined />}
             loading={isLoadingOnAdd}
-            type={BUTTON_TYPES.PRIMAARY}
+            type={BUTTON_TYPES.PRIMARY}
             htmlType={BUTTON_HTML_TYPES.SUBMIT}
             style={formItemsStyles.submitButton}
           />
