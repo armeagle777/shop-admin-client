@@ -8,7 +8,7 @@ export * from './Profile';
 export * from './NewOrder';
 export * from './NotFound';
 export * from './expenses';
-export * from './customer';
+export * from './customer_';
 export * from './customers';
 export * from './Categories';
 export * from './expenseDirections';

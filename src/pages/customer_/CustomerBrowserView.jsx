@@ -1,7 +1,7 @@
 import { Timeline, Typography } from 'antd';
 
 import { EditCustomerForm } from '../../components';
-import { CustomerSkeleton, TimelineSkeleton, CustomerHystory } from './';
+import { CustomerSkeleton, TimelineSkeleton, CustomerHystory } from '.';
 import {
   brViewContainerStyles,
   brContentContainerstyles,

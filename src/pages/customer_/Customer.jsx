@@ -2,7 +2,7 @@ import delve from 'dlv';
 import { useParams } from 'react-router-dom';
 import { BrowserView, MobileView } from 'react-device-detect';
 
-import { NotFound } from '../';
+import { NotFound } from '..';
 import { useCustomerData } from '../../hooks';
 import { ALERT_TYPES, Alert } from '../../components';
 import CustomerMobileView from './CustomerMobileView';
