@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 
-import { addCustomer } from '../../api/serverApi';
 import { messages } from '../../utils/constants';
+import { addCustomer, getCustomerById } from '../../api/serverApi';
 
-const useCustomerData = ({ addCustomerForm }) => {
+const useCustomerData = ({ addCustomerForm, customerId }) => {
   const [showCustomerModal, setShowCustomerModal] = useState(false);
   const queryClient = useQueryClient();
+
+  const { data, isLoading, isFetching, isError, error } = useQuery(
+    ['customers', customerId],
+    () => getCustomerById(customerId),
+    {
+      keepPreviousData: true,
+    },
+  );
 
   const addItemMutation = useMutation((item) => addCustomer(item), {
     onSuccess: (data) => {
@@ -44,10 +52,14 @@ const useCustomerData = ({ addCustomerForm }) => {
   };
 
   return {
+    data,
+    error,
+    isError,
     showCustomerModal,
     onOpenCustomerModal,
     onCloseCustomerModal,
     onSubmit: handleSubmit,
+    isLoading: isLoading || isFetching,
     onAddIsLoading: addItemMutation.isLoading,
   };
 };

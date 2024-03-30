@@ -1,4 +1,4 @@
-import { Skeleton, Space, Typography } from 'antd';
+import { Skeleton, Space } from 'antd';
 
 import { EditCustomerForm } from '../../components';
 
@@ -11,16 +11,14 @@ const CustomerMobileView = ({
   last_name,
   isLoading,
   first_name,
-  isFetching,
   customerId,
   phone_number,
 }) => {
-  const { Text, Link } = Typography;
   return (
     <>
       <div style={{ width: '100%', display: 'flex' }}>
         <div style={{ width: '80%' }}>
-          {isLoading || isFetching ? (
+          {isLoading ? (
             <Space
               direction="vertical"
               style={{
@@ -47,17 +45,17 @@ const CustomerMobileView = ({
             </Space>
           ) : (
             <EditCustomerForm
-              customerId={customerId}
+              error={error}
+              Avatar={Avatar}
+              isError={isError}
+              contacts={contacts}
+              last_name={last_name}
+              addresses={addresses}
               isLoading={isLoading}
               isFetching={isFetching}
-              isError={isError}
-              error={error}
               first_name={first_name}
-              last_name={last_name}
+              customerId={customerId}
               phone_number={phone_number}
-              Avatar={Avatar}
-              addresses={addresses}
-              contacts={contacts}
             />
           )}
         </div>

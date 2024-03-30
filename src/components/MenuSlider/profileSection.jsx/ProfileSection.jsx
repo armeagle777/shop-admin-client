@@ -1,10 +1,9 @@
-import React from 'react';
-import { Dropdown, Button, Flex, Divider, Avatar, Typography } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-import { MdLogout } from 'react-icons/md';
-import { redirect, useNavigate } from 'react-router-dom';
-import { useSignOut } from 'react-auth-kit';
 import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Divider, Dropdown, Flex, Typography } from 'antd';
+import React from 'react';
+import { useSignOut } from 'react-auth-kit';
+import { MdLogout } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileSection = ({ collapsed }) => {
   const navigate = useNavigate();
@@ -23,7 +22,12 @@ const ProfileSection = ({ collapsed }) => {
     {
       key: '1',
       label: (
-        <Button block type="link" onClick={handleLinkClick} style={{ border: 'none', outline: 'none' }}>
+        <Button
+          block
+          type="link"
+          onClick={handleLinkClick}
+          style={{ border: 'none', outline: 'none' }}
+        >
           Profile
         </Button>
       ),
@@ -44,7 +48,9 @@ const ProfileSection = ({ collapsed }) => {
           }}
         >
           <Text style={{ position: 'relative' }}>Ելք</Text>
-          <MdLogout style={{ position: 'absolute', top: '10px', right: '20px' }} />
+          <MdLogout
+            style={{ position: 'absolute', top: '10px', right: '20px' }}
+          />
         </Button>
       ),
     },

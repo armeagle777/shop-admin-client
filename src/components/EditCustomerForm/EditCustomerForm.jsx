@@ -81,7 +81,6 @@ const prefixSelector = (
 const EditCustomerForm = ({
   customerId,
   isLoading,
-  isFetching,
   isError,
   error,
   first_name,
@@ -176,7 +175,7 @@ const EditCustomerForm = ({
     return e?.files;
   };
 
-  if (isLoading || isFetching) return 'Loading...';
+  if (isLoading) return 'Loading...';
 
   if (isError) {
     return <Alert type="error" message={error.message} />;
