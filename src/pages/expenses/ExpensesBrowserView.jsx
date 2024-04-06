@@ -1,112 +1,38 @@
 import { Table } from '../../components';
-import { Button, DatePicker, Form, InputNumber, Select } from 'antd';
+
+import { ANT_SIZES } from '../../utils/constants';
+import { AddExpenseBrForm } from './AddExpenseBrForm';
 
 const ExpensesBrowserView = ({
-  addItemMutation,
-  dateFormat,
-  eDOptions,
-  validateMessages,
-  onFinish,
-  newExpenseForm,
-  isAddButtonDisabled,
-  isLoading,
-  columns,
-  modifiedData,
   form,
+  columns,
+  onFinish,
+  eDOptions,
+  isLoading,
+  dateFormat,
+  modifiedData,
+  newExpenseForm,
+  addItemMutation,
+  validateMessages,
+  isAddButtonDisabled,
 }) => {
   return (
     <>
-      <Form
-        name="add-expenses-direction"
-        validateMessages={validateMessages}
+      <AddExpenseBrForm
         onFinish={onFinish}
-        labelCol={{
-          span: 8,
-        }}
-        form={newExpenseForm}
-        wrapperCol={{
-          span: 20,
-        }}
-        style={{
-          maxWidth: 900,
-        }}
-      >
-        <Form.Item
-          name="amount"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          style={{
-            display: 'inline-block',
-            width: '100px',
-          }}
-        >
-          <InputNumber min={0} placeholder="Գումար" />
-        </Form.Item>
-        <Form.Item
-          name="direction"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          style={{
-            display: 'inline-block',
-            width: '220px',
-          }}
-        >
-          <Select
-            showSearch
-            style={{
-              width: 200,
-            }}
-            placeholder="Ուղղություն"
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              (option?.label.toLowerCase() ?? '').includes(
-                input.toLocaleLowerCase(),
-              )
-            }
-            filterSort={(optionA, optionB) =>
-              (optionA?.label ?? '')
-                .toLowerCase()
-                .localeCompare((optionB?.label ?? '').toLowerCase())
-            }
-            options={eDOptions}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="expense_date"
-          style={{
-            display: 'inline-block',
-            width: '320px',
-          }}
-        >
-          <DatePicker
-            format={dateFormat}
-            placeholder="Ընտրեք ամսաթիվը"
-            style={{ width: '100%' }}
-          />
-        </Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={addItemMutation.isLoading}
-          style={{ marginBottom: 16 }}
-          disabled={isAddButtonDisabled}
-        >
-          Ավելացնել
-        </Button>
-      </Form>
+        eDOptions={eDOptions}
+        dateFormat={dateFormat}
+        newExpenseForm={newExpenseForm}
+        addItemMutation={addItemMutation}
+        validateMessages={validateMessages}
+        isAddButtonDisabled={isAddButtonDisabled}
+      />
       <Table
-        loading={!!isLoading}
-        columns={columns}
-        dataSource={modifiedData}
         form={form}
-        size="medium"
+        columns={columns}
+        loading={!!isLoading}
+        size={ANT_SIZES.MEDIUM}
+        dataSource={modifiedData}
       />
     </>
   );

@@ -49,6 +49,12 @@
     "NOT_FOUND_MESSAGE": "Չի գտնվել",
     "REDIRECT_BUTTON_TEXT": "Հինական էջ"
   },
+  "CUSTOMERS_PAGE": {
+    "BROWSER_ADD_BUTTON_TEXT": "Ավելացնել",
+    "DIRECTION_PLACEHOLDER": "Ուղղություն",
+    "EXPENSE_DATE_PLACEHOLDER": "Ընտրեք ամսաթիվը",
+    "AMOUNT_PLACEHOLDER": "Գումար"
+  },
   "SHARED": {
     "TOAST_ERROR": "Սխալ է տեղի ունեցել",
     "REDIRECT_BUTTON_TEXT": "Հինական էջ",

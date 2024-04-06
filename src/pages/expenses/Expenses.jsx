@@ -9,6 +9,7 @@ import { messages } from '../../utils/constants';
 import ExpensesMobileView from './ExpensesMobileView';
 import ExpensesBrowserView from './ExpensesBrowserView';
 import { Alert, PopConfirm, AddExpenseForm } from '../../components';
+import translations from '../../utils/translations/am.json';
 import {
   addExpense,
   getExpenses,
@@ -20,6 +21,7 @@ const Expenses = () => {
   const [showProgress, setShowProgress] = useState(false);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
+  const { SHARED } = translations;
   const { data, isFetching, isLoading, isError, error } = useQuery(
     ['expenses'],
     () => getExpenses(),
@@ -137,12 +139,6 @@ const Expenses = () => {
     {
       title: 'Ա/թ',
       dataIndex: 'expense_date',
-      // render: (_, record) => {
-      //     const create_date = record.expense_date;
-      //     console.log('new Date(create_date):::::: ',new Date(create_date));
-
-      //     return format(new Date(create_date), 'dd-MM-yyy');
-      // },
     },
     {
       title: 'Գործողություններ',
@@ -174,53 +170,53 @@ const Expenses = () => {
   ];
 
   if (isError) {
-    return <Alert type="error" message={error.message} />;
+    return <Alert message={SHARED.ALERT_ERROR_MESSAGE} />;
   }
 
   return (
     <>
       <BrowserView>
         <ExpensesBrowserView
-          eDOptions={eDOptions}
-          validateMessages={validateMessages}
-          onFinish={onFinish}
-          newExpenseForm={newExpenseForm}
-          dateFormat={dateFormat}
-          addItemMutation={addItemMutation}
-          isAddButtonDisabled={isAddButtonDisabled}
-          isLoading={isLoading}
-          columns={columns}
-          modifiedData={modifiedData}
           form={form}
+          columns={columns}
+          onFinish={onFinish}
+          eDOptions={eDOptions}
+          isLoading={isLoading}
+          dateFormat={dateFormat}
+          modifiedData={modifiedData}
+          newExpenseForm={newExpenseForm}
+          addItemMutation={addItemMutation}
+          validateMessages={validateMessages}
+          isAddButtonDisabled={isAddButtonDisabled}
         />
       </BrowserView>
       <MobileView>
         <ExpensesMobileView
-          modifiedData={modifiedData}
           isLoading={isLoading}
-          onOpenExpenseModal={onOpenExpenseModal}
-          onCloseExpenseModal={onCloseExpenseModal}
-          handleDelete={handleDelete}
+          modifiedData={modifiedData}
           showProgress={showProgress}
+          handleDelete={handleDelete}
           allowPopConfirm={allowPopConfirm}
+          onOpenExpenseModal={onOpenExpenseModal}
           setAllowPopConfirm={setAllowPopConfirm}
+          onCloseExpenseModal={onCloseExpenseModal}
         />
       </MobileView>
       <Modal
-        title="Ավելացնել նոր ծախս"
         centered
-        open={showExpenseModal}
-        onCancel={onCloseExpenseModal}
         width={800}
         footer={null}
+        title="Ավելացնել նոր ծախս"
+        open={showExpenseModal}
+        onCancel={onCloseExpenseModal}
       >
         <AddExpenseForm
-          onCancel={onCloseExpenseModal}
           onSubmit={onFinish}
-          isLoadingAdd={addItemMutation.isLoading}
           form={newExpenseForm}
           eDOptions={eDOptions}
           dateFormat={dateFormat}
+          onCancel={onCloseExpenseModal}
+          isLoadingAdd={addItemMutation.isLoading}
         />
       </Modal>
     </>
