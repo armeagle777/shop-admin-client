@@ -4,6 +4,7 @@ import {
   formItemNames,
   formItemsRules,
   formItemsStyles,
+  validateMessages,
   addExpenseBrFormProps,
 } from '../Expenses.constants';
 import translations from '../../../utils/translations/am.json';
@@ -14,12 +15,11 @@ const AddExpenseBrForm = ({
   onFinish,
   eDOptions,
   dateFormat,
+  isLoadingAdd,
   newExpenseForm,
-  addItemMutation,
-  validateMessages,
   isAddButtonDisabled,
 }) => {
-  const { CUSTOMERS_PAGE } = translations;
+  const { EXPENSES_PAGE } = translations;
   return (
     <Form
       onFinish={onFinish}
@@ -35,7 +35,7 @@ const AddExpenseBrForm = ({
         rules={formItemsRules.AMOUNT}
         style={formItemsStyles.AMOUNT}
       >
-        <InputNumber min={0} placeholder={CUSTOMERS_PAGE.AMOUNT_PLACEHOLDER} />
+        <InputNumber min={0} placeholder={EXPENSES_PAGE.AMOUNT_PLACEHOLDER} />
       </Form.Item>
       <Form.Item
         name={formItemNames.DIRECTION}
@@ -49,7 +49,7 @@ const AddExpenseBrForm = ({
           optionFilterProp="children"
           filterOption={filterOptions}
           style={formItemsStyles.DIRECTION_SELECT}
-          placeholder={CUSTOMERS_PAGE.DIRECTION_PLACEHOLDER}
+          placeholder={EXPENSES_PAGE.DIRECTION_PLACEHOLDER}
         />
       </Form.Item>
 
@@ -60,17 +60,17 @@ const AddExpenseBrForm = ({
         <DatePicker
           format={dateFormat}
           style={formItemsStyles.EXPENSE_DATE_DATEPICKER}
-          placeholder={CUSTOMERS_PAGE.EXPENSE_DATE_PLACEHOLDER}
+          placeholder={EXPENSES_PAGE.EXPENSE_DATE_PLACEHOLDER}
         />
       </Form.Item>
       <Button
+        loading={isLoadingAdd}
         type={BUTTON_TYPES.PRIMARY}
         disabled={isAddButtonDisabled}
-        loading={addItemMutation.isLoading}
         htmlType={BUTTON_HTML_TYPES.SUBMIT}
         style={formItemsStyles.SUBMIT_BUTTON}
       >
-        {CUSTOMERS_PAGE.BROWSER_ADD_BUTTON_TEXT}
+        {EXPENSES_PAGE.BROWSER_ADD_BUTTON_TEXT}
       </Button>
     </Form>
   );

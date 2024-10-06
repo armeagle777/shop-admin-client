@@ -17,6 +17,11 @@ export const messages = {
 
 export const BUTTON_TYPES = {
   PRIMARY: 'primary',
+  DEFAULT: 'default',
+};
+
+export const ANT_TEXT_TYPES = {
+  SECONDARY: 'secondary',
 };
 
 export const BUTTON_HTML_TYPES = {
@@ -24,6 +29,7 @@ export const BUTTON_HTML_TYPES = {
 };
 
 export const ANT_SIZES = {
+  SMALL: 'small',
   LARGE: 'large',
   MEDIUM: 'medium',
 };

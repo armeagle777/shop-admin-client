@@ -1,4 +1,4 @@
-import { Timeline, Typography } from 'antd';
+import { Timeline } from 'antd';
 
 import { EditCustomerForm } from '../../components';
 import { CustomerSkeleton, TimelineSkeleton, CustomerHystory } from '.';

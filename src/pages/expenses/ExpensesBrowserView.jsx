@@ -7,13 +7,12 @@ const ExpensesBrowserView = ({
   form,
   columns,
   onFinish,
+  expenses,
   eDOptions,
   isLoading,
   dateFormat,
-  modifiedData,
+  isLoadingAdd,
   newExpenseForm,
-  addItemMutation,
-  validateMessages,
   isAddButtonDisabled,
 }) => {
   return (
@@ -22,17 +21,16 @@ const ExpensesBrowserView = ({
         onFinish={onFinish}
         eDOptions={eDOptions}
         dateFormat={dateFormat}
+        isLoadingAdd={isLoadingAdd}
         newExpenseForm={newExpenseForm}
-        addItemMutation={addItemMutation}
-        validateMessages={validateMessages}
         isAddButtonDisabled={isAddButtonDisabled}
       />
       <Table
         form={form}
         columns={columns}
-        loading={!!isLoading}
+        loading={isLoading}
+        dataSource={expenses}
         size={ANT_SIZES.MEDIUM}
-        dataSource={modifiedData}
       />
     </>
   );

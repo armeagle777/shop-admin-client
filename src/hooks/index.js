@@ -5,4 +5,6 @@ export * from './useOrderData';
 export * from './useCreateRouter';
 export * from './useNewOrderData';
 export * from './useCustomerData';
+export * from './useExpensesData';
 export * from './useCategoriesData';
+export * from './useExpenseDirectionsData';

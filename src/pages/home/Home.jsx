@@ -455,7 +455,7 @@ const Home = () => {
               <Statistic
                 title="Ամսական Եկամուտ"
                 value={
-                  0
+                  meanIncome || 0
                   // septemberExpenses && septemberData
                   //     ? septemberData?.shahuyt -
                   //       septemberData?.inqnarjeq -

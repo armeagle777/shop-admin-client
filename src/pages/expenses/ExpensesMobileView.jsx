@@ -1,14 +1,14 @@
 import { List, Skeleton, Space } from 'antd';
 import { DeleteOutlined, StarOutlined } from '@ant-design/icons';
 
-import { FloatButton, IconText, PopConfirm } from '../../components';
+import { ListItem } from '.';
 import { mbViewListPgStyles } from './Expenses.constants';
 import { ANT_LAYOUTS, ANT_SIZES } from '../../utils/constants';
-import { ListItem } from '.';
+import { FloatButton, IconText, PopConfirm } from '../../components';
 
 const ExpensesMobileView = ({
   isLoading,
-  modifiedData,
+  expenses,
   showProgress,
   handleDelete,
   allowPopConfirm,
@@ -19,7 +19,7 @@ const ExpensesMobileView = ({
     const { amount, key, direction, expense_date } = { ...item };
     return (
       <ListItem
-        key={key}
+        itemId={key}
         amount={amount}
         direction={direction}
         expense_date={expense_date}
@@ -30,9 +30,9 @@ const ExpensesMobileView = ({
   return (
     <Space direction={ANT_LAYOUTS.VERTICAL} style={{ width: '100%' }}>
       <List
+        dataSource={expenses}
         size={ANT_SIZES.LARGE}
         renderItem={renderItem}
-        dataSource={modifiedData}
         pagination={mbViewListPgStyles}
         itemLayout={ANT_LAYOUTS.VERTICAL}
       />

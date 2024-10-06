@@ -42,18 +42,34 @@
     "CUSTOMER_INPUT_LABEL": "Հաճախորդ",
     "CUSTOMER_SELECT_PLACEHOLDER": "Որոնել",
     "CUSTOMER_MODAL_TITlE": "Ավելացնել նոր հաճախորդ",
+    "CATEGORY_MODAL_TITlE": "Ավելացնել նոր կատեգորիա",
     "IMAGE_LABEL": "Նկար",
     "UPLOAD_BUTTON_TEXT": "Բեռնել"
   },
   "CUSTOMER_PAGE": {
     "NOT_FOUND_MESSAGE": "Չի գտնվել",
-    "REDIRECT_BUTTON_TEXT": "Հինական էջ"
+    "REDIRECT_BUTTON_TEXT": "Հինական էջ",
+    "CARD_TITLE": "Պատմություն",
+    "HYSTORY_REGISTER_TITLE": "Գրանցվել է",
+    "HYSTORY_COUNT_TITLE": "Քանակը",
+    "HYSTORY_COUNT_TEXT": "Պատվեր",
+    "HYSTORY_INCOME_TITLE": "Եկամուտ",
+    "HYSTORY_INCOME_TEXT": "դ. Եկամուտ",
+    "HYSTORY_AMOUNT_TITLE": "Գումարը",
+    "HYSTORY_AMOUNT_TEXT": "դ. Պատվեր"
   },
-  "CUSTOMERS_PAGE": {
+  "EXPENSES_PAGE": {
     "BROWSER_ADD_BUTTON_TEXT": "Ավելացնել",
     "DIRECTION_PLACEHOLDER": "Ուղղություն",
     "EXPENSE_DATE_PLACEHOLDER": "Ընտրեք ամսաթիվը",
-    "AMOUNT_PLACEHOLDER": "Գումար"
+    "AMOUNT_PLACEHOLDER": "Գումար",
+    "DELETE_SUCCESS_MESSAGE": "հաջողությամբ հեռացվել է",
+    "DELETE_ERROR_MESSAGE": "չհաջողվեց հեռացնել",
+    "ADD_SUCCESS_MESSAGE": "հաջողությամբ ավելացվել է",
+    "ADD_ERROR_MESSAGE": "չհաջողվեց ավելացնել",
+    "MODAL_TITLE": "Ավելացնել նոր ծախս",
+    "EDIT_EXPENSE_BUTTON_TITLE": "Խմբագրել",
+    "DELETE_EXPENSE_BUTTON_TITLE": "Հեռացնել"
   },
   "SHARED": {
     "TOAST_ERROR": "Սխալ է տեղի ունեցել",

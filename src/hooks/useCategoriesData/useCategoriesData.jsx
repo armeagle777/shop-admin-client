@@ -5,9 +5,15 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { PopConfirm } from '../../components';
-import { getCategories } from '../../api/serverApi';
+import {
+  addCategory,
+  getCategories,
+  deleteCategory,
+} from '../../api/serverApi';
+import { messages } from '../../utils/constants';
 
 const useCategoriesData = ({ newCategoryForm }) => {
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
   const queryClient = useQueryClient();
   const [showProgress, setShowProgress] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
@@ -28,14 +34,14 @@ const useCategoriesData = ({ newCategoryForm }) => {
   const deleteItemMutation = useMutation((itemId) => deleteCategory(itemId), {
     onSuccess: () => {
       queryClient.invalidateQueries('categories');
-      toast.success(messages.shops.deleteSuccess, {
+      toast.success(messages.orders.deleteSuccess, {
         progress: undefined,
       });
       setShowProgress(false);
       setAllowPopConfirm(false);
     },
     onError: () => {
-      toast.error(messages.shops.deleteError, {
+      toast.error(messages.orders.deleteError, {
         progress: undefined,
       });
       setShowProgress(false);
@@ -45,7 +51,7 @@ const useCategoriesData = ({ newCategoryForm }) => {
   const addItemMutation = useMutation((item) => addCategory(item), {
     onSuccess: (data) => {
       queryClient.invalidateQueries('categories');
-      toast.success(messages.customers.createSuccess, {
+      toast.success(messages.orders.createSuccess, {
         progress: undefined,
       });
       newCategoryForm.resetFields();
@@ -109,6 +115,8 @@ const useCategoriesData = ({ newCategoryForm }) => {
     columns,
     showProgress,
     allowPopConfirm,
+    showCategoryModal,
+    setShowCategoryModal,
     data: modifiedData,
     setAllowPopConfirm,
     onSubmit: handleSubmit,

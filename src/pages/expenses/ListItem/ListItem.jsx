@@ -1,8 +1,10 @@
 import { DeleteOutlined, StarOutlined } from '@ant-design/icons';
 import { List, Skeleton } from 'antd';
 
+import { IconText, PopConfirm } from '../../../components';
+
 const ListItem = ({
-  key,
+  itemId,
   amount,
   direction,
   isLoading,
@@ -14,13 +16,13 @@ const ListItem = ({
 }) => {
   return (
     <List.Item
-      key={key}
+      key={itemId}
       actions={
         !isLoading
           ? [
               <PopConfirm
                 loading={isLoading}
-                itemId={key}
+                itemId={itemId}
                 onConfirm={handleDelete}
                 showProgress={showProgress}
                 allowPopConfirm={allowPopConfirm}

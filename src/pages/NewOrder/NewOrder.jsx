@@ -68,7 +68,12 @@ const NewOrder = () => {
     },
     {
       title: NEW_ORDER_PAGE.THIRD_STEP_TITLE,
-      content: <ThirdStepContent setFormValues={setFormValues} />,
+      content: (
+        <ThirdStepContent
+          setFormValues={setFormValues}
+          formValues={formValues}
+        />
+      ),
     },
   ];
 

@@ -840,7 +840,7 @@ const OrdersTable = ({
   const deleteItemMutation = useMutation((itemId) => deleteOrder(itemId), {
     onSuccess: () => {
       queryClient.invalidateQueries(['orders']);
-      toast.success(messages.shops.deleteSuccess, {
+      toast.success(messages.orders.deleteSuccess, {
         progress: undefined,
       });
       setShowProgress(false);

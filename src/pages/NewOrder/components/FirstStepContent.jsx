@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Select } from 'antd';
+import { Button, Form, Input, InputNumber, Modal, Select, Space } from 'antd';
 
 import {
   nameInputRules,
@@ -9,11 +9,28 @@ import {
   shopInputStyles,
   netCostInputRules,
   categoryInputRules,
+  customerSpaceStyles,
+  customerSelectStyles,
 } from '../NewOrder.constants';
 import tranlsations from '../../../utils/translations/am.json';
+import { PlusOutlined } from '@ant-design/icons';
+import { ANT_SIZES, BUTTON_TYPES } from '../../../utils/constants';
+import { useCategoriesData } from '../../../hooks';
+import { AddCategoryForm } from '../../../components/AddCategoryForm';
 
 const FirstStepContent = ({ categoriesOptions, shopsOptions }) => {
   const { NEW_ORDER_PAGE } = tranlsations;
+  const [newCategoryForm] = Form.useForm();
+  const { onSubmit, isLoadingOnAdd, showCategoryModal, setShowCategoryModal } =
+    useCategoriesData({ newCategoryForm });
+
+  const validateMessages = {
+    required: 'Անունը պարտադիր է!',
+    types: {
+      email: '${label}֊ի ֆորմատը սխալ է',
+      number: '${label} is not a valid number!',
+    },
+  };
   return (
     <>
       <Form.Item
@@ -30,12 +47,37 @@ const FirstStepContent = ({ categoriesOptions, shopsOptions }) => {
       >
         <Input />
       </Form.Item>
-      <Form.Item
+      {/* <Form.Item
         name="category"
         rules={categoryInputRules}
         label={NEW_ORDER_PAGE.CAT_INPUT_LABEL}
       >
         <Select style={catInputStyles} options={categoriesOptions} />
+      </Form.Item> */}
+      <Form.Item
+        rules={categoriesOptions}
+        label={NEW_ORDER_PAGE.CAT_INPUT_LABEL}
+      >
+        <Space.Compact style={customerSpaceStyles}>
+          <Form.Item name="category" rules={categoryInputRules}>
+            <Select
+              showSearch
+              options={categoriesOptions}
+              optionFilterProp="children"
+              // filterOption={filterOption}
+              style={customerSelectStyles}
+              placeholder={NEW_ORDER_PAGE.CAT_INPUT_LABEL}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              icon={<PlusOutlined />}
+              size={ANT_SIZES.MEDIUM}
+              type={BUTTON_TYPES.PRIMARY}
+              onClick={() => setShowCategoryModal(true)}
+            />
+          </Form.Item>
+        </Space.Compact>
       </Form.Item>
       <Form.Item
         name="shop"
@@ -58,6 +100,23 @@ const FirstStepContent = ({ categoriesOptions, shopsOptions }) => {
       >
         <InputNumber />
       </Form.Item>
+      <Modal
+        centered
+        width={800}
+        footer={null}
+        open={showCategoryModal}
+        onCancel={() => setShowCategoryModal(false)}
+        title={NEW_ORDER_PAGE.CATEGORY_MODAL_TITlE}
+      >
+        <AddCategoryForm
+          onFinish={onSubmit}
+          isLoadingOnAdd={isLoadingOnAdd}
+          newCategoryForm={newCategoryForm}
+          validateMessages={validateMessages}
+
+          // onCancel={() => setShowCategoryModal(false)}
+        />
+      </Modal>
     </>
   );
 };

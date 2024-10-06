@@ -7,14 +7,17 @@ import {
   FieldTimeOutlined,
 } from '@ant-design/icons';
 
+import { ANT_TEXT_TYPES } from '../../../utils/constants';
+import translations from '../../../utils/translations/am.json';
+
 const CustomerHystory = ({ createdAt, ordersSums, isLoading, ordersCount }) => {
+  const { CUSTOMER_PAGE } = translations;
   const { Text } = Typography;
-  console.log('createdAt:::::: ', createdAt);
 
   return (
     <Card
       loading={isLoading}
-      title="Պատմություն"
+      title={CUSTOMER_PAGE.CARD_TITLE}
       style={{
         width: '100%',
         marginBottom: '20px',
@@ -41,9 +44,9 @@ const CustomerHystory = ({ createdAt, ordersSums, isLoading, ordersCount }) => {
           >
             <Text style={{ fontSize: 16 }}>
               <FieldTimeOutlined style={{ marginRight: 8 }} />
-              Գրանցվել է
+              {CUSTOMER_PAGE.HYSTORY_REGISTER_TITLE}
             </Text>
-            <Text type="secondary" style={{ fontSize: 16 }}>
+            <Text type={ANT_TEXT_TYPES.SECONDARY} style={{ fontSize: 16 }}>
               {createdAt && format(new Date(createdAt), 'dd-MM-yyy')}
             </Text>
           </div>
@@ -55,10 +58,10 @@ const CustomerHystory = ({ createdAt, ordersSums, isLoading, ordersCount }) => {
           >
             <Text style={{ fontSize: 16 }}>
               <SkinOutlined style={{ marginRight: 8 }} />
-              Քանակը
+              {CUSTOMER_PAGE.HYSTORY_COUNT_TITLE}
             </Text>
-            <Text type="secondary" style={{ fontSize: 16 }}>
-              {ordersCount} - Պատվեր
+            <Text type={ANT_TEXT_TYPES.SECONDARY} style={{ fontSize: 16 }}>
+              {ordersCount} - {CUSTOMER_PAGE.HYSTORY_COUNT_TEXT}
             </Text>
           </div>
         </div>
@@ -77,10 +80,11 @@ const CustomerHystory = ({ createdAt, ordersSums, isLoading, ordersCount }) => {
           >
             <Text style={{ fontSize: 16 }}>
               <GiftOutlined style={{ marginRight: 8 }} />
-              Գումարը
+              {CUSTOMER_PAGE.HYSTORY_AMOUNT_TITLE}
             </Text>
-            <Text type="secondary" style={{ fontSize: 16 }}>
-              {ordersSums.net_cost.toLocaleString()}դ. Պատվեր
+            <Text type={ANT_TEXT_TYPES.SECONDARY} style={{ fontSize: 16 }}>
+              {ordersSums.net_cost.toLocaleString()}
+              {CUSTOMER_PAGE.HYSTORY_AMOUNT_TEXT}
             </Text>
           </div>
           <div
@@ -91,10 +95,11 @@ const CustomerHystory = ({ createdAt, ordersSums, isLoading, ordersCount }) => {
           >
             <Text style={{ fontSize: 16 }}>
               <SmileOutlined style={{ marginRight: 8 }} />
-              Եկամուտ
+              {CUSTOMER_PAGE.HYSTORY_INCOME_TITLE}
             </Text>
-            <Text type="secondary" style={{ fontSize: 16 }}>
-              {ordersSums.profit.toLocaleString()}դ. Եկամուտ
+            <Text type={ANT_TEXT_TYPES.SECONDARY} style={{ fontSize: 16 }}>
+              {ordersSums.profit.toLocaleString()}
+              {CUSTOMER_PAGE.HYSTORY_INCOME_TEXT}
             </Text>
           </div>
         </div>

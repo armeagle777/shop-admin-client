@@ -54,3 +54,14 @@ export const formItemsRules = {
     },
   ],
 };
+
+export const validateMessages = {
+  required: '${label} պարտադիր է!',
+  types: {
+    email: '${label}֊ի ֆորմատը սխալ է',
+    number: '${label} is not a valid number!',
+  },
+  number: {
+    range: '${label} must be between ${min} and ${max}',
+  },
+};
