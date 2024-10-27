@@ -20,6 +20,14 @@ export const BUTTON_TYPES = {
   DEFAULT: 'default',
 };
 
+export const BUTTON_VARIANTS = {
+  TEXT: 'text',
+};
+
+export const ANT_COLORS = {
+  DEFAULT: 'default',
+};
+
 export const ANT_TEXT_TYPES = {
   SECONDARY: 'secondary',
 };
@@ -51,4 +59,20 @@ export const accessoriesCategories = [74];
 export const ORDER_STATUSES_MAP = {
   CANCELED: 'CANCELED',
   RETURNED: 'RETURNED',
+};
+
+export const ANT_GAPS = {
+  MIDDLE: 'middle',
+};
+
+export const ANT_FLEX_ALIGNS = {
+  FLEX_START: 'flex-start',
+  CENTER: 'center',
+  FLEX_END: '',
+};
+
+export const ANT_FLEX_JUSTIFIES = {
+  FLEX_START: 'flex-start',
+  CENTER: 'center',
+  FLEX_END: 'flex-end',
 };

@@ -1,17 +1,26 @@
-import { List, Skeleton, Space } from 'antd';
-import { DeleteOutlined, StarOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import dayjs from 'dayjs';
+import { DatePicker } from 'antd-mobile';
+import { CalendarOutlined } from '@ant-design/icons';
+import { List, Flex, Space, Button, Select, Divider, Skeleton } from 'antd';
 
 import { ListItem } from '.';
 import { mbViewListPgStyles } from './Expenses.constants';
 import { ANT_LAYOUTS, ANT_SIZES } from '../../utils/constants';
-import { FloatButton, IconText, PopConfirm } from '../../components';
+import { FloatButton } from '../../components';
+import { MobileFilterBar } from './MobileFilterBar';
 
 const ExpensesMobileView = ({
+  filters,
   isLoading,
   expenses,
+  eDOptions,
+  eDIsloading,
   showProgress,
   handleDelete,
+  onDateFilter,
   allowPopConfirm,
+  onDirectionFilter,
   onOpenExpenseModal,
   setAllowPopConfirm,
 }) => {
@@ -29,6 +38,16 @@ const ExpensesMobileView = ({
 
   return (
     <Space direction={ANT_LAYOUTS.VERTICAL} style={{ width: '100%' }}>
+      {eDIsloading ? (
+        <Skeleton active />
+      ) : (
+        <MobileFilterBar
+          filters={filters}
+          eDOptions={eDOptions}
+          onDateFilter={onDateFilter}
+          onDirectionFilter={onDirectionFilter}
+        />
+      )}
       <List
         dataSource={expenses}
         size={ANT_SIZES.LARGE}

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { filterExpenses, initialFilters } from '.';
 import { ExpensesActionColumn } from '../../components';
 import translations from '../../utils/translations/am.json';
 import { addExpense, deleteExpense, getExpenses } from '../../api/serverApi';
@@ -10,6 +11,7 @@ const useExpensesData = ({ newExpenseForm }) => {
   const [showProgress, setShowProgress] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
+  const [filters, setFilters] = useState(initialFilters);
 
   const queryClient = useQueryClient();
   const { EXPENSES_PAGE } = translations;
@@ -119,16 +121,51 @@ const useExpensesData = ({ newExpenseForm }) => {
     setShowExpenseModal(false);
   };
 
+  const filteredExpenses = filterExpenses(modifiedData, filters);
+
+  const handleDateFilter = (datesArray) => {
+    if (!datesArray?.length) return;
+    const [start, end] = datesArray;
+    setFilters((prev) => ({
+      ...prev,
+      date: { start: start ?? null, end: end ?? null },
+    }));
+  };
+
+  const handleDirectionFilter = (directionName) => {
+    if (!directionName) return;
+    if (Array.isArray(directionName)) {
+      return setFilters((filters) => ({
+        ...filters,
+        directions: directionName,
+      }));
+    }
+    const directions = filters.directions;
+
+    const newDirections = directions.includes(directionName)
+      ? directions.filter((direction) => direction !== directionName)
+      : [...directions, directionName];
+
+    setFilters((filters) => ({ ...filters, directions: newDirections }));
+  };
+
+  const handleClearFIlters = () => setFilters(initialFilters);
+
   return {
     error,
     columns,
     isError,
+    filters,
     showProgress,
     allowPopConfirm,
     showExpenseModal,
+    filteredExpenses,
+    handleDateFilter,
     setAllowPopConfirm,
     onOpenExpenseModal,
+    handleClearFIlters,
     onCloseExpenseModal,
+    handleDirectionFilter,
     onFinish: handleFinish,
     expenses: modifiedData,
     onDelete: handleDelete,

@@ -19,7 +19,7 @@ const Expenses = () => {
     error,
     isError,
     columns,
-    expenses,
+    filters,
     onDelete,
     onFinish,
     isLoading,
@@ -27,9 +27,13 @@ const Expenses = () => {
     onAddIsLoading,
     allowPopConfirm,
     showExpenseModal,
+    handleDateFilter,
+    filteredExpenses,
+    handleClearFIlters,
     setAllowPopConfirm,
     onOpenExpenseModal,
     onCloseExpenseModal,
+    handleDirectionFilter,
   } = useExpensesData({ newExpenseForm });
 
   const { expenseDirections, isLoading: eDIsloading } =
@@ -46,26 +50,36 @@ const Expenses = () => {
       <BrowserView>
         <ExpensesBrowserView
           form={form}
+          filters={filters}
           columns={columns}
-          expenses={expenses}
           onFinish={onFinish}
           isLoading={isLoading}
           dateFormat={dateFormat}
+          eDIsloading={eDIsloading}
+          expenses={filteredExpenses}
           eDOptions={expenseDirections}
           isLoadingAdd={onAddIsLoading}
+          onDateFilter={handleDateFilter}
           newExpenseForm={newExpenseForm}
+          onClearFilters={handleClearFIlters}
+          onDirectionFilter={handleDirectionFilter}
           isAddButtonDisabled={isAddButtonDisabled}
         />
       </BrowserView>
       <MobileView>
         <ExpensesMobileView
-          expenses={expenses}
+          filters={filters}
           onDelete={onDelete}
           isLoading={isLoading}
+          eDIsloading={eDIsloading}
           showProgress={showProgress}
+          expenses={filteredExpenses}
+          eDOptions={expenseDirections}
+          onDateFilter={handleDateFilter}
           allowPopConfirm={allowPopConfirm}
           onOpenExpenseModal={onOpenExpenseModal}
           setAllowPopConfirm={setAllowPopConfirm}
+          onDirectionFilter={handleDirectionFilter}
           onCloseExpenseModal={onCloseExpenseModal}
         />
       </MobileView>

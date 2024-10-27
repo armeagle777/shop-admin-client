@@ -69,7 +69,16 @@
     "ADD_ERROR_MESSAGE": "չհաջողվեց ավելացնել",
     "MODAL_TITLE": "Ավելացնել նոր ծախս",
     "EDIT_EXPENSE_BUTTON_TITLE": "Խմբագրել",
-    "DELETE_EXPENSE_BUTTON_TITLE": "Հեռացնել"
+    "DELETE_EXPENSE_BUTTON_TITLE": "Հեռացնել",
+    "FILTERS_TITLE": "Ֆիլտրեր",
+    "FILTERS_CLEAR_ALL_BUTTON_TITLE": "Մաքրել ֆիլտրերը",
+    "FILTERS_DATE_TITLE": "Ամսաթիվ",
+    "FILTERS_DIRECTION_TITLE": "Ուղղություն",
+    "FILTERS_DATE_START_PLACEHOLDER": "Սկիզբ",
+    "FILTERS_DATE_END_PLACEHOLDER": "Ավարտ",
+    "FILTERS_MOBILE_DATE_CONFIRM_TEXT": "Հաստատել",
+    "FILTERS_MOBILE_DATE_CANCEL_TEXT": "Փակել",
+    "FILTERS_MOBILE_DIRECTIONS_PLACEHOLDER": "Ծախսի ուղղություն"
   },
   "SHARED": {
     "TOAST_ERROR": "Սխալ է տեղի ունեցել",
