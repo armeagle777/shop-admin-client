@@ -3,7 +3,6 @@ export * from './Table';
 export * from './Loader';
 export * from './IconText';
 export * from './OrderCard';
-export * from './Menuslider';
 export * from './PopConfirm';
 export * from './AdminLayout';
 export * from './MenuSlider';
