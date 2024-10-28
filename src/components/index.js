@@ -6,6 +6,7 @@ export * from './OrderCard';
 export * from './Menuslider';
 export * from './PopConfirm';
 export * from './AdminLayout';
+export * from './MenuSlider';
 export * from './AddShopForm';
 export * from './OrdersTable';
 export * from './FloatButton';
