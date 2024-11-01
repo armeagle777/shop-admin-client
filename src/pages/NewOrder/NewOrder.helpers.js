@@ -1,9 +1,8 @@
 export const filterOption = (input, option) => {
-  const children = option.label?.props?.children || [];
-
-  const fName = children[1] || '';
-  const lName = children[3] || '';
-  const phoneNumber = children[5] || '';
+  const children = option.label?.props?.attributes || [];
+  const fName = children.first_name || '';
+  const lName = children.last_name || '';
+  const phoneNumber = children.phone_number || '';
 
   return (
     fName?.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||
