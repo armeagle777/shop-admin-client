@@ -17,6 +17,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { ANT_SIZES, BUTTON_TYPES } from '../../../utils/constants';
 import { useCategoriesData } from '../../../hooks';
 import { AddCategoryForm } from '../../../components/AddCategoryForm';
+import { filterCategories } from '../NewOrder.helpers';
 
 const FirstStepContent = ({ categoriesOptions, shopsOptions }) => {
   const { NEW_ORDER_PAGE } = tranlsations;
@@ -64,7 +65,7 @@ const FirstStepContent = ({ categoriesOptions, shopsOptions }) => {
               showSearch
               options={categoriesOptions}
               optionFilterProp="children"
-              // filterOption={filterOption}
+              filterOption={filterCategories}
               style={customerSelectStyles}
               placeholder={NEW_ORDER_PAGE.CAT_INPUT_LABEL}
             />

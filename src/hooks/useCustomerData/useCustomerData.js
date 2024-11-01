@@ -14,6 +14,7 @@ const useCustomerData = ({ addCustomerForm, customerId }) => {
     () => getCustomerById(customerId),
     {
       keepPreviousData: true,
+      enabled: !!customerId,
     },
   );
 
