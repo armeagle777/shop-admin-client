@@ -10,9 +10,23 @@ function getLastDayOfMonth(year, month) {
 }
 
 export function getCurrentYearAndPast11Months(expenses, orders) {
-  const months = ['Հունվ․', 'Փետր․', 'Մրտ․', 'Ապր․', 'Մայ․', 'Հնս', 'Հլս․', 'Օգստ․', 'Սեպտ․', 'Հոկտ․', 'Նոյ․', 'Դեկտ․'];
+  const months = [
+    'Հունվ․',
+    'Փետր․',
+    'Մրտ․',
+    'Ապր․',
+    'Մայ․',
+    'Հնս',
+    'Հլս․',
+    'Օգստ․',
+    'Սեպտ․',
+    'Հոկտ․',
+    'Նոյ․',
+    'Դեկտ․',
+  ];
 
   const currentDate = new Date();
+
   let currentYear = currentDate.getFullYear();
   let currentMonth = currentDate.getMonth();
 
@@ -20,16 +34,20 @@ export function getCurrentYearAndPast11Months(expenses, orders) {
 
   for (let i = 0; i < 12; i++) {
     const monthName = months[currentMonth];
-    const firstDayOfMonth = startOfMonth(new Date(currentYear, currentMonth, 1));
+    const firstDayOfMonth = startOfMonth(
+      new Date(currentYear, currentMonth, 1),
+    );
     const lastDayOfMonth = endOfMonth(new Date(currentYear, currentMonth, 1));
 
     const currentMonthOrders = orders?.filter((item) => {
       const itemDate = new Date(item?.attributes?.order_date);
       return (
-        item?.attributes?.status !== 'CANCELED' &&
+        item?.attributes?.status !== 'CANCELLED' &&
         item?.attributes?.status !== 'RETURNED' &&
-        (isEqual(itemDate, firstDayOfMonth) || isAfter(itemDate, firstDayOfMonth)) &&
-        (isEqual(itemDate, lastDayOfMonth) || isBefore(itemDate, lastDayOfMonth))
+        (isEqual(itemDate, firstDayOfMonth) ||
+          isAfter(itemDate, firstDayOfMonth)) &&
+        (isEqual(itemDate, lastDayOfMonth) ||
+          isBefore(itemDate, lastDayOfMonth))
       );
     });
 
@@ -37,8 +55,10 @@ export function getCurrentYearAndPast11Months(expenses, orders) {
       const itemDate = new Date(item?.attributes?.expense_date);
 
       return (
-        (isEqual(itemDate, firstDayOfMonth) || isAfter(itemDate, firstDayOfMonth)) &&
-        (isEqual(itemDate, lastDayOfMonth) || isBefore(itemDate, lastDayOfMonth))
+        (isEqual(itemDate, firstDayOfMonth) ||
+          isAfter(itemDate, firstDayOfMonth)) &&
+        (isEqual(itemDate, lastDayOfMonth) ||
+          isBefore(itemDate, lastDayOfMonth))
       );
     });
 

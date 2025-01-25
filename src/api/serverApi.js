@@ -119,6 +119,11 @@ export const getExpenses = async () => {
   return response.data;
 };
 
+export const getHomepagePillsStats = async () => {
+  const response = await serverApi.get('/statistics/homepage/pills');
+  return response.data;
+};
+
 export const deleteExpense = async (id) => {
   return await serverApi.put(`/expenses/${id}`, {
     data: { isActive: false },

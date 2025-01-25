@@ -29,7 +29,7 @@ const useCustomerData = ({ addCustomerForm, customerId }) => {
       toast.success(messages.customers.createSuccess, {
         progress: undefined,
       });
-      setShowAddCustomerModal(false);
+      setShowCustomerModal(false);
       addCustomerForm.resetFields();
     },
     onError: (error, variables, context, mutation) => {

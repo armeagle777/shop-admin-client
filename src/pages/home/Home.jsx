@@ -20,14 +20,39 @@ import {
 } from 'recharts';
 
 import { getCurrentYearAndPast11Months } from './Home.helpers';
-import { getCustomers, getExpenses, getOrders } from '../../api/serverApi';
+import {
+  getCustomers,
+  getExpenses,
+  getHomepagePillsStats,
+  getOrders,
+} from '../../api/serverApi';
 import { accessoriesCategories, accessoryIds } from '../../utils/constants';
 
 const Home = () => {
+  const {
+    data: statisticsData,
+    isLoading: isStatLoading,
+    isFetching: isStatsFetching,
+    isError: isStatsError,
+    error: statsError,
+  } = useQuery(['homepage-pills-statistics'], getHomepagePillsStats);
+
+  const {
+    customersCount,
+    meanIncome,
+    ordersCount,
+    surplus,
+    nonAccessoryCharData,
+    accessoryCharData,
+  } = {
+    ...statisticsData,
+  };
+
   const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
     keepPreviousData: true,
   });
-  const customersCount = delve(customers, 'meta.pagination.total');
+  const customersCount_old = delve(customers, 'meta.pagination.total');
+  console.log('customersCount_old:::::: ', customersCount_old);
 
   const { data: orders } = useQuery(['orders'], () => getOrders({}), {
     keepPreviousData: false,
@@ -94,19 +119,30 @@ const Home = () => {
       return acc;
     }, 0);
 
-  const ordersCount = orders?.length;
+  const ordersCount_old = orders?.length;
+  console.log('ordersCount_old:::::: ', ordersCount_old);
 
-  const chartData = getCurrentYearAndPast11Months(
+  const chartData_old = getCurrentYearAndPast11Months(
     nonAccessoriesExpenses,
     nonAccsorriesOrders,
   );
-  const incomes = chartData.map((monthData) => monthData['Զուտ եկամուտ']);
-  const meanIncome = _.mean(incomes);
+  console.log('chartData_old:::::: ', chartData_old);
+
+  const incomes = chartData_old.map((monthData) => monthData['Զուտ եկամուտ']);
+  const meanIncome_old = _.mean(incomes);
+  console.log('meanIncome_old:::::: ', meanIncome_old);
 
   const accessoriesChartData = getCurrentYearAndPast11Months(
     accesorriesExpenses,
     accsorriesOrders,
   );
+  console.log('accessoriesChartData:::::: ', accessoriesChartData);
+
+  const surplus_old =
+    availableOrdersSum && orderedOrdersSum
+      ? availableOrdersSum + orderedOrdersSum
+      : 0;
+  console.log('surplus_old:::::: ', surplus_old);
 
   const { Text } = Typography;
   const formatter = (value) => <CountUp end={value} separator="," />;
@@ -223,7 +259,7 @@ const Home = () => {
                 <ComposedChart
                   width={500}
                   height={400}
-                  data={chartData}
+                  data={nonAccessoryCharData}
                   margin={{
                     top: 10,
                     right: 30,
@@ -358,11 +394,7 @@ const Home = () => {
                 >
                   <Statistic
                     title="Մնացորդ"
-                    value={
-                      availableOrdersSum && orderedOrdersSum
-                        ? availableOrdersSum + orderedOrdersSum
-                        : 0
-                    }
+                    value={surplus || 0}
                     formatter={formatter}
                   />
                 </div>
@@ -379,7 +411,7 @@ const Home = () => {
                 <BarChart
                   width={500}
                   height={300}
-                  data={accessoriesChartData}
+                  data={accessoryCharData}
                   margin={{
                     top: 5,
                     right: 30,
@@ -604,11 +636,7 @@ const Home = () => {
             >
               <Statistic
                 title="Մնացորդ"
-                value={
-                  availableOrdersSum && orderedOrdersSum
-                    ? availableOrdersSum + orderedOrdersSum
-                    : 0
-                }
+                value={surplus || 0}
                 formatter={formatter}
               />
             </div>
@@ -623,7 +651,7 @@ const Home = () => {
               <ComposedChart
                 width={500}
                 height={400}
-                data={chartData}
+                data={nonAccessoryCharData}
                 margin={{
                   top: 10,
                   right: 30,
@@ -675,7 +703,7 @@ const Home = () => {
               <BarChart
                 width={500}
                 height={300}
-                data={accessoriesChartData}
+                data={accessoryCharData}
                 margin={{
                   top: 5,
                   right: 30,
