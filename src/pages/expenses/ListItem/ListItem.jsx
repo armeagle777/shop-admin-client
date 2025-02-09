@@ -6,6 +6,7 @@ import { IconText, PopConfirm } from '../../../components';
 const ListItem = ({
   itemId,
   amount,
+  comment,
   direction,
   isLoading,
   handleDelete,
@@ -42,6 +43,7 @@ const ListItem = ({
       <Skeleton loading={isLoading} active>
         <List.Item.Meta
           title={`${amount} դր -> ${direction.data.attributes.name}`}
+          description={comment || ''}
         />
       </Skeleton>
     </List.Item>

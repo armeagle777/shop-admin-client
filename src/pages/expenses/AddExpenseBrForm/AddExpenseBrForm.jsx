@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, InputNumber, Select } from 'antd';
+import { Button, DatePicker, Form, InputNumber, Input, Select } from 'antd';
 
 import {
   formItemNames,
@@ -52,7 +52,6 @@ const AddExpenseBrForm = ({
           placeholder={EXPENSES_PAGE.DIRECTION_PLACEHOLDER}
         />
       </Form.Item>
-
       <Form.Item
         name={formItemNames.EXOENSE_DATE}
         style={formItemsStyles.EXPENSE_DATE}
@@ -62,6 +61,13 @@ const AddExpenseBrForm = ({
           style={formItemsStyles.EXPENSE_DATE_DATEPICKER}
           placeholder={EXPENSES_PAGE.EXPENSE_DATE_PLACEHOLDER}
         />
+      </Form.Item>
+      <Form.Item
+        name={formItemNames.COMMENT}
+        rules={formItemsRules.COMMENT}
+        style={formItemsStyles.COMMENT}
+      >
+        <Input placeholder={EXPENSES_PAGE.COMMENT_PLACEHOLDER} />
       </Form.Item>
       <Button
         loading={isLoadingAdd}

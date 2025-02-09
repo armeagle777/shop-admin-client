@@ -25,11 +25,12 @@ const ExpensesMobileView = ({
   setAllowPopConfirm,
 }) => {
   const renderItem = (item, index) => {
-    const { amount, key, direction, expense_date } = { ...item };
+    const { amount, key, direction, expense_date, comment } = { ...item };
     return (
       <ListItem
         itemId={key}
         amount={amount}
+        comment={comment}
         direction={direction}
         expense_date={expense_date}
       />

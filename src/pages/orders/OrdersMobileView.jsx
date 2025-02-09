@@ -7,6 +7,7 @@ const OrdersMobileView = ({
   showProgress,
   setShowProgress,
   handleDelete,
+  filter,
 }) => {
   const { Search } = Input;
   return (
@@ -53,6 +54,8 @@ const OrdersMobileView = ({
             status={status}
             queryString={queryString}
             handleDelete={handleDelete}
+            order={attributes}
+            filter={filter}
           />
         );
       })}

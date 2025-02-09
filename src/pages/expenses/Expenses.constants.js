@@ -5,7 +5,7 @@ export const mbViewListPgStyles = {
 
 export const addExpenseBrFormProps = {
   style: {
-    maxWidth: 900,
+    maxWidth: 1100,
   },
   labelCol: {
     span: 8,
@@ -20,10 +20,15 @@ export const formItemNames = {
   DIRECTION: 'direction',
   EXOENSE_DATE: 'expense_date',
   FORM: 'add-expenses-direction',
+  COMMENT: 'comment',
 };
 
 export const formItemsStyles = {
   EXPENSE_DATE: {
+    width: '320px',
+    display: 'inline-block',
+  },
+  COMMENT: {
     width: '320px',
     display: 'inline-block',
   },
@@ -51,6 +56,11 @@ export const formItemsRules = {
   DIRECTION: [
     {
       required: true,
+    },
+  ],
+  COMMENT: [
+    {
+      required: false,
     },
   ],
 };

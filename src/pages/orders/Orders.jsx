@@ -169,6 +169,7 @@ const Orders = () => {
           setShowProgress={setShowProgress}
           filteredData={data}
           handleDelete={handleDelete}
+          filter={filter}
         />
       </MobileView>
       <FloatButton

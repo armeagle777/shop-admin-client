@@ -7,19 +7,22 @@ import { Avatar, Card, Image } from 'antd';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   EditOutlined,
+  RedoOutlined,
   DeleteOutlined,
   StepForwardOutlined,
 } from '@ant-design/icons';
 
-import { editOrder } from '../../api/serverApi';
+import { editOrder, removeOrder } from '../../api/serverApi';
 import { messages } from '../../utils/constants';
 import { formatImageUrl } from '../../utils/helpers';
 import { PopConfirm, PopConfirmEdit } from '..';
 
 const OrderCard = ({
   name,
+  order,
   status,
   images,
+  filter,
   orderId,
   customer,
   net_cost,
@@ -38,6 +41,8 @@ const OrderCard = ({
     customer,
     'data.attributes.Avatar.data.attributes.url',
   );
+  console.log('filter:::::: ', filter);
+
   // const image = images?.data ? images?.data[0] : undefined;
   const orderImages = images?.data || [];
   const orderImageUrls =
@@ -106,6 +111,27 @@ const OrderCard = ({
     },
   });
 
+  const removeItemMutation = useMutation({
+    mutationFn: ({ record, newStatus }) => {
+      return removeOrder({ record, newStatus });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['orders', filter]);
+      toast.success(messages.orders.statusChangeSuccess, {
+        progress: undefined,
+      });
+    },
+    onSettled: (record) => {
+      setShowProgress(false);
+      setAllowPopConfirm(false);
+    },
+    onError: (err, variables, context) => {
+      toast.error(messages.orders.deleteError, {
+        progress: undefined,
+      });
+    },
+  });
+
   const onChangeStatusToAvailable = (record) => {
     setShowProgress(true);
     editItemMutation.mutate({ record, newStatus: 'AVAILABLE' });
@@ -114,6 +140,12 @@ const OrderCard = ({
   const onChangeStatusToDelivered = (record) => {
     setShowProgress(true);
     editItemMutation.mutate({ record, newStatus: 'DELIVERED' });
+  };
+
+  const onReturnOrCancel = ({ id, record, newStatus }) => {
+    record.key = id;
+    setShowProgress(true);
+    removeItemMutation.mutate({ record, id, newStatus });
   };
 
   return (
@@ -183,6 +215,22 @@ const OrderCard = ({
           buttonTitle="Ստացվել է"
           icon={<StepForwardOutlined />}
           disabled={status !== 'ORDERED' && status !== 'AVAILABLE'}
+        />,
+        <PopConfirmEdit
+          loading={removeItemMutation.isLoading}
+          itemId={orderId}
+          onConfirm={() =>
+            onReturnOrCancel({
+              id: orderId,
+              record: order,
+              newStatus: 'RETURNED',
+            })
+          }
+          showProgress={showProgress}
+          allowPopConfirm={allowPopConfirm}
+          setAllowPopConfirm={setAllowPopConfirm}
+          buttonTitle="Վերադարձնել"
+          icon={<RedoOutlined />}
         />,
       ]}
     >

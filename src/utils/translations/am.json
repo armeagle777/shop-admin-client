@@ -61,6 +61,7 @@
   "EXPENSES_PAGE": {
     "BROWSER_ADD_BUTTON_TEXT": "Ավելացնել",
     "DIRECTION_PLACEHOLDER": "Ուղղություն",
+    "COMMENT_PLACEHOLDER": "Նկարագրություն",
     "EXPENSE_DATE_PLACEHOLDER": "Ընտրեք ամսաթիվը",
     "AMOUNT_PLACEHOLDER": "Գումար",
     "DELETE_SUCCESS_MESSAGE": "հաջողությամբ հեռացվել է",

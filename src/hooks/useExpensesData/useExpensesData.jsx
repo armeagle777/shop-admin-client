@@ -47,6 +47,10 @@ const useExpensesData = ({ newExpenseForm }) => {
       dataIndex: 'expense_date',
     },
     {
+      title: 'Նկարագրություն',
+      dataIndex: 'comment',
+    },
+    {
       title: 'Գործողություններ',
       dataIndex: 'operation',
       render: (_, record) => {

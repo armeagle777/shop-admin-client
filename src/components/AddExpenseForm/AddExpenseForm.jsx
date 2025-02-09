@@ -1,6 +1,6 @@
 import { isMobile } from 'react-device-detect';
-import { Button, DatePicker, Form, InputNumber, Select } from 'antd';
-
+import { Button, DatePicker, Form, Input, InputNumber, Select } from 'antd';
+import translations from '../../utils/translations/am.json';
 const layout = {
   labelCol: {
     span: 8,
@@ -26,6 +26,7 @@ const AddExpenseForm = ({
   eDOptions,
   dateFormat,
 }) => {
+  const { EXPENSES_PAGE } = translations;
   const onFinish = (values) => {
     onSubmit(values);
   };
@@ -100,6 +101,20 @@ const AddExpenseForm = ({
           placeholder="Ընտրեք ամսաթիվը"
           style={{ width: '100%' }}
         />
+      </Form.Item>
+      <Form.Item
+        name="comment"
+        rules={[
+          {
+            required: false,
+          },
+        ]}
+        style={{
+          display: 'inline-block',
+          width: '100%',
+        }}
+      >
+        <Input placeholder={EXPENSES_PAGE.COMMENT_PLACEHOLDER} />
       </Form.Item>
       {/* <Button
         type="primary"

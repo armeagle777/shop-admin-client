@@ -748,6 +748,8 @@ const OrdersTable = ({
   };
 
   const onReturnOrCancel = ({ id, record, newStatus }) => {
+    console.log('record:::::: ', record);
+
     setShowProgress(true);
     removeItemMutation.mutate({ record, id, newStatus });
   };
