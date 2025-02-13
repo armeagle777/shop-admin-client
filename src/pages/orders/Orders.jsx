@@ -7,7 +7,11 @@ import { FloatButton, Form, Input, Segmented } from 'antd';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { OrdersTable } from '../../components';
-import { messages } from '../../utils/constants';
+import {
+  DEFAULT_PAGE,
+  DEFAULT_PAGE_SIZE,
+  messages,
+} from '../../utils/constants';
 import OrdersMobileView from './OrdersMobileView';
 import { deleteOrder, getOrders } from '../../api/serverApi';
 import {
@@ -20,6 +24,8 @@ import {
 import './orders.styles.css';
 
 const Orders = () => {
+  const [page, setPage] = useState(DEFAULT_PAGE);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [showProgress, setShowProgress] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [queryString, setQueryString] = useState('');
@@ -68,23 +74,22 @@ const Orders = () => {
     );
   }, [filter, location]);
 
-  const {
-    data = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery(
-    ['orders', filter, queryString],
-    () => getOrders({ filter, query: queryString }),
+  const { data, isLoading, isError, error } = useQuery(
+    ['orders', filter, queryString, page, pageSize],
+    () => getOrders({ filter, query: queryString, page, pageSize }),
     {
       keepPreviousData: false,
     },
   );
+
+  const { data: ordersData = [], meta } = { ...data };
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
     if (e.target.value === '') setQueryString('');
   };
   const onSegmentChange = (e) => {
+    setPage(DEFAULT_PAGE);
+    setPageSize(DEFAULT_PAGE_SIZE);
     setFilter(segmentFilterValues[e]);
     setQueryString('');
     setSearchTerm('');
@@ -114,6 +119,14 @@ const Orders = () => {
     },
   });
 
+  const pageChangeHandle = (page, pageSize) => {
+    setPage(page);
+  };
+
+  const pageSizeChangeHandler = (current, size) => {
+    setPageSize(size);
+  };
+
   return (
     <>
       <BrowserView>
@@ -136,13 +149,18 @@ const Orders = () => {
           style={{ marginBottom: 10 }}
         />
         <OrdersTable
-          data={data}
+          data={ordersData}
           queryString={queryString}
           isLoading={isLoading}
           error={error}
           isError={isError}
           form={form}
           filter={filter}
+          totalCount={meta?.pagination?.total}
+          pageSize={meta?.pagination?.pageSize}
+          currentPage={meta?.pagination?.page}
+          onPageChange={pageChangeHandle}
+          onPageSizeChange={pageSizeChangeHandler}
         />
       </BrowserView>
       <MobileView>
@@ -167,9 +185,12 @@ const Orders = () => {
           queryString={queryString}
           showProgress={showProgress}
           setShowProgress={setShowProgress}
-          filteredData={data}
+          filteredData={ordersData}
           handleDelete={handleDelete}
           filter={filter}
+          totalCount={meta?.pagination?.total}
+          currentPage={meta?.pagination?.page}
+          onPageChange={pageChangeHandle}
         />
       </MobileView>
       <FloatButton

@@ -1,12 +1,18 @@
 import { Row, Col, Table as AntTable, Form } from 'antd';
+import { Pagination } from 'antd';
 
 const Table = ({
+  form,
   columns,
   dataSource,
-  form,
-  cancel,
   size = 'large',
   loading = false,
+  // new props
+  totalCount,
+  onPageChange,
+  pageSize = 10,
+  currentPage = 1,
+  onPageSizeChange,
 }) => {
   return (
     <Form form={form} component={false}>
@@ -14,13 +20,18 @@ const Table = ({
         <Col xs={24} sm={24} md={24} lg={24} xl={24}>
           <AntTable
             bordered
-            loading={loading}
-            dataSource={dataSource}
-            columns={columns}
-            rowClassName="editable-row"
             size={size}
+            loading={loading}
+            columns={columns}
+            dataSource={dataSource}
+            rowClassName="editable-row"
             pagination={{
-              onChange: cancel,
+              current: currentPage,
+              pageSize: pageSize,
+              total: totalCount,
+              onChange: onPageChange,
+              pageSizeOptions: [10, 20, 50],
+              onShowSizeChange: onPageSizeChange,
             }}
           />
         </Col>

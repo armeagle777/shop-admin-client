@@ -3,14 +3,20 @@ import { Button, Flex, Input } from 'antd';
 import { Table } from '../../components';
 
 const CustomersBrowserView = ({
-  onOpenCustomerModal,
-  isLoading,
-  columns,
-  modifiedData,
   form,
+  columns,
+  isLoading,
   searchTerm,
-  setSearchTerm,
+  modifiedData,
   handleSearch,
+  setSearchTerm,
+  onOpenCustomerModal,
+  //
+  pageSize,
+  totalCount,
+  currentPage,
+  onPageChange,
+  onPageSizeChange,
 }) => {
   const { Search } = Input;
 
@@ -23,13 +29,13 @@ const CustomersBrowserView = ({
       <Flex justify="space-between">
         <div>
           <Search
-            placeholder="Որոնում"
             allowClear
-            enterButton="Որոնել"
             size="large"
             value={searchTerm}
-            onChange={handleInputChange}
+            enterButton="Որոնել"
+            placeholder="Որոնում"
             onSearch={handleSearch}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -45,10 +51,15 @@ const CustomersBrowserView = ({
         </div>
       </Flex>
       <Table
-        loading={!!isLoading}
-        columns={columns}
-        dataSource={modifiedData}
         form={form}
+        columns={columns}
+        loading={!!isLoading}
+        dataSource={modifiedData}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </>
   );

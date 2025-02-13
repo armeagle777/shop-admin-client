@@ -21,6 +21,11 @@ const Categories = () => {
     isLoadingOnAdd,
     allowPopConfirm,
     setAllowPopConfirm,
+    onPageChange,
+    onPageSizeChange,
+    totalCount,
+    currentPage,
+    pageSize,
   } = useCategoriesData({ newCategoryForm });
 
   const validateMessages = {
@@ -46,6 +51,11 @@ const Categories = () => {
           isLoadingOnAdd={isLoadingOnAdd}
           newCategoryForm={newCategoryForm}
           validateMessages={validateMessages}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+          totalCount={totalCount}
+          currentPage={currentPage}
+          pageSize={pageSize}
         />
       </BrowserView>
       <MobileView>
@@ -60,6 +70,9 @@ const Categories = () => {
           newCategoryForm={newCategoryForm}
           validateMessages={validateMessages}
           setAllowPopConfirm={setAllowPopConfirm}
+          totalCount={totalCount}
+          currentPage={currentPage}
+          onPageChange={onPageChange}
         />
       </MobileView>
     </>

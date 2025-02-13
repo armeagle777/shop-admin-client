@@ -10,13 +10,14 @@ export const login = async (credentials) => {
 };
 
 //Customer endpoints
-export const getCustomers = async ({ query }) => {
+export const getCustomers = async ({ query, page = 1, pageSize = 10 }) => {
   const searchString = query
     ? `&filters[$or][0][first_name][$containsi]=${query}&filters[$or][1][last_name][$containsi]=${query}&filters[$or][2][phone_number][$containsi]=${query}`
     : '';
-  const response = await serverApi.get(
-    `/customers?filters[isActive][$eq]=true${searchString}&populate=*&sort[0]=id:desc`,
-  );
+
+  const queryString = `/customers?filters[isActive][$eq]=true${searchString}&populate=*&sort[0]=id:desc&pagination[page]=${page}&pagination[pageSize]=${pageSize}`;
+  const response = await serverApi.get(queryString);
+
   return response.data;
 };
 
@@ -46,9 +47,12 @@ export const deleteCustomer = async (id) => {
 };
 
 //Shop endpoints
-export const getShops = async () => {
+export const getShops = async ({ page = 1, pageSize = 10, searchText }) => {
+  const searchQuery = searchText
+    ? `&filters[name][$containsi]=${searchText}`
+    : '';
   const response = await serverApi.get(
-    '/shops?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*',
+    `/shops?filters[isActive][$eq]=true${searchQuery}&populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}`,
   );
   return response.data;
 };
@@ -72,9 +76,9 @@ export const addExpenseDirection = async (newDirection) => {
   });
 };
 
-export const getExpenseDirections = async () => {
+export const getExpenseDirections = async ({ page = 1, pageSize = 10 }) => {
   const response = await serverApi.get(
-    '/expense-directions?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*',
+    `/expense-directions?filters[isActive][$eq]=true&populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}`,
   );
   return response.data;
 };
@@ -86,9 +90,16 @@ export const deleteExpenseDirections = async (id) => {
 };
 
 //Category endpoints
-export const getCategories = async () => {
+export const getCategories = async ({
+  page = 1,
+  pageSize = 10,
+  searchText,
+}) => {
+  const searchQuery = searchText
+    ? `&filters[name][$containsi]=${searchText}`
+    : '';
   const response = await serverApi.get(
-    '/categories?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*',
+    `/categories?filters[isActive][$eq]=true${searchQuery}&populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}`,
   );
   return response.data;
 };
@@ -112,10 +123,27 @@ export const addExpense = async (newExpense) => {
   });
 };
 
-export const getExpenses = async () => {
-  const response = await serverApi.get(
-    '/expenses?filters[isActive][$eq]=true&pagination[pageSize]=1000&populate=*&sort[0]=expense_date:desc',
-  );
+export const getExpenses = async ({ page = 1, pageSize = 10, filters }) => {
+  const { directions, date } = filters;
+
+  let query = `/expenses?filters[isActive][$eq]=true&populate=*&sort[0]=expense_date:desc&pagination[page]=${page}&pagination[pageSize]=${pageSize}`;
+  //Filter by direction
+  if (directions?.length > 0) {
+    directions.forEach((id, index) => {
+      query += `&filters[direction][id][$in][${index}]=${id}`;
+    });
+  }
+
+  //Filters by expense date
+  if (date.start) {
+    query += `&filters[expense_date][$gte]=${date.start}`;
+  }
+
+  if (date.end) {
+    query += `&filters[expense_date][$lte]=${date.end}`;
+  }
+
+  const response = await serverApi.get(query);
   return response.data;
 };
 
@@ -144,16 +172,18 @@ export const removeOrder = async ({ record, newStatus }) => {
   });
 };
 
-export const getOrders = async ({ filter, query }) => {
+export const getOrders = async ({ filter, query, page = 1, pageSize = 10 }) => {
   const searchString = query
     ? `&filters[$or][0][name][$containsi]=${query}&filters[$or][1][description][$containsi]=${query}&filters[$or][2][customer][first_name][$containsi]=${query}&filters[$or][3][customer][last_name][$containsi]=${query}&filters[$or][4][customer][phone_number][$containsi]=${query}`
     : '';
-  const url = filter
-    ? `/orders?filters[isActive][$eq]=true&filters[status][$eq]=${filter}${searchString}&pagination[pageSize]=10000&populate[customer][populate][0]=addresses&populate[customer][populate][1]=Avatar&populate[customer][populate][2]=contacts&populate[shop][populate][0]=logo&populate[images][populate]=url&populate[category][populate]=image&sort[0]=order_date:desc`
-    : `/orders?filters[isActive][$eq]=true${searchString}&pagination[pageSize]=10000&populate[customer][populate][0]=addresses&populate[customer][populate][1]=Avatar&populate[customer][populate][2]=contacts&populate[shop][populate][0]=logo&populate[images][populate]=url&populate[category][populate]=image&sort[0]=order_date:desc`;
+
+  const baseUrl = `/orders?filters[isActive][$eq]=true${searchString}&pagination[page]=${page}&pagination[pageSize]=${pageSize}&populate[customer][populate][0]=addresses&populate[customer][populate][1]=Avatar&populate[customer][populate][2]=contacts&populate[shop][populate][0]=logo&populate[images][populate]=url&populate[category][populate]=image&sort[0]=order_date:desc`;
+
+  const url = filter ? `${baseUrl}&filters[status][$eq]=${filter}` : baseUrl;
+
   const response = await serverApi.get(url);
 
-  return response.data.data;
+  return response.data;
 };
 
 export const getOrderById = async (id) => {

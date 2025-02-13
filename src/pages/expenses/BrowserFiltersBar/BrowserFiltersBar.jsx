@@ -66,8 +66,9 @@ const BrowserFiltersBar = ({
             <CheckboxButton
               key={index}
               text={directionName.label}
+              value={directionName.value}
               onDirectionFilter={onDirectionFilter}
-              checked={filters.directions.includes(directionName.label)}
+              checked={filters.directions.includes(directionName.value)}
             />
           ))
         )}

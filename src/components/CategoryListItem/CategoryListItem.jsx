@@ -3,7 +3,16 @@ import { DeleteOutlined, StarOutlined } from '@ant-design/icons';
 
 import { PopConfirm, IconText } from '..';
 
-const CategoryListItem = ({ itemId, name, orders }) => {
+const CategoryListItem = ({
+  itemId,
+  name,
+  orders,
+  isLoading,
+  onDelete,
+  showProgress,
+  allowPopConfirm,
+  setAllowPopConfirm,
+}) => {
   return (
     <List.Item
       actions={

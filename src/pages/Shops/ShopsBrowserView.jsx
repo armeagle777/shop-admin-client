@@ -11,6 +11,11 @@ const ShopsBrowserView = ({
   modifiedData,
   onOpenShopModal,
   shopsTableColumns,
+  onPageChange,
+  onPageSizeChange,
+  totalCount,
+  currentPage,
+  pageSize,
 }) => {
   const { SHOPS_PAGE } = translations;
 
@@ -28,6 +33,11 @@ const ShopsBrowserView = ({
         loading={isLoading}
         dataSource={modifiedData}
         columns={shopsTableColumns}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        pageSize={pageSize}
       />
     </>
   );

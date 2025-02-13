@@ -28,6 +28,9 @@ const CategoriesMobileView = ({
   allowPopConfirm,
   validateMessages,
   setAllowPopConfirm,
+  totalCount,
+  currentPage,
+  onPageChange,
 }) => {
   const { CATEGORIES_PAGE } = translations;
 
@@ -76,7 +79,12 @@ const CategoriesMobileView = ({
       <List
         dataSource={data}
         size={ANT_SIZES.LARGE}
-        pagination={listStyles}
+        pagination={{
+          ...listStyles,
+          total: totalCount,
+          current: currentPage,
+          onChange: onPageChange,
+        }}
         renderItem={renderListItem}
         itemLayout={ANT_LAYOUTS.VERTICAL}
       />

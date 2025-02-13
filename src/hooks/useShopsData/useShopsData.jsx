@@ -8,8 +8,11 @@ import { PopConfirm } from '../../components';
 import { generateRandomColor } from '../../utils/helpers';
 import translations from '../../utils/translations/am.json';
 import { addShop, deleteShop, getShops } from '../../api/serverApi';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../../utils/constants';
 
 const useShopsData = ({ addShopForm }) => {
+  const [page, setPage] = useState(DEFAULT_PAGE);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [showProgress, setShowProgress] = useState(false);
   const [showShopModal, setShowShopModal] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
@@ -18,8 +21,8 @@ const useShopsData = ({ addShopForm }) => {
   const queryClient = useQueryClient();
 
   const { data, isLoading, isFetching, isError, error } = useQuery(
-    ['shops'],
-    () => getShops(),
+    ['shops', page, pageSize],
+    () => getShops({ page, pageSize }),
     {
       keepPreviousData: true,
     },
@@ -149,6 +152,14 @@ const useShopsData = ({ addShopForm }) => {
     },
   ];
 
+  const pageChangeHandle = (page, pageSize) => {
+    setPage(page);
+  };
+
+  const pageSizeChangeHandler = (current, size) => {
+    setPageSize(size);
+  };
+
   return {
     error,
     isError,
@@ -161,8 +172,13 @@ const useShopsData = ({ addShopForm }) => {
     shopsTableColumns,
     setAllowPopConfirm,
     shopsList: modifiedData,
+    onPageChange: pageChangeHandle,
+    onPageSizeChange: pageSizeChangeHandler,
     isLoadingOnAdd: addItemMutation.isLoading,
     isShopListLoading: isFetching || isLoading,
+    totalCount: data?.meta?.pagination?.total,
+    currentPage: data?.meta?.pagination?.page,
+    pageSize: data?.meta?.pagination?.pageSize,
   };
 };
 

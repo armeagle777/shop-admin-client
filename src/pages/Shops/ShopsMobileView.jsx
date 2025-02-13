@@ -12,6 +12,9 @@ const ShopsMobileView = ({
   allowPopConfirm,
   onOpenShopModal,
   setAllowPopConfirm,
+  totalCount,
+  onPageChange,
+  currentPage,
 }) => {
   const renderListItem = (item, index) => (
     <ShopsListItem
@@ -30,7 +33,12 @@ const ShopsMobileView = ({
         size={ANT_SIZES.LARGE}
         dataSource={modifiedData}
         renderItem={renderListItem}
-        pagination={paginationStyles}
+        pagination={{
+          ...paginationStyles,
+          current: currentPage,
+          total: totalCount,
+          onChange: onPageChange,
+        }}
         itemLayout={ANT_LAYOUTS.VERTICAL}
       />
       <FloatButton onClick={onOpenShopModal} />

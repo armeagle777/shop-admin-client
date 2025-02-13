@@ -24,6 +24,11 @@ const Shops = () => {
     setShowShopModal,
     shopsTableColumns,
     isShopListLoading,
+    onPageChange,
+    onPageSizeChange,
+    totalCount,
+    currentPage,
+    pageSize,
     setAllowPopConfirm,
   } = useShopsData({ addShopForm });
 
@@ -59,6 +64,11 @@ const Shops = () => {
           isLoading={isShopListLoading}
           onOpenShopModal={handleOpenModal}
           shopsTableColumns={shopsTableColumns}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+          totalCount={totalCount}
+          currentPage={currentPage}
+          pageSize={pageSize}
         />
       </BrowserView>
       <MobileView>
@@ -70,6 +80,9 @@ const Shops = () => {
           onOpenShopModal={handleOpenModal}
           allowPopConfirm={allowPopConfirm}
           setAllowPopConfirm={setAllowPopConfirm}
+          totalCount={totalCount}
+          onPageChange={onPageChange}
+          currentPage={currentPage}
         />
       </MobileView>
       <Modal

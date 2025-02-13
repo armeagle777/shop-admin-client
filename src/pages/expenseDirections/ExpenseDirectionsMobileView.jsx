@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons';
 
 import { PopConfirm } from '../../components';
+import React from 'react';
 
 const IconText = ({ icon, text }) => (
   <Space>
@@ -25,6 +26,9 @@ const ExpenseDirectionsMobileView = ({
   showProgress,
   allowPopConfirm,
   setAllowPopConfirm,
+  totalCount,
+  currentPage,
+  onPageChange,
 }) => {
   return (
     <Space direction="vertical" style={{ width: '100%' }}>
@@ -61,6 +65,9 @@ const ExpenseDirectionsMobileView = ({
         pagination={{
           position: 'bottom',
           align: 'center',
+          current: currentPage,
+          total: totalCount,
+          onChange: onPageChange,
         }}
         size="large"
         dataSource={modifiedData}

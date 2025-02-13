@@ -10,11 +10,17 @@ import {
   getExpenseDirections,
 } from '../../api/serverApi';
 import { Alert } from '../../components';
-import { messages } from '../../utils/constants';
+import {
+  DEFAULT_PAGE,
+  DEFAULT_PAGE_SIZE,
+  messages,
+} from '../../utils/constants';
 import ExpenseDirectionsBrowserView from './ExpenseDirectionsBrowserView';
 import ExpenseDirectionsMobileView from './ExpenseDirectionsMobileView';
 
 const ExpenseDirections = () => {
+  const [page, setPage] = useState(DEFAULT_PAGE);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const queryClient = useQueryClient();
   const [showProgress, setShowProgress] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
@@ -24,9 +30,13 @@ const ExpenseDirections = () => {
     isFetching,
     isError,
     error,
-  } = useQuery(['expense-directions'], () => getExpenseDirections(), {
-    keepPreviousData: false,
-  });
+  } = useQuery(
+    ['expense-directions', page, pageSize],
+    () => getExpenseDirections({ page, pageSize }),
+    {
+      keepPreviousData: false,
+    },
+  );
 
   const validateMessages = {
     required: '${label} պարտադիր է!',
@@ -48,7 +58,7 @@ const ExpenseDirections = () => {
     (itemId) => deleteExpenseDirections(itemId),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('expense-directions');
+        queryClient.invalidateQueries(['expense-directions', page, pageSize]);
         toast.success(messages.shops.deleteSuccess, {
           progress: undefined,
         });
@@ -76,7 +86,7 @@ const ExpenseDirections = () => {
 
   const addItemMutation = useMutation((item) => addExpenseDirection(item), {
     onSuccess: (data) => {
-      queryClient.invalidateQueries('expense-directions');
+      queryClient.invalidateQueries(['expense-directions', page, pageSize]);
       toast.success(messages.customers.createSuccess, {
         progress: undefined,
       });
@@ -95,6 +105,14 @@ const ExpenseDirections = () => {
     return <Alert type="error" message={error.message} />;
   }
 
+  const pageChangeHandle = (page, pageSize) => {
+    setPage(page);
+  };
+
+  const pageSizeChangeHandler = (current, size) => {
+    setPageSize(size);
+  };
+
   return (
     <>
       <BrowserView>
@@ -109,6 +127,11 @@ const ExpenseDirections = () => {
           showProgress={showProgress}
           allowPopConfirm={allowPopConfirm}
           setAllowPopConfirm={setAllowPopConfirm}
+          totalCount={data?.meta?.pagination?.total}
+          pageSize={data?.meta?.pagination?.pageSize}
+          currentPage={data?.meta?.pagination?.page}
+          onPageChange={pageChangeHandle}
+          onPageSizeChange={pageSizeChangeHandler}
         />
       </BrowserView>
       <MobileView>
@@ -123,6 +146,9 @@ const ExpenseDirections = () => {
           showProgress={showProgress}
           allowPopConfirm={allowPopConfirm}
           setAllowPopConfirm={setAllowPopConfirm}
+          totalCount={data?.meta?.pagination?.total}
+          currentPage={data?.meta?.pagination?.page}
+          onPageChange={pageChangeHandle}
         />
       </MobileView>
     </>

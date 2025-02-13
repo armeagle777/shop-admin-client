@@ -18,6 +18,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
+import { Skeleton } from 'antd';
 
 import { getCurrentYearAndPast11Months } from './Home.helpers';
 import {
@@ -48,45 +49,44 @@ const Home = () => {
     ...statisticsData,
   };
 
-  const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
-    keepPreviousData: true,
-  });
-  const customersCount_old = delve(customers, 'meta.pagination.total');
-  console.log('customersCount_old:::::: ', customersCount_old);
+  // const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
+  //   keepPreviousData: true,
+  // });
+  // const customersCount_old = delve(customers, 'meta.pagination.total');
 
-  const { data: orders } = useQuery(['orders'], () => getOrders({}), {
-    keepPreviousData: false,
-  });
+  // const { data: orders } = useQuery(['orders'], () => getOrders({}), {
+  //   keepPreviousData: false,
+  // });
 
-  const { data: expensesResponse } = useQuery(
-    ['expenses'],
-    () => getExpenses(),
-    {
-      keepPreviousData: false,
-    },
-  );
+  // const { data: expensesResponse } = useQuery(
+  //   ['expenses'],
+  //   () => getExpenses(),
+  //   {
+  //     keepPreviousData: false,
+  //   },
+  // );
 
-  const nonAccessoriesExpenses = expensesResponse?.data?.filter(
-    (ex) => !accessoryIds.includes(ex.attributes.direction.data.id),
-  );
+  // const nonAccessoriesExpenses = expensesResponse?.data?.filter(
+  //   (ex) => !accessoryIds.includes(ex.attributes.direction.data.id),
+  // );
 
-  const accesorriesExpenses = expensesResponse?.data?.filter((ex) =>
-    accessoryIds.includes(ex.attributes.direction.data.id),
-  );
-  const { data: availableOrders } = useQuery(
-    ['orders', { filter: 'AVAILABLE' }],
-    () => getOrders({ filter: 'AVAILABLE' }),
-    {
-      keepPreviousData: false,
-    },
-  );
-  const { data: orderedOrders } = useQuery(
-    ['orders', { filter: 'ORDERED' }],
-    () => getOrders({ filter: 'ORDERED' }),
-    {
-      keepPreviousData: false,
-    },
-  );
+  // const accesorriesExpenses = expensesResponse?.data?.filter((ex) =>
+  //   accessoryIds.includes(ex.attributes.direction.data.id),
+  // );
+  // const { data: availableOrders } = useQuery(
+  //   ['orders', { filter: 'AVAILABLE' }],
+  //   () => getOrders({ filter: 'AVAILABLE' }),
+  //   {
+  //     keepPreviousData: false,
+  //   },
+  // );
+  // const { data: orderedOrders } = useQuery(
+  //   ['orders', { filter: 'ORDERED' }],
+  //   () => getOrders({ filter: 'ORDERED' }),
+  //   {
+  //     keepPreviousData: false,
+  //   },
+  // );
 
   // const { data: deliveredOrders } = useQuery(
   //     ['orders', { filter: 'DELIVERED' }],
@@ -96,53 +96,48 @@ const Home = () => {
   //     }
   // );
 
-  const nonAccsorriesOrders = orders?.filter(
-    (o) => !accessoriesCategories.includes(o.attributes.category.data.id),
-  );
-  const accsorriesOrders = orders?.filter((o) =>
-    accessoriesCategories.includes(o.attributes.category.data.id),
-  );
+  // const nonAccsorriesOrders = orders?.filter(
+  //   (o) => !accessoriesCategories.includes(o.attributes.category.data.id),
+  // );
+  // const accsorriesOrders = orders?.filter((o) =>
+  //   accessoriesCategories.includes(o.attributes.category.data.id),
+  // );
 
-  const availableOrdersSum = availableOrders
-    ?.filter((o) => o.attributes.category.data.id !== 18)
-    ?.reduce((acc, el) => {
-      acc += el.attributes.net_cost;
+  // const availableOrdersSum = availableOrders
+  //   ?.filter((o) => o.attributes.category.data.id !== 18)
+  //   ?.reduce((acc, el) => {
+  //     acc += el.attributes.net_cost;
 
-      return acc;
-    }, 0);
+  //     return acc;
+  //   }, 0);
 
-  const orderedOrdersSum = orderedOrders
-    ?.filter((o) => o.attributes.category.data.id !== 18)
-    ?.reduce((acc, el) => {
-      acc += el.attributes.net_cost;
+  // const orderedOrdersSum = orderedOrders
+  //   ?.filter((o) => o.attributes.category.data.id !== 18)
+  //   ?.reduce((acc, el) => {
+  //     acc += el.attributes.net_cost;
 
-      return acc;
-    }, 0);
+  //     return acc;
+  //   }, 0);
 
-  const ordersCount_old = orders?.length;
-  console.log('ordersCount_old:::::: ', ordersCount_old);
+  // const ordersCount_old = orders?.length;
 
-  const chartData_old = getCurrentYearAndPast11Months(
-    nonAccessoriesExpenses,
-    nonAccsorriesOrders,
-  );
-  console.log('chartData_old:::::: ', chartData_old);
+  // const chartData_old = getCurrentYearAndPast11Months(
+  //   nonAccessoriesExpenses,
+  //   nonAccsorriesOrders,
+  // );
 
-  const incomes = chartData_old.map((monthData) => monthData['Զուտ եկամուտ']);
-  const meanIncome_old = _.mean(incomes);
-  console.log('meanIncome_old:::::: ', meanIncome_old);
+  // const incomes = chartData_old.map((monthData) => monthData['Զուտ եկամուտ']);
+  // const meanIncome_old = _.mean(incomes);
 
-  const accessoriesChartData = getCurrentYearAndPast11Months(
-    accesorriesExpenses,
-    accsorriesOrders,
-  );
-  console.log('accessoriesChartData:::::: ', accessoriesChartData);
+  // const accessoriesChartData = getCurrentYearAndPast11Months(
+  //   accesorriesExpenses,
+  //   accsorriesOrders,
+  // );
 
-  const surplus_old =
-    availableOrdersSum && orderedOrdersSum
-      ? availableOrdersSum + orderedOrdersSum
-      : 0;
-  console.log('surplus_old:::::: ', surplus_old);
+  // const surplus_old =
+  //   availableOrdersSum && orderedOrdersSum
+  //     ? availableOrdersSum + orderedOrdersSum
+  //     : 0;
 
   const { Text } = Typography;
   const formatter = (value) => <CountUp end={value} separator="," />;
@@ -196,6 +191,7 @@ const Home = () => {
                     title="Ամսական Եկամուտ"
                     value={meanIncome}
                     formatter={formatter}
+                    loading={isStatLoading}
                   />
                 </div>
               </div>
@@ -244,6 +240,7 @@ const Home = () => {
                     title="Պատվեր"
                     value={ordersCount || 0}
                     formatter={formatter}
+                    loading={isStatLoading}
                   />
                 </div>
               </div>
@@ -255,51 +252,59 @@ const Home = () => {
                 marginTop: 30,
               }}
             >
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart
-                  width={500}
-                  height={400}
-                  data={nonAccessoryCharData}
-                  margin={{
-                    top: 10,
-                    right: 30,
-                    left: 0,
-                    bottom: 0,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Area
-                    type="monotone"
-                    dataKey="Ծախսեր"
-                    stackId="1"
-                    stroke="#8884d8"
-                    fill="#8884d8"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="Ինքնարժեք"
-                    stackId="1"
-                    stroke="#82ca9d"
-                    fill="#82ca9d"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="Շահույթ"
-                    stackId="1"
-                    stroke="#ffc658"
-                    fill="#ffc658"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="Զուտ եկամուտ"
-                    stroke="rgb(220, 53, 69)"
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
+              {isStatLoading ? (
+                <Skeleton
+                  active
+                  title={false}
+                  paragraph={{ rows: 12, width: '100%' }}
+                />
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart
+                    width={500}
+                    height={400}
+                    data={nonAccessoryCharData}
+                    margin={{
+                      top: 10,
+                      right: 30,
+                      left: 0,
+                      bottom: 0,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Area
+                      type="monotone"
+                      dataKey="Ծախսեր"
+                      stackId="1"
+                      stroke="#8884d8"
+                      fill="#8884d8"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="Ինքնարժեք"
+                      stackId="1"
+                      stroke="#82ca9d"
+                      fill="#82ca9d"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="Շահույթ"
+                      stackId="1"
+                      stroke="#ffc658"
+                      fill="#ffc658"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="Զուտ եկամուտ"
+                      stroke="rgb(220, 53, 69)"
+                    />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
           <div style={{ width: '50%', paddingLeft: 10 }}>
@@ -348,6 +353,7 @@ const Home = () => {
                     title="Հաճախորդ"
                     value={customersCount || 0}
                     formatter={formatter}
+                    loading={isStatLoading}
                   />
                 </div>
               </div>
@@ -396,6 +402,7 @@ const Home = () => {
                     title="Մնացորդ"
                     value={surplus || 0}
                     formatter={formatter}
+                    loading={isStatLoading}
                   />
                 </div>
               </div>
@@ -407,29 +414,37 @@ const Home = () => {
                 marginTop: 30,
               }}
             >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  width={500}
-                  height={300}
-                  data={accessoryCharData}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="Ծախսեր" fill="#8884d8" />
-                  <Bar dataKey="Ինքնարժեք" fill="#82ca9d" />
-                  <Bar dataKey="Շահույթ" fill="#ffc658" />
-                  <Bar dataKey="Զուտ եկամուտ" fill="rgb(220, 53, 69)" />
-                </BarChart>
-              </ResponsiveContainer>
+              {isStatLoading ? (
+                <Skeleton
+                  active
+                  title={false}
+                  paragraph={{ rows: 12, width: '100%' }}
+                />
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    width={500}
+                    height={300}
+                    data={accessoryCharData}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="Ծախսեր" fill="#8884d8" />
+                    <Bar dataKey="Ինքնարժեք" fill="#82ca9d" />
+                    <Bar dataKey="Շահույթ" fill="#ffc658" />
+                    <Bar dataKey="Զուտ եկամուտ" fill="rgb(220, 53, 69)" />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
         </div>

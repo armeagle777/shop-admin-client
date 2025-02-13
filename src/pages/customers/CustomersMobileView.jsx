@@ -20,6 +20,9 @@ const CustomersMobileView = ({
   handleDelete,
   showProgress,
   handleSearch,
+  onPageChange,
+  currentPage,
+  totalCount,
   setSearchTerm,
   allowPopConfirm,
   setAllowPopConfirm,
@@ -44,6 +47,9 @@ const CustomersMobileView = ({
         pagination={{
           position: 'bottom',
           align: 'center',
+          onChange: onPageChange,
+          current: currentPage,
+          total: totalCount,
         }}
         size="large"
         dataSource={modifiedData}

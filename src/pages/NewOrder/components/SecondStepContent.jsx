@@ -22,7 +22,12 @@ import {
   customerSelectStyles,
 } from '../NewOrder.constants';
 
-const SecondStepContent = ({ countriesOptions, customerOptions }) => {
+const SecondStepContent = ({
+  countriesOptions,
+  customerOptions,
+  onCustomersSearch,
+  searchCustomersLoading,
+}) => {
   const [addCustomerForm] = Form.useForm();
   const { NEW_ORDER_PAGE } = translations;
 
@@ -79,6 +84,8 @@ const SecondStepContent = ({ countriesOptions, customerOptions }) => {
               filterOption={filterOption}
               style={customerSelectStyles}
               placeholder={NEW_ORDER_PAGE.CUSTOMER_SELECT_PLACEHOLDER}
+              loading={searchCustomersLoading}
+              onSearch={onCustomersSearch}
             />
           </Form.Item>
           <Form.Item>

@@ -27,6 +27,11 @@ const OrdersTable = ({
   form,
   filter,
   queryString,
+  totalCount,
+  pageSize,
+  currentPage,
+  onPageChange,
+  onPageSizeChange,
 }) => {
   const [showProgress, setShowProgress] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
@@ -748,8 +753,6 @@ const OrdersTable = ({
   };
 
   const onReturnOrCancel = ({ id, record, newStatus }) => {
-    console.log('record:::::: ', record);
-
     setShowProgress(true);
     removeItemMutation.mutate({ record, id, newStatus });
   };
@@ -874,6 +877,11 @@ const OrdersTable = ({
         form={form}
         size="medium"
         columns={columns[filter]}
+        totalCount={totalCount}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </>
   );

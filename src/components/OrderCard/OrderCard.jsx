@@ -41,7 +41,6 @@ const OrderCard = ({
     customer,
     'data.attributes.Avatar.data.attributes.url',
   );
-  console.log('filter:::::: ', filter);
 
   // const image = images?.data ? images?.data[0] : undefined;
   const orderImages = images?.data || [];

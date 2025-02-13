@@ -31,7 +31,13 @@ const NewOrder = () => {
     countriesOptions,
     categoriesOptions,
     disabledNextButton,
+    onCategoriesSearch,
     onAddItemIsloading,
+    onShopsSearch,
+    searchShopsLoading,
+    searchCategoriesLoading,
+    onCustomersSearch,
+    searchCustomersLoading,
   } = useNewOrderData({ form });
 
   const { token } = theme.useToken();
@@ -53,7 +59,11 @@ const NewOrder = () => {
         <FirstStepContent
           setFormValues={setFormValues}
           shopsOptions={shopsOptions || []}
+          onShopsSearch={onShopsSearch}
+          onCategoriesSearch={onCategoriesSearch}
+          searchShopsLoading={searchShopsLoading}
           categoriesOptions={categoriesOptions || []}
+          searchCategoriesLoading={searchCategoriesLoading}
         />
       ),
     },
@@ -63,6 +73,8 @@ const NewOrder = () => {
         <SecondStepContent
           countriesOptions={countriesOptions}
           customerOptions={customerOptions || []}
+          onCustomersSearch={onCustomersSearch}
+          searchCustomersLoading={searchCustomersLoading}
         />
       ),
     },

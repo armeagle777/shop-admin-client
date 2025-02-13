@@ -19,6 +19,9 @@ const ExpensesMobileView = ({
   showProgress,
   handleDelete,
   onDateFilter,
+  totalCount,
+  onPageChange,
+  currentPage,
   allowPopConfirm,
   onDirectionFilter,
   onOpenExpenseModal,
@@ -53,7 +56,12 @@ const ExpensesMobileView = ({
         dataSource={expenses}
         size={ANT_SIZES.LARGE}
         renderItem={renderItem}
-        pagination={mbViewListPgStyles}
+        pagination={{
+          ...mbViewListPgStyles,
+          current: currentPage,
+          total: totalCount,
+          onChange: onPageChange,
+        }}
         itemLayout={ANT_LAYOUTS.VERTICAL}
       />
       <FloatButton onClick={onOpenExpenseModal} />

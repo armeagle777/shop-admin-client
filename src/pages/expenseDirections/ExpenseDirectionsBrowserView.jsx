@@ -14,6 +14,11 @@ const ExpenseDirectionsBrowserView = ({
   showProgress,
   allowPopConfirm,
   setAllowPopConfirm,
+  totalCount,
+  pageSize,
+  currentPage,
+  onPageChange,
+  onPageSizeChange,
 }) => {
   const columns = [
     {
@@ -97,6 +102,11 @@ const ExpenseDirectionsBrowserView = ({
         dataSource={modifiedData}
         form={form}
         size="medium"
+        totalCount={totalCount}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </>
   );

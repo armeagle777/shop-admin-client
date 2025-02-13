@@ -7,15 +7,22 @@ const useExpenseDirectionsData = () => {
     data = { data: [] },
     isFetching,
     isLoading,
-  } = useQuery(['expense-directions'], () => getExpenseDirections(), {
-    keepPreviousData: true,
-  });
+  } = useQuery(
+    ['expense-directions'],
+    () => getExpenseDirections({ page: 1, pageSize: 1000 }),
+    {
+      keepPreviousData: true,
+    },
+  );
   const eDOptions = data.data.map(({ id, attributes }) => ({
     value: id,
     label: attributes.name,
   }));
 
-  return { expenseDirections: eDOptions, isLoading: isLoading || isFetching };
+  return {
+    expenseDirections: eDOptions,
+    isLoading: isLoading || isFetching,
+  };
 };
 
 export default useExpenseDirectionsData;

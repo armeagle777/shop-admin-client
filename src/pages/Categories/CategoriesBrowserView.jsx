@@ -13,6 +13,11 @@ const CategoriesBrowserView = ({
   isLoadingOnAdd,
   newCategoryForm,
   validateMessages,
+  onPageChange,
+  onPageSizeChange,
+  totalCount,
+  currentPage,
+  pageSize,
 }) => {
   const [form] = Form.useForm();
   const { CATEGORIES_PAGE } = translations;
@@ -49,6 +54,11 @@ const CategoriesBrowserView = ({
         columns={columns}
         dataSource={data}
         loading={isLoading}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        totalCount={totalCount}
+        currentPage={currentPage}
+        pageSize={pageSize}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import { Input } from 'antd';
+import { Pagination } from 'antd';
 import { OrderCard } from '../../components';
 
 const OrdersMobileView = ({
@@ -8,8 +8,10 @@ const OrdersMobileView = ({
   setShowProgress,
   handleDelete,
   filter,
+  totalCount,
+  currentPage,
+  onPageChange,
 }) => {
-  const { Search } = Input;
   return (
     <div
       style={{
@@ -19,7 +21,7 @@ const OrdersMobileView = ({
         background: 'transparent',
       }}
     >
-      {filteredData?.map((row) => {
+      {filteredData?.map((row, index) => {
         const { id, attributes } = { ...row };
         const {
           cancel_date,
@@ -59,6 +61,12 @@ const OrdersMobileView = ({
           />
         );
       })}
+      <Pagination
+        onChange={onPageChange}
+        current={currentPage}
+        total={totalCount}
+        hideOnSinglePage
+      />
     </div>
   );
 };

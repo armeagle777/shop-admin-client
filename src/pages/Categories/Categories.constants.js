@@ -28,10 +28,12 @@ export const formItemsStyles = {
   },
 };
 
-export const formItemRules = {
-  name: [
-    {
-      required: true,
-    },
-  ],
-};
+export const formItemRules = [
+  {
+    name: [
+      {
+        required: true,
+      },
+    ],
+  },
+];

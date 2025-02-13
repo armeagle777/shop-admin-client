@@ -19,7 +19,14 @@ import { useCategoriesData } from '../../../hooks';
 import { AddCategoryForm } from '../../../components/AddCategoryForm';
 import { filterCategories } from '../NewOrder.helpers';
 
-const FirstStepContent = ({ categoriesOptions, shopsOptions }) => {
+const FirstStepContent = ({
+  shopsOptions,
+  onShopsSearch,
+  categoriesOptions,
+  searchShopsLoading,
+  onCategoriesSearch,
+  searchCategoriesLoading,
+}) => {
   const { NEW_ORDER_PAGE } = tranlsations;
   const [newCategoryForm] = Form.useForm();
   const { onSubmit, isLoadingOnAdd, showCategoryModal, setShowCategoryModal } =
@@ -63,9 +70,11 @@ const FirstStepContent = ({ categoriesOptions, shopsOptions }) => {
           <Form.Item name="category" rules={categoryInputRules}>
             <Select
               showSearch
+              loading={searchCategoriesLoading}
               options={categoriesOptions}
               optionFilterProp="children"
-              filterOption={filterCategories}
+              onSearch={onCategoriesSearch}
+              filterOption={false}
               style={customerSelectStyles}
               placeholder={NEW_ORDER_PAGE.CAT_INPUT_LABEL}
             />
@@ -85,7 +94,15 @@ const FirstStepContent = ({ categoriesOptions, shopsOptions }) => {
         rules={shopInputRules}
         label={NEW_ORDER_PAGE.SHOP_INPUT_LABEL}
       >
-        <Select style={shopInputStyles} options={shopsOptions} />
+        <Select
+          showSearch
+          filterOption={false}
+          loading={searchShopsLoading}
+          style={shopInputStyles}
+          options={shopsOptions}
+          onSearch={onShopsSearch}
+          optionFilterProp="children"
+        />
       </Form.Item>
       <Form.Item
         name="net_cost"

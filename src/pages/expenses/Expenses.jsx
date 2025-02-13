@@ -22,10 +22,16 @@ const Expenses = () => {
     filters,
     onDelete,
     onFinish,
+    pageSize,
     isLoading,
+    expenses,
+    totalCount,
+    currentPage,
+    onPageChange,
     showProgress,
     onAddIsLoading,
     allowPopConfirm,
+    onPageSizeChange,
     showExpenseModal,
     handleDateFilter,
     filteredExpenses,
@@ -53,14 +59,19 @@ const Expenses = () => {
           filters={filters}
           columns={columns}
           onFinish={onFinish}
+          pageSize={pageSize}
           isLoading={isLoading}
+          totalCount={totalCount}
           dateFormat={dateFormat}
           eDIsloading={eDIsloading}
-          expenses={filteredExpenses}
+          currentPage={currentPage}
+          expenses={expenses}
+          onPageChange={onPageChange}
           eDOptions={expenseDirections}
           isLoadingAdd={onAddIsLoading}
           onDateFilter={handleDateFilter}
           newExpenseForm={newExpenseForm}
+          onPageSizeChange={onPageSizeChange}
           onClearFilters={handleClearFIlters}
           onDirectionFilter={handleDirectionFilter}
           isAddButtonDisabled={isAddButtonDisabled}
@@ -73,7 +84,7 @@ const Expenses = () => {
           isLoading={isLoading}
           eDIsloading={eDIsloading}
           showProgress={showProgress}
-          expenses={filteredExpenses}
+          expenses={expenses}
           eDOptions={expenseDirections}
           onDateFilter={handleDateFilter}
           allowPopConfirm={allowPopConfirm}
@@ -81,6 +92,9 @@ const Expenses = () => {
           setAllowPopConfirm={setAllowPopConfirm}
           onDirectionFilter={handleDirectionFilter}
           onCloseExpenseModal={onCloseExpenseModal}
+          totalCount={totalCount}
+          onPageChange={onPageChange}
+          currentPage={currentPage}
         />
       </MobileView>
       <Modal

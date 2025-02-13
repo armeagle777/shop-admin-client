@@ -10,16 +10,22 @@ import {
   getCategories,
   deleteCategory,
 } from '../../api/serverApi';
-import { messages } from '../../utils/constants';
+import {
+  DEFAULT_PAGE,
+  DEFAULT_PAGE_SIZE,
+  messages,
+} from '../../utils/constants';
 
 const useCategoriesData = ({ newCategoryForm }) => {
+  const [page, setPage] = useState(DEFAULT_PAGE);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const queryClient = useQueryClient();
   const [showProgress, setShowProgress] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
   const { data, isLoading, isFetching, isError, error } = useQuery(
-    ['categories'],
-    () => getCategories(),
+    ['categories', page, pageSize],
+    () => getCategories({ page, pageSize }),
     {
       keepPreviousData: true,
     },
@@ -109,6 +115,14 @@ const useCategoriesData = ({ newCategoryForm }) => {
     },
   ];
 
+  const pageChangeHandle = (page, pageSize) => {
+    setPage(page);
+  };
+
+  const pageSizeChangeHandler = (current, size) => {
+    setPageSize(size);
+  };
+
   return {
     error,
     isError,
@@ -123,6 +137,11 @@ const useCategoriesData = ({ newCategoryForm }) => {
     onDelete: handleDelete,
     isLoading: isLoading || isFetching,
     isLoadingOnAdd: addItemMutation.isLoading,
+    onPageChange: pageChangeHandle,
+    onPageSizeChange: pageSizeChangeHandler,
+    totalCount: data?.meta?.pagination?.total,
+    currentPage: data?.meta?.pagination?.page,
+    pageSize: data?.meta?.pagination?.pageSize,
   };
 };
 

@@ -11,14 +11,19 @@ const ExpensesBrowserView = ({
   filters,
   onFinish,
   expenses,
+  pageSize,
   eDOptions,
   isLoading,
   dateFormat,
+  totalCount,
   eDIsloading,
+  onPageChange,
+  currentPage,
   isLoadingAdd,
   onDateFilter,
   newExpenseForm,
   onClearFilters,
+  onPageSizeChange,
   onDirectionFilter,
   isAddButtonDisabled,
 }) => {
@@ -48,6 +53,11 @@ const ExpensesBrowserView = ({
             loading={isLoading}
             dataSource={expenses}
             size={ANT_SIZES.MEDIUM}
+            totalCount={totalCount}
+            onPageChange={onPageChange}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageSizeChange={onPageSizeChange}
           />
         </div>
       </Flex>

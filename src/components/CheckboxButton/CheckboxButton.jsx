@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Checkbox, Button } from 'antd';
 import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
-const CheckboxButton = ({ text, onDirectionFilter, checked }) => {
+const CheckboxButton = ({ text, onDirectionFilter, checked, value }) => {
   const textsArray = text.split(' ');
 
   const checkedOption = checked ? { variant: 'filled' } : { type: 'text' };
@@ -27,7 +27,7 @@ const CheckboxButton = ({ text, onDirectionFilter, checked }) => {
         }}
         color="default"
         {...checkedOption}
-        onClick={() => onDirectionFilter(text)}
+        onClick={() => onDirectionFilter(value)}
       >
         {textsArray?.length > 2 ? `${textsArray[0]} ${textsArray[1]}...` : text}
         {checked && <CloseCircleOutlined />}

@@ -7,7 +7,11 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Avatar, Button, Form, Image, Modal, Space } from 'antd';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { messages } from '../../utils/constants';
+import {
+  DEFAULT_PAGE,
+  DEFAULT_PAGE_SIZE,
+  messages,
+} from '../../utils/constants';
 import CustomersMobileView from './CustomersMobileView';
 import CustomersBrowserView from './CustomersBrowserView';
 import { Alert, PopConfirm, AddCustomerForm } from '../../components';
@@ -15,23 +19,35 @@ import { formatImageUrl, generateRandomColor } from '../../utils/helpers';
 import { addCustomer, deleteCustomer, getCustomers } from '../../api/serverApi';
 
 const Customers = () => {
+  const [page, setPage] = useState(DEFAULT_PAGE);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [searchTerm, setSearchTerm] = useState('');
   const [queryString, setQueryString] = useState('');
   const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
+
   const { data, isLoading, isError, error } = useQuery(
-    ['customers', queryString],
-    () => getCustomers({ query: queryString }),
+    ['customers', queryString, page, pageSize],
+    () => getCustomers({ query: queryString, page, pageSize }),
     {
       keepPreviousData: true,
     },
   );
 
+  const pageChangeHandle = (page, pageSize) => {
+    setPage(page);
+  };
+
+  const pageSizeChangeHandler = (current, size) => {
+    setPageSize(size);
+  };
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [addCustomerForm] = Form.useForm();
   const { data: customers = [], meta } = { ...data };
+
   const modifiedData = customers.map(({ id, attributes }) => ({
     key: id,
     ...attributes,
@@ -100,6 +116,8 @@ const Customers = () => {
   });
 
   const handleSearch = () => {
+    setPage(DEFAULT_PAGE);
+    setPageSize(DEFAULT_PAGE_SIZE);
     const url = new URL(window.location);
 
     if (searchTerm.trim() === '') {
@@ -229,14 +247,19 @@ const Customers = () => {
     <>
       <BrowserView>
         <CustomersBrowserView
-          columns={columns}
-          modifiedData={modifiedData}
           form={form}
-          onOpenCustomerModal={onOpenCustomerModal}
+          columns={columns}
+          currentPage={meta?.pagination?.page}
+          pageSize={meta?.pagination?.pageSize}
           isLoading={isLoading}
           searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
+          modifiedData={modifiedData}
           handleSearch={handleSearch}
+          setSearchTerm={setSearchTerm}
+          totalCount={meta?.pagination?.total}
+          onPageChange={pageChangeHandle}
+          onPageSizeChange={pageSizeChangeHandler}
+          onOpenCustomerModal={onOpenCustomerModal}
         />
       </BrowserView>
       <MobileView>
@@ -251,6 +274,9 @@ const Customers = () => {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           handleSearch={handleSearch}
+          totalCount={meta?.pagination?.total}
+          onPageChange={pageChangeHandle}
+          currentPage={meta?.pagination?.page}
         />
       </MobileView>
       <Modal

@@ -17,6 +17,9 @@ import { formatCountriesData } from '../../utils/helpers';
 
 const useNewOrderData = ({ form }) => {
   const [formValues, setFormValues] = useState({});
+  const [searchShopInput, setSearchShopInput] = useState('');
+  const [searchCategoryInput, setSearchCategoryInput] = useState('');
+  const [searchCustomerInput, setSearchCustomerInput] = useState('');
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -29,17 +32,38 @@ const useNewOrderData = ({ form }) => {
     keepPreviousData: true,
   });
 
-  const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
-    keepPreviousData: true,
-  });
+  const { data: customers, isLoading: searchCustomersLoading } = useQuery(
+    ['customers', searchCustomerInput],
+    () => getCustomers({ page: 1, pageSize: 10, query: searchCustomerInput }),
+    {
+      keepPreviousData: true,
+    },
+  );
 
-  const { data: categories } = useQuery(['categories'], () => getCategories(), {
-    keepPreviousData: true,
-  });
+  const {
+    data: categories,
+    isLoading: searchCategoriesLoading,
+    isFetching: searchCategoriesFetching,
+  } = useQuery(
+    ['categories', searchCategoryInput],
+    () =>
+      getCategories({
+        page: 1,
+        pageSize: 10,
+        searchText: searchCategoryInput,
+      }),
+    {
+      keepPreviousData: true,
+    },
+  );
 
-  const { data: shops } = useQuery(['shops'], () => getShops(), {
-    keepPreviousData: true,
-  });
+  const { data: shops, isLoading: searchShopsLoading } = useQuery(
+    ['shops', searchShopInput],
+    () => getShops({ page: 1, pageSize: 10, searchText: searchShopInput }),
+    {
+      keepPreviousData: true,
+    },
+  );
 
   const customerOptions = customers?.data?.map(({ id, attributes }) => {
     return {
@@ -123,6 +147,22 @@ const useNewOrderData = ({ form }) => {
     addItemMutation.mutate(newData);
   };
 
+  const onCategoriesSearch = (value) => {
+    setSearchCategoryInput(value);
+  };
+
+  const onShopsSearch = (value) => {
+    setSearchShopInput(value);
+  };
+
+  const onCustomersSearch = (value) => {
+    // if (!value.trim()) return;
+
+    const words = value.trim().split(/\s+/);
+    const firstWord = words[0];
+    setSearchCustomerInput(firstWord);
+  };
+
   return {
     onFinish,
     onSubmit,
@@ -134,6 +174,13 @@ const useNewOrderData = ({ form }) => {
     categoriesOptions,
     disabledNextButton,
     onAddItemIsloading: addItemMutation.isLoading,
+    searchCategoriesLoading,
+    searchCategoriesFetching,
+    onCategoriesSearch,
+    onShopsSearch,
+    searchShopsLoading,
+    onCustomersSearch,
+    searchCustomersLoading,
   };
 };
 

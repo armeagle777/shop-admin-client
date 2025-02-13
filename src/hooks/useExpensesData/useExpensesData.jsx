@@ -6,8 +6,11 @@ import { filterExpenses, initialFilters } from '.';
 import { ExpensesActionColumn } from '../../components';
 import translations from '../../utils/translations/am.json';
 import { addExpense, deleteExpense, getExpenses } from '../../api/serverApi';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../../utils/constants';
 
 const useExpensesData = ({ newExpenseForm }) => {
+  const [page, setPage] = useState(DEFAULT_PAGE);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const [showProgress, setShowProgress] = useState(false);
   const [allowPopConfirm, setAllowPopConfirm] = useState(false);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
@@ -21,9 +24,13 @@ const useExpensesData = ({ newExpenseForm }) => {
     isLoading,
     isError,
     error,
-  } = useQuery(['expenses'], () => getExpenses(), {
-    keepPreviousData: false,
-  });
+  } = useQuery(
+    ['expenses', page, pageSize, filters],
+    () => getExpenses({ page, pageSize, filters }),
+    {
+      keepPreviousData: false,
+    },
+  );
 
   const modifiedData = data.data.map(({ id, attributes }) => ({
     key: id,
@@ -130,6 +137,8 @@ const useExpensesData = ({ newExpenseForm }) => {
   const handleDateFilter = (datesArray) => {
     if (!datesArray?.length) return;
     const [start, end] = datesArray;
+    setPage(DEFAULT_PAGE);
+    setPageSize(DEFAULT_PAGE_SIZE);
     setFilters((prev) => ({
       ...prev,
       date: { start: start ?? null, end: end ?? null },
@@ -138,22 +147,31 @@ const useExpensesData = ({ newExpenseForm }) => {
 
   const handleDirectionFilter = (directionName) => {
     if (!directionName) return;
-    if (Array.isArray(directionName)) {
-      return setFilters((filters) => ({
-        ...filters,
-        directions: directionName,
-      }));
-    }
+    // if (Array.isArray(directionName)) {
+    //   return setFilters((filters) => ({
+    //     ...filters,
+    //     directions: directionName,
+    //   }));
+    // }
     const directions = filters.directions;
 
     const newDirections = directions.includes(directionName)
       ? directions.filter((direction) => direction !== directionName)
       : [...directions, directionName];
-
+    setPage(DEFAULT_PAGE);
+    setPageSize(DEFAULT_PAGE_SIZE);
     setFilters((filters) => ({ ...filters, directions: newDirections }));
   };
 
   const handleClearFIlters = () => setFilters(initialFilters);
+
+  const pageChangeHandle = (page, pageSize) => {
+    setPage(page);
+  };
+
+  const pageSizeChangeHandler = (current, size) => {
+    setPageSize(size);
+  };
 
   return {
     error,
@@ -167,9 +185,14 @@ const useExpensesData = ({ newExpenseForm }) => {
     handleDateFilter,
     setAllowPopConfirm,
     onOpenExpenseModal,
+    totalCount: data?.meta?.pagination?.total,
+    pageSize: data?.meta?.pagination?.pageSize,
+    currentPage: data?.meta?.pagination?.page,
     handleClearFIlters,
     onCloseExpenseModal,
     handleDirectionFilter,
+    onPageChange: pageChangeHandle,
+    onPageSizeChange: pageSizeChangeHandler,
     onFinish: handleFinish,
     expenses: modifiedData,
     onDelete: handleDelete,
