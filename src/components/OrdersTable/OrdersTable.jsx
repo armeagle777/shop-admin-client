@@ -763,6 +763,8 @@ const OrdersTable = ({
   };
 
   const onChangeStatusToDelivered = (record) => {
+    console.log('IN onChangeStatusToDelivered:::::: record', record);
+
     setShowProgress(true);
     editItemMutation.mutate({ record, newStatus: 'DELIVERED' });
   };
@@ -799,28 +801,37 @@ const OrdersTable = ({
       }
       return editOrder(editObj);
     },
-    onMutate: async ({ record, newStatus }) => {
-      await queryClient.cancelQueries({
-        queryKey: ['orders', record.status.toUpperCase(), record.key],
-      });
+    // onMutate: async ({ record, newStatus }) => {
+    //   await queryClient.cancelQueries({
+    //     queryKey: ['orders', record.status.toUpperCase(), record.key],
+    //   });
 
-      const previousOrders = queryClient.getQueryData([
-        'orders',
-        record.status.toUpperCase(),
-        queryString,
-      ]);
+    //   const previousOrders = queryClient.getQueryData([
+    //     'orders',
+    //     record.status.toUpperCase(),
+    //     queryString,
+    //     currentPage,
+    //     pageSize,
+    //   ]);
 
-      queryClient.setQueryData(
-        ['orders', record.status.toUpperCase(), queryString],
-        (old) => {
-          const newData = old.filter((o) => o.id !== record.key);
+    //   queryClient.setQueryData(
+    //     [
+    //       'orders',
+    //       record.status.toUpperCase(),
+    //       queryString,
+    //       currentPage,
+    //       pageSize,
+    //     ],
+    //     (old) => {
+    //       console.log('OLD', old);
+    //       const newData = old.filter((o) => o.id !== record.key);
 
-          return newData;
-        },
-      );
+    //       return newData;
+    //     },
+    //   );
 
-      return { previousOrders };
-    },
+    //   return { previousOrders };
+    // },
     onSuccess: () => {
       toast.success(messages.orders.statusChangeSuccess, {
         progress: undefined,
