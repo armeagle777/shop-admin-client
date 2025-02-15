@@ -12,7 +12,7 @@ import {
 
 import { useCustomerData } from '../../../hooks';
 import { AddCustomerForm } from '../../../components';
-import { filterOption, onChange } from '../NewOrder.helpers';
+import { onChange } from '../NewOrder.helpers';
 import translations from '../../../utils/translations/am.json';
 import { ANT_SIZES, BUTTON_TYPES, dateFormat } from '../../../utils/constants';
 import {
@@ -81,7 +81,7 @@ const SecondStepContent = ({
               showSearch
               options={customerOptions}
               optionFilterProp="children"
-              filterOption={filterOption}
+              filterOption={false}
               style={customerSelectStyles}
               placeholder={NEW_ORDER_PAGE.CUSTOMER_SELECT_PLACEHOLDER}
               loading={searchCustomersLoading}

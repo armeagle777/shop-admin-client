@@ -74,7 +74,7 @@ const Orders = () => {
     );
   }, [filter, location]);
 
-  const { data, isLoading, isError, error } = useQuery(
+  const { data, isLoading, isFetching, isError, error } = useQuery(
     ['orders', filter, queryString, page, pageSize],
     () => getOrders({ filter, query: queryString, page, pageSize }),
     {
@@ -191,6 +191,7 @@ const Orders = () => {
           totalCount={meta?.pagination?.total}
           currentPage={meta?.pagination?.page}
           onPageChange={pageChangeHandle}
+          isLoading={isLoading || isFetching}
         />
       </MobileView>
       <FloatButton

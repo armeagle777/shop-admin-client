@@ -128,9 +128,8 @@ const EditCustomerForm = ({
 
   const phone_code = phone_number?.substring(0, 3);
   const phone_digits = phone_number?.substring(3, 9);
-  const contactsInfo = contacts?.data;
-  const address_info = addresses?.data[0]?.attributes;
-  const address_id = addresses?.data[0]?.id;
+  const address_info = addresses[0];
+  const address_id = addresses[0]?.id;
   const { community, country, index, marz, settlement, street } = {
     ...address_info,
   };
@@ -139,11 +138,11 @@ const EditCustomerForm = ({
   const communityId = delve(community, 'data.id');
   const settlementId = delve(settlement, 'data.id');
 
-  const avatarSrc = delve(Avatar, 'data.attributes.url');
-  const currentImageId = delve(Avatar, 'data.id');
+  const avatarSrc = Avatar?.url;
+  const currentImageId = Avatar?.id;
   const disabledSubmitButton = isCountriesLoadin || isCountriesFetching;
-  const contactsList = contactsInfo?.map((el) => ({
-    phone_number: el.attributes.phone_number,
+  const contactsList = contacts?.map((el) => ({
+    phone_number: el?.phone_number,
   }));
 
   const countriesOptions = formatCountriesData(countries);

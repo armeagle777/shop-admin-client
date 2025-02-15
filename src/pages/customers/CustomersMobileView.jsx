@@ -65,7 +65,7 @@ const CustomersMobileView = ({
             addresses,
             Avatar: avatarImage,
           } = { ...item };
-          const avatarUrl = avatarImage?.data?.attributes?.url || '';
+          const avatarUrl = avatarImage?.url || '';
 
           return (
             <List.Item
@@ -108,11 +108,7 @@ const CustomersMobileView = ({
                       {first_name} {last_name}
                     </Link>
                   }
-                  description={
-                    addresses?.data.length
-                      ? addresses?.data[0].attributes.street
-                      : ''
-                  }
+                  description={addresses?.length ? addresses[0].street : ''}
                 />
               </Skeleton>
             </List.Item>

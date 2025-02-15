@@ -1,6 +1,6 @@
 export const colorsMap = {
   ORDERED: 'gray',
-  CANCELED: 'red',
+  CANCELLED: 'red',
   RETURNED: 'red',
   AVAILABLE: 'blue',
   DELIVERED: 'green',
@@ -9,7 +9,7 @@ export const colorsMap = {
 export const datesMap = {
   ORDERED: 'order_date',
   RETURNED: 'return_date',
-  CANCELED: 'cancel_date',
+  CANCELLED: 'cancel_date',
   DELIVERED: 'deliver_date',
   AVAILABLE: 'received_date',
 };
@@ -17,7 +17,7 @@ export const datesMap = {
 export const statusesMap = {
   AVAILABLE: 'առկա',
   DELIVERED: 'առաքված',
-  CANCELED: 'չեղարկված',
+  CANCELLED: 'չեղարկված',
   ORDERED: 'պատվիրված',
   RETURNED: 'վերադարձված',
 };

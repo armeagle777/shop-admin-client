@@ -1,5 +1,6 @@
 import { Pagination } from 'antd';
 import { OrderCard } from '../../components';
+import SkeletonCard from '../../components/SkeletonCard/SkeletonCard';
 
 const OrdersMobileView = ({
   queryString,
@@ -11,6 +12,7 @@ const OrdersMobileView = ({
   totalCount,
   currentPage,
   onPageChange,
+  isLoading,
 }) => {
   return (
     <div
@@ -21,6 +23,7 @@ const OrdersMobileView = ({
         background: 'transparent',
       }}
     >
+      {isLoading && <SkeletonCard />}
       {filteredData?.map((row, index) => {
         const { id, attributes } = { ...row };
         const {

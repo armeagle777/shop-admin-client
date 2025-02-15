@@ -1,3 +1,4 @@
+// TODO Not used and needs be deleted after testes
 export const filterOption = (input, option) => {
   const words = input.trim().split(' ');
 

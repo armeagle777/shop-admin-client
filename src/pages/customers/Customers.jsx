@@ -48,9 +48,9 @@ const Customers = () => {
   const [addCustomerForm] = Form.useForm();
   const { data: customers = [], meta } = { ...data };
 
-  const modifiedData = customers.map(({ id, attributes }) => ({
+  const modifiedData = customers.map(({ id, ...restProps }) => ({
     key: id,
-    ...attributes,
+    ...restProps,
   }));
 
   useEffect(() => {
@@ -155,7 +155,7 @@ const Customers = () => {
       dataIndex: 'Avatar',
       width: '10%',
       render: (_, record) => {
-        const src = delve(record, 'Avatar.data.attributes.url');
+        const src = delve(record, 'Avatar.url');
         return src ? (
           <Image
             width={60}
@@ -203,9 +203,9 @@ const Customers = () => {
     {
       title: 'Հասցե',
       render: (_, record) => {
-        const address = record?.addresses.data[0];
-        const index = delve(address, 'attributes.index');
-        const street = delve(address, 'attributes.street');
+        const address = record?.addresses[0];
+        const index = address?.index;
+        const street = address?.street;
         return `${street || ''} ${index || ''}`;
       },
     },

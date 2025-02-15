@@ -60,7 +60,7 @@ export const accessoryIds = [32, 39];
 export const accessoriesCategories = [74];
 
 export const ORDER_STATUSES_MAP = {
-  CANCELED: 'CANCELED',
+  CANCELED: 'CANCELLED',
   RETURNED: 'RETURNED',
 };
 

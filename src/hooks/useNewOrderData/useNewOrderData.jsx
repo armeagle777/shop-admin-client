@@ -65,10 +65,10 @@ const useNewOrderData = ({ form }) => {
     },
   );
 
-  const customerOptions = customers?.data?.map(({ id, attributes }) => {
+  const customerOptions = customers?.data?.map(({ id, ...restOptions }) => {
     return {
       value: id,
-      label: <CustomerOptionLabel attributes={attributes} />,
+      label: <CustomerOptionLabel attributes={restOptions} />,
       style: { padding: '8px' },
     };
   });
@@ -156,11 +156,7 @@ const useNewOrderData = ({ form }) => {
   };
 
   const onCustomersSearch = (value) => {
-    // if (!value.trim()) return;
-
-    const words = value.trim().split(/\s+/);
-    const firstWord = words[0];
-    setSearchCustomerInput(firstWord);
+    setSearchCustomerInput(value);
   };
 
   return {

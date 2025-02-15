@@ -11,12 +11,10 @@ export const login = async (credentials) => {
 
 //Customer endpoints
 export const getCustomers = async ({ query, page = 1, pageSize = 10 }) => {
-  const searchString = query
-    ? `&filters[$or][0][first_name][$containsi]=${query}&filters[$or][1][last_name][$containsi]=${query}&filters[$or][2][phone_number][$containsi]=${query}`
-    : '';
-
-  const queryString = `/customers?filters[isActive][$eq]=true${searchString}&populate=*&sort[0]=id:desc&pagination[page]=${page}&pagination[pageSize]=${pageSize}`;
-  const response = await serverApi.get(queryString);
+  const getCustomersUrl = query
+    ? `/customers/search?query=${query}`
+    : `/customers?filters[isActive][$eq]=true&populate=*&sort[0]=id:desc&pagination[page]=${page}&pagination[pageSize]=${pageSize}`;
+  const response = await serverApi.get(getCustomersUrl);
 
   return response.data;
 };

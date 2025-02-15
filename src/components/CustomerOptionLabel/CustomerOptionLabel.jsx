@@ -9,7 +9,7 @@ const CustomerOptionLabel = ({ attributes }) => {
       <img
         style={imageStyles}
         alt={`${first_name} ${last_name}`}
-        src={formatImageUrl(`${Avatar?.data?.attributes?.url}`)}
+        src={formatImageUrl(`${Avatar?.url}`)}
       />
       {first_name} {last_name} {phone_number}
     </div>

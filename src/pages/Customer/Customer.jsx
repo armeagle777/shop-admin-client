@@ -27,7 +27,7 @@ const Customer = () => {
     );
   }
 
-  const info = delve(data, 'data.attributes');
+  const info = data?.data || {};
 
   const {
     orders,
@@ -43,10 +43,10 @@ const Customer = () => {
   } = {
     ...info,
   };
-  const ordersInfo = delve(orders, 'data');
-  const ordersCount = ordersInfo?.length || 0;
-  const ordersSums = calculateOrdersSum(ordersInfo);
-  const timeLineItems = formatTimelineItems(ordersInfo);
+
+  const ordersCount = orders?.length || 0;
+  const ordersSums = calculateOrdersSum(orders);
+  const timeLineItems = formatTimelineItems(orders);
 
   return (
     <>
