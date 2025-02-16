@@ -26,7 +26,6 @@ const OrderMobileView = ({
   tracking_id,
   updatedAt,
 }) => {
-  const { Text, Link } = Typography;
   return (
     <>
       <div style={{ width: '100%', display: 'flex' }}>

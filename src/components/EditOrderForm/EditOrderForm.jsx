@@ -78,11 +78,18 @@ const EditOrderForm = ({
   const onEditCancel = () => {
     navigate('/orders');
   };
-  const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
-    keepPreviousData: true,
-  });
-  const customerOptions = customers?.data.map(({ id, attributes }) => {
-    const { first_name, last_name, phone_number } = { ...attributes };
+
+  const customerSearchText = customer?.data?.attributes?.first_name;
+  const { data: customers } = useQuery(
+    ['customers', customerSearchText, 1, 10],
+    () => getCustomers({ query: customerSearchText, page: 1, pageSize: 10 }),
+    {
+      keepPreviousData: true,
+    },
+  );
+
+  const customerOptions = customers?.data.map((row) => {
+    const { id, first_name, last_name, phone_number } = { ...row };
 
     return {
       value: id,
@@ -90,18 +97,31 @@ const EditOrderForm = ({
     };
   });
 
-  const { data: categories } = useQuery(['categories'], () => getCategories(), {
-    keepPreviousData: true,
-  });
+  const { data: categories } = useQuery(
+    ['categories'],
+    () =>
+      getCategories({
+        page: 1,
+        pageSize: 100,
+        searchText: '',
+      }),
+    {
+      keepPreviousData: true,
+    },
+  );
 
   const categoriesOptions = categories?.data.map(({ id, attributes }) => ({
     value: id,
     label: attributes.name,
   }));
 
-  const { data: shops } = useQuery(['shops'], () => getShops(), {
-    keepPreviousData: true,
-  });
+  const { data: shops } = useQuery(
+    ['shops'],
+    () => getShops({ page: 1, pageSize: 100, searchText: '' }),
+    {
+      keepPreviousData: true,
+    },
+  );
 
   const shopsOptions = shops?.data.map(({ id, attributes }) => ({
     value: id,
