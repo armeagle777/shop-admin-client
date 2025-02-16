@@ -49,7 +49,7 @@ const useNewOrderData = ({ form }) => {
     () =>
       getCategories({
         page: 1,
-        pageSize: 10,
+        pageSize: 100,
         searchText: searchCategoryInput,
       }),
     {
@@ -59,7 +59,7 @@ const useNewOrderData = ({ form }) => {
 
   const { data: shops, isLoading: searchShopsLoading } = useQuery(
     ['shops', searchShopInput],
-    () => getShops({ page: 1, pageSize: 10, searchText: searchShopInput }),
+    () => getShops({ page: 1, pageSize: 100, searchText: searchShopInput }),
     {
       keepPreviousData: true,
     },
