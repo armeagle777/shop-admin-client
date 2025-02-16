@@ -67,28 +67,28 @@ const OrderCard = ({
       }
       return editOrder(editObj);
     },
-    onMutate: async ({ record, newStatus }) => {
-      await queryClient.cancelQueries({
-        queryKey: ['orders', record.status.toUpperCase(), record.key],
-      });
+    // onMutate: async ({ record, newStatus }) => {
+    //   await queryClient.cancelQueries({
+    //     queryKey: ['orders', record.status.toUpperCase(), record.key],
+    //   });
 
-      const previousOrders = queryClient.getQueryData([
-        'orders',
-        record.status.toUpperCase(),
-        queryString,
-      ]);
+    //   const previousOrders = queryClient.getQueryData([
+    //     'orders',
+    //     record.status.toUpperCase(),
+    //     queryString,
+    //   ]);
 
-      queryClient.setQueryData(
-        ['orders', record.status.toUpperCase(), queryString],
-        (old) => {
-          const newData = old.filter((o) => o.id !== record.key);
+    //   queryClient.setQueryData(
+    //     ['orders', record.status.toUpperCase(), queryString],
+    //     (old) => {
+    //       const newData = old.filter((o) => o.id !== record.key);
 
-          return newData;
-        },
-      );
+    //       return newData;
+    //     },
+    //   );
 
-      return { previousOrders };
-    },
+    //   return { previousOrders };
+    // },
     onSuccess: () => {
       toast.success(messages.orders.statusChangeSuccess, {
         progress: undefined,
@@ -230,6 +230,7 @@ const OrderCard = ({
           setAllowPopConfirm={setAllowPopConfirm}
           buttonTitle="Վերադարձնել"
           icon={<RedoOutlined />}
+          disabled={status !== 'DELIVERED'}
         />,
       ]}
     >
