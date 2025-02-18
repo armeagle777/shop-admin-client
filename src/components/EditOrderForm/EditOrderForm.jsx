@@ -45,7 +45,10 @@ const EditOrderForm = ({
   status,
   tracking_id,
 }) => {
+  const customerSearchText = customer?.data?.attributes?.first_name || '';
   const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
+  const [searchCustomerInput, setSearchCustomerInput] =
+    useState(customerSearchText);
   const { token } = theme.useToken();
   const [form] = Form.useForm();
 
@@ -79,14 +82,17 @@ const EditOrderForm = ({
     navigate('/orders');
   };
 
-  const customerSearchText = customer?.data?.attributes?.first_name;
-  const { data: customers } = useQuery(
-    ['customers', customerSearchText, 1, 10],
-    () => getCustomers({ query: customerSearchText, page: 1, pageSize: 10 }),
+  const { data: customers, isLoading: searchCustomersLoading } = useQuery(
+    ['customers', searchCustomerInput, 1, 10],
+    () => getCustomers({ query: searchCustomerInput, page: 1, pageSize: 10 }),
     {
       keepPreviousData: true,
     },
   );
+
+  const onCustomersSearch = (value) => {
+    setSearchCustomerInput(value);
+  };
 
   const customerOptions = customers?.data.map((row) => {
     const { id, first_name, last_name, phone_number } = { ...row };
@@ -440,21 +446,20 @@ const EditOrderForm = ({
               >
                 <Select
                   showSearch
+                  filterOption={false}
+                  loading={searchCustomersLoading}
+                  onSearch={onCustomersSearch}
                   style={{
                     width: isMobile ? 300 : 370,
                   }}
                   placeholder="Որոնել"
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    (option?.label?.toLowerCase() ?? '').includes(
-                      input.toLowerCase(),
-                    )
-                  }
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? '')
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? '').toLowerCase())
-                  }
+                  //
+                  // filterSort={(optionA, optionB) =>
+                  //   (optionA?.label ?? '')
+                  //     .toLowerCase()
+                  //     .localeCompare((optionB?.label ?? '').toLowerCase())
+                  // }
                   options={customerOptions}
                 />
               </Form.Item>
