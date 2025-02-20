@@ -45,7 +45,13 @@ const EditOrderForm = ({
   status,
   tracking_id,
 }) => {
-  const customerSearchText = customer?.data?.attributes?.first_name || '';
+  const customerSearchText =
+    `${customer?.data?.attributes?.first_name}${
+      customer?.data?.attributes?.last_name
+        ? ' ' + customer?.data?.attributes?.last_name
+        : ''
+    }` || '';
+
   const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
   const [searchCustomerInput, setSearchCustomerInput] =
     useState(customerSearchText);
