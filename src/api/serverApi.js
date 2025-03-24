@@ -175,7 +175,7 @@ export const getOrders = async ({ filter, query, page = 1, pageSize = 10 }) => {
     ? `&filters[$or][0][name][$containsi]=${query}&filters[$or][1][description][$containsi]=${query}&filters[$or][2][customer][first_name][$containsi]=${query}&filters[$or][3][customer][last_name][$containsi]=${query}&filters[$or][4][customer][phone_number][$containsi]=${query}`
     : '';
 
-  const baseUrl = `/orders?filters[isActive][$eq]=true${searchString}&pagination[page]=${page}&pagination[pageSize]=${pageSize}&populate[customer][populate][0]=addresses&populate[customer][populate][1]=Avatar&populate[customer][populate][2]=contacts&populate[shop][populate][0]=logo&populate[images][populate]=url&populate[category][populate]=image&sort[0]=order_date:desc`;
+  const baseUrl = `/orders?filters[isActive][$eq]=true${searchString}&pagination[page]=${page}&pagination[pageSize]=${pageSize}&populate[customer][populate][0]=addresses&populate[customer][populate][1]=Avatar&populate[customer][populate][2]=contacts&populate[shop][populate][0]=logo&populate[images][populate]=url&populate[category][populate]=image&sort[0]=id:desc`;
 
   const url = filter ? `${baseUrl}&filters[status][$eq]=${filter}` : baseUrl;
 

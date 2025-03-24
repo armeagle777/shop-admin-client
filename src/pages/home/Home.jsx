@@ -48,6 +48,7 @@ const Home = () => {
   } = {
     ...statisticsData,
   };
+  console.log('nonAccessoryCharData:::::: ', nonAccessoryCharData);
 
   // const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
   //   keepPreviousData: true,
