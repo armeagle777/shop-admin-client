@@ -56,9 +56,6 @@ export const ANT_LAYOUTS = {
 
 export const dateFormat = 'DD/MM/YYYY';
 
-export const accessoryIds = [32, 39];
-export const accessoriesCategories = [74];
-
 export const ORDER_STATUSES_MAP = {
   CANCELED: 'CANCELLED',
   RETURNED: 'RETURNED',

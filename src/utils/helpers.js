@@ -64,5 +64,16 @@ export const formatImageUrl = (url) => {
     ? ''
     : url.startsWith('https://')
     ? url
-    : `${import.meta.env.VITE_IMAGE_SERVER_URL}${url}`;
+    : formatCloudinaryUrl(url);
 };
+
+function formatCloudinaryUrl(relativeUrl) {
+  const cleanPath = relativeUrl.startsWith('/')
+    ? relativeUrl.slice(1)
+    : relativeUrl;
+
+  // extract file name
+  const fileName = cleanPath.split('/').pop();
+
+  return `https://res.cloudinary.com/dquetvhty/image/upload/${fileName}`;
+}
