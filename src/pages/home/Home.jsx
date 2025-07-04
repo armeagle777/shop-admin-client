@@ -1,4 +1,3 @@
-import delve from 'dlv';
 import _ from 'lodash';
 import CountUp from 'react-countup';
 import { Statistic, Typography } from 'antd';
@@ -20,14 +19,7 @@ import {
 } from 'recharts';
 import { Skeleton } from 'antd';
 
-import { getCurrentYearAndPast11Months } from './Home.helpers';
-import {
-  getCustomers,
-  getExpenses,
-  getHomepagePillsStats,
-  getOrders,
-} from '../../api/serverApi';
-import { accessoriesCategories, accessoryIds } from '../../utils/constants';
+import { getHomepagePillsStats } from '../../api/serverApi';
 
 const Home = () => {
   const {
@@ -48,97 +40,6 @@ const Home = () => {
   } = {
     ...statisticsData,
   };
-  console.log('nonAccessoryCharData:::::: ', nonAccessoryCharData);
-
-  // const { data: customers } = useQuery(['customers'], () => getCustomers({}), {
-  //   keepPreviousData: true,
-  // });
-  // const customersCount_old = delve(customers, 'meta.pagination.total');
-
-  // const { data: orders } = useQuery(['orders'], () => getOrders({}), {
-  //   keepPreviousData: false,
-  // });
-
-  // const { data: expensesResponse } = useQuery(
-  //   ['expenses'],
-  //   () => getExpenses(),
-  //   {
-  //     keepPreviousData: false,
-  //   },
-  // );
-
-  // const nonAccessoriesExpenses = expensesResponse?.data?.filter(
-  //   (ex) => !accessoryIds.includes(ex.attributes.direction.data.id),
-  // );
-
-  // const accesorriesExpenses = expensesResponse?.data?.filter((ex) =>
-  //   accessoryIds.includes(ex.attributes.direction.data.id),
-  // );
-  // const { data: availableOrders } = useQuery(
-  //   ['orders', { filter: 'AVAILABLE' }],
-  //   () => getOrders({ filter: 'AVAILABLE' }),
-  //   {
-  //     keepPreviousData: false,
-  //   },
-  // );
-  // const { data: orderedOrders } = useQuery(
-  //   ['orders', { filter: 'ORDERED' }],
-  //   () => getOrders({ filter: 'ORDERED' }),
-  //   {
-  //     keepPreviousData: false,
-  //   },
-  // );
-
-  // const { data: deliveredOrders } = useQuery(
-  //     ['orders', { filter: 'DELIVERED' }],
-  //     () => getOrders('DELIVERED'),
-  //     {
-  //         keepPreviousData: false,
-  //     }
-  // );
-
-  // const nonAccsorriesOrders = orders?.filter(
-  //   (o) => !accessoriesCategories.includes(o.attributes.category.data.id),
-  // );
-  // const accsorriesOrders = orders?.filter((o) =>
-  //   accessoriesCategories.includes(o.attributes.category.data.id),
-  // );
-
-  // const availableOrdersSum = availableOrders
-  //   ?.filter((o) => o.attributes.category.data.id !== 18)
-  //   ?.reduce((acc, el) => {
-  //     acc += el.attributes.net_cost;
-
-  //     return acc;
-  //   }, 0);
-
-  // const orderedOrdersSum = orderedOrders
-  //   ?.filter((o) => o.attributes.category.data.id !== 18)
-  //   ?.reduce((acc, el) => {
-  //     acc += el.attributes.net_cost;
-
-  //     return acc;
-  //   }, 0);
-
-  // const ordersCount_old = orders?.length;
-
-  // const chartData_old = getCurrentYearAndPast11Months(
-  //   nonAccessoriesExpenses,
-  //   nonAccsorriesOrders,
-  // );
-
-  // const incomes = chartData_old.map((monthData) => monthData['Զուտ եկամուտ']);
-  // const meanIncome_old = _.mean(incomes);
-
-  // const accessoriesChartData = getCurrentYearAndPast11Months(
-  //   accesorriesExpenses,
-  //   accsorriesOrders,
-  // );
-
-  // const surplus_old =
-  //   availableOrdersSum && orderedOrdersSum
-  //     ? availableOrdersSum + orderedOrdersSum
-  //     : 0;
 
   const { Text } = Typography;
   const formatter = (value) => <CountUp end={value} separator="," />;
