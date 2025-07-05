@@ -41,6 +41,7 @@ const OrdersMobileView = ({
           selling_price,
           shop,
           status,
+          comment,
         } = {
           ...attributes,
         };
@@ -49,6 +50,7 @@ const OrdersMobileView = ({
             name={name}
             description={description}
             customer={customer}
+            comment={comment}
             images={images}
             net_cost={net_cost}
             selling_price={selling_price}

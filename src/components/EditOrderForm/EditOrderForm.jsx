@@ -44,6 +44,7 @@ const EditOrderForm = ({
   shop,
   status,
   tracking_id,
+  comment,
 }) => {
   const customerSearchText =
     `${customer?.data?.attributes?.first_name}${
@@ -150,6 +151,7 @@ const EditOrderForm = ({
       shop,
       selling_price,
       order_date,
+      comment,
     } = values;
     const formatedOrderDate = dayjs(order_date.$d).format('YYYY-MM-DD');
     const newData = {
@@ -160,6 +162,7 @@ const EditOrderForm = ({
       name,
       net_cost,
       shop,
+      comment,
       selling_price,
       order_date: formatedOrderDate,
       images: uploads.map((image) => image.id || image.response[0].id),
@@ -278,6 +281,7 @@ const EditOrderForm = ({
             shop: shop.data.id,
             net_cost,
             selling_price,
+            comment,
             customer: customer?.data?.id,
             order_date: dayjs(order_date),
           }}
@@ -478,6 +482,9 @@ const EditOrderForm = ({
                 />
               </Form.Item>
             </Space.Compact>
+          </Form.Item>
+          <Form.Item name="comment" label="Մեկնաբանություն">
+            <Input />
           </Form.Item>
           <Modal
             title="Ավելացնել նոր հաճախորդ"

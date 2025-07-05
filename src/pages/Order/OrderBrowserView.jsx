@@ -23,6 +23,7 @@ const OrderBrowserView = ({
   received_date,
   reference_url,
   selling_price,
+  comment,
 }) => {
   return (
     <>
@@ -41,6 +42,7 @@ const OrderBrowserView = ({
               net_cost={net_cost}
               isActive={isActive}
               customer={customer}
+              comment={comment}
               createdAt={createdAt}
               updatedAt={updatedAt}
               order_date={order_date}

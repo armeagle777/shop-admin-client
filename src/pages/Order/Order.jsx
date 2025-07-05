@@ -43,6 +43,7 @@ const Order = () => {
     isActive,
     createdAt,
     updatedAt,
+    comment,
     order_date,
     description,
     return_date,
@@ -74,6 +75,7 @@ const Order = () => {
           updatedAt={updatedAt}
           order_date={order_date}
           isFetching={isFetching}
+          comment={comment}
           tracking_id={tracking_id}
           return_date={return_date}
           description={description}
@@ -94,6 +96,7 @@ const Order = () => {
           isActive={isActive}
           net_cost={net_cost}
           category={category}
+          comment={comment}
           customer={customer}
           updatedAt={updatedAt}
           createdAt={createdAt}
