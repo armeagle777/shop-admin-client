@@ -25,6 +25,7 @@ const OrderMobileView = ({
   status,
   tracking_id,
   updatedAt,
+  comment,
 }) => {
   return (
     <>
@@ -77,6 +78,7 @@ const OrderMobileView = ({
             status={status}
             tracking_id={tracking_id}
             updatedAt={updatedAt}
+            comment={comment}
           />
         )}
         {/* </div> */}

@@ -98,6 +98,9 @@ const SecondStepContent = ({
           </Form.Item>
         </Space.Compact>
       </Form.Item>
+      <Form.Item name="comment" label={NEW_ORDER_PAGE.COMMENT}>
+        <Input placeholder={NEW_ORDER_PAGE.COMMENT} />
+      </Form.Item>
       <Modal
         centered
         width={800}

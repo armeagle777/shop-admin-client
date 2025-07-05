@@ -24,6 +24,7 @@ const OrderCard = ({
   images,
   filter,
   orderId,
+  comment,
   customer,
   net_cost,
   isLoading,
@@ -245,7 +246,8 @@ const OrderCard = ({
         description={
           <>
             {first_name} {last_name} <br />
-            {net_cost} ֏ - {selling_price} ֏
+            {net_cost} ֏ - {selling_price} ֏ <br />
+            {comment && `Մեկնաբանություն՝ ${comment}`}
           </>
         }
       />
