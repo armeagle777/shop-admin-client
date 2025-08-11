@@ -46,11 +46,24 @@ const OrdersTable = ({
         title: 'Անուն',
         render: (_, record) => {
           return record.reference_url ? (
+            <>
             <a target="_blank" href={record.reference_url}>
               {record.name}
             </a>
+            {record.comment || ""}
+            </>
           ) : (
-            record.name
+            <>
+              {record.name}
+              {record.comment && (
+                <>
+                  <br />
+                  * <span style={{ fontSize: "12px", color: "#888" }}>
+                    {record.comment}
+                  </span>
+                </>
+              )}
+            </>
           );
         },
       },
@@ -219,11 +232,24 @@ const OrdersTable = ({
         title: 'Անուն',
         render: (_, record) => {
           return record.reference_url ? (
+            <>
             <a target="_blank" href={record.reference_url}>
               {record.name}
             </a>
+            {record.comment || ""}
+            </>
           ) : (
-            record.name
+            <>
+              {record.name}
+              {record.comment && (
+                <>
+                  <br />
+                  * <span style={{ fontSize: "12px", color: "#888" }}>
+                    {record.comment}
+                  </span>
+                </>
+              )}
+            </>
           );
         },
       },
@@ -403,11 +429,24 @@ const OrdersTable = ({
         title: 'Անուն',
         render: (_, record) => {
           return record.reference_url ? (
+            <>
             <a target="_blank" href={record.reference_url}>
               {record.name}
             </a>
+            {record.comment || ""}
+            </>
           ) : (
-            record.name
+            <>
+              {record.name}
+              {record.comment && (
+                <>
+                  <br />
+                  * <span style={{ fontSize: "12px", color: "#888" }}>
+                    {record.comment}
+                  </span>
+                </>
+              )}
+            </>
           );
         },
       },
@@ -554,11 +593,24 @@ const OrdersTable = ({
         title: 'Անուն',
         render: (_, record) => {
           return record.reference_url ? (
+            <>
             <a target="_blank" href={record.reference_url}>
               {record.name}
             </a>
+            {record.comment || ""}
+            </>
           ) : (
-            record.name
+            <>
+              {record.name}
+              {record.comment && (
+                <>
+                  <br />
+                  * <span style={{ fontSize: "12px", color: "#888" }}>
+                    {record.comment}
+                  </span>
+                </>
+              )}
+            </>
           );
         },
       },
