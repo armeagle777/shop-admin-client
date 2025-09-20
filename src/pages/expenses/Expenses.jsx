@@ -40,6 +40,7 @@ const Expenses = () => {
     onOpenExpenseModal,
     onCloseExpenseModal,
     handleDirectionFilter,
+    handleMobileDirectionFilter,
   } = useExpensesData({ newExpenseForm });
 
   const { expenseDirections, isLoading: eDIsloading } =
@@ -90,7 +91,7 @@ const Expenses = () => {
           allowPopConfirm={allowPopConfirm}
           onOpenExpenseModal={onOpenExpenseModal}
           setAllowPopConfirm={setAllowPopConfirm}
-          onDirectionFilter={handleDirectionFilter}
+          onDirectionFilter={handleMobileDirectionFilter}
           onCloseExpenseModal={onCloseExpenseModal}
           totalCount={totalCount}
           onPageChange={onPageChange}

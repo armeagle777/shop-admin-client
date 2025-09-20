@@ -145,16 +145,19 @@ const useExpensesData = ({ newExpenseForm }) => {
     }));
   };
 
+  const handleMobileDirectionFilter = (selectedIds) => {
+    setPage(DEFAULT_PAGE);
+    setPageSize(DEFAULT_PAGE_SIZE);
+    setFilters((filters) => ({
+      ...filters,
+      directions: selectedIds,
+    }));
+  };
+
   const handleDirectionFilter = (directionName) => {
     if (!directionName) return;
-    // if (Array.isArray(directionName)) {
-    //   return setFilters((filters) => ({
-    //     ...filters,
-    //     directions: directionName,
-    //   }));
-    // }
-    const directions = filters.directions;
 
+    const directions = filters.directions;
     const newDirections = directions.includes(directionName)
       ? directions.filter((direction) => direction !== directionName)
       : [...directions, directionName];
@@ -191,6 +194,7 @@ const useExpensesData = ({ newExpenseForm }) => {
     handleClearFIlters,
     onCloseExpenseModal,
     handleDirectionFilter,
+    handleMobileDirectionFilter,
     onPageChange: pageChangeHandle,
     onPageSizeChange: pageSizeChangeHandler,
     onFinish: handleFinish,

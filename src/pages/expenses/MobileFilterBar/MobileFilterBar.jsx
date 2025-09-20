@@ -2,7 +2,7 @@ import { useState } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker } from 'antd-mobile';
 import { CalendarOutlined } from '@ant-design/icons';
-import { Button, Divider, Flex, Select } from 'antd';
+import { Button, Divider, Flex, Select, Tag } from 'antd';
 import {
   ANT_COLORS,
   ANT_LAYOUTS,
@@ -24,8 +24,23 @@ const MobileFilterBar = ({
 
   const now = new Date();
   const filteredOptions = eDOptions?.filter(
-    (d) => !filters.directions.includes(d.label),
+    (d) => !filters.directions.includes(d.value),
   );
+
+  const tagRender = (props) => {
+    const { value, closable, onClose } = props;
+    const option = eDOptions.find((o) => o.value === value);
+    return (
+      <Tag
+        color="blue"
+        closable={closable}
+        onClose={onClose}
+        style={{ marginRight: 3 }}
+      >
+        {option.label}
+      </Tag>
+    );
+  };
 
   const dateBtnStyle = {
     display: 'flex',
@@ -76,10 +91,8 @@ const MobileFilterBar = ({
         style={{
           width: '100%',
         }}
-        options={filteredOptions.map((item) => ({
-          value: item.label,
-          label: item.label,
-        }))}
+        options={filteredOptions}
+        tagRender={tagRender}
       />
       <DatePicker
         max={now}
